@@ -145,7 +145,7 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
 }
 
 /* =========================================================
-   ATLAS UI KIT — integrated visual layer
+   ATLAS UI KIT -- integrated visual layer
    ========================================================= */
 :root{
   --atlas-bg:#f4f1ea;
@@ -327,6 +327,87 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   .atlas-shell{border-radius:14px}
 }
 
+
+/* =========================================================
+   ATLAS V3 -- one large editorial feature panel
+   ========================================================= */
+.atlas-lab{position:relative;overflow:hidden}
+.atlas-lab::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 0 7%,rgba(49,91,83,.035) 7.05%,transparent 7.1% 92.9%,rgba(181,106,52,.04) 92.95%,transparent 93%),
+    repeating-linear-gradient(90deg,transparent 0,transparent 119px,rgba(49,91,83,.035) 120px);
+}
+.atlas-lab > .wrap{position:relative;z-index:1}
+.atlas-intro{padding-bottom:6px}
+.atlas-shell{box-shadow:0 32px 90px -52px rgba(25,55,50,.62)}
+.atlas-toolbar{padding:24px 26px 22px}
+.atlas-stage{min-height:430px;padding:26px;background:radial-gradient(circle at 50% 45%,rgba(49,91,83,.045),transparent 48%),#fbfaf5}
+.atlas-stage > *{min-height:380px}
+
+/* Kuvaan perustuva rakenne: kaksi laatikkoa korvataan yhdellä yhtenäisellä lukupaneelilla. */
+.atlas-reading{
+  display:grid;
+  grid-template-columns:minmax(0,1.28fr) minmax(300px,.72fr);
+  margin-top:38px;
+  border:1px solid #d9d3c7;
+  background:#fdfcf7;
+  box-shadow:0 24px 70px -46px rgba(25,55,50,.55);
+  min-height:460px;
+}
+.atlas-reading-visual{
+  min-width:0;
+  padding:30px 28px 24px;
+  background:#fdfcf7;
+  display:flex;
+  flex-direction:column;
+}
+.atlas-reading-visual .micro{
+  color:#68716f;font:600 .65rem ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.13em;text-transform:uppercase;
+}
+.atlas-reading-visual h3{
+  margin:8px 0 18px;color:#203f3b;font-size:clamp(1.35rem,2vw,1.75rem);
+}
+.atlas-chart{
+  flex:1;min-height:300px;border:1px solid #e0dbd0;border-radius:14px;
+  background:linear-gradient(180deg,#fffef9,#fbfaf5);
+  overflow:hidden;position:relative;
+}
+.atlas-chart svg{display:block;width:100%;height:100%;min-height:300px}
+.atlas-chart .grid{stroke:#ded8ca;stroke-width:1}
+.atlas-chart .axis{stroke:#b9b1a4;stroke-width:1.2}
+.atlas-chart .curve{fill:none;stroke:#315b53;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.atlas-chart .curve-shadow{fill:none;stroke:#b56a34;stroke-width:1.4;stroke-dasharray:4 7;opacity:.75}
+.atlas-chart .dot{fill:#b56a34;stroke:#fffef9;stroke-width:3}
+.atlas-chart text{font-family:"Source Sans 3",system-ui,sans-serif;fill:#69716e}
+.atlas-chart .year{font-size:12px;letter-spacing:.08em}
+.atlas-chart .label{font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.atlas-chart .hint{font-size:12px;fill:#315b53;font-weight:600}
+.atlas-chart-note{
+  display:flex;justify-content:space-between;gap:18px;margin-top:10px;color:#737b78;
+  font:500 .68rem ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.07em;text-transform:uppercase;
+}
+.atlas-reading-copy{
+  padding:44px 34px;
+  background:#203f3b;color:#f8f5ed;display:flex;flex-direction:column;justify-content:center;
+}
+.atlas-reading-copy .micro{color:#d6b28f;font:600 .68rem ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.13em;text-transform:uppercase}
+.atlas-reading-copy p{color:rgba(248,245,237,.76)}
+.atlas-reading-copy .atlas-claim{
+  color:#fff;font:600 clamp(1.8rem,3vw,2.7rem)/1.06 "Fraunces",Georgia,serif;
+  margin:14px 0 20px;letter-spacing:-.025em;
+}
+.atlas-mini-rule{width:54px;height:2px;background:#b56a34;margin:14px 0 22px}
+.atlas-reading-links{display:flex;flex-wrap:wrap;gap:8px 18px;font:600 .62rem ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:rgba(248,245,237,.55)}
+.atlas-reading-links span::before{content:"/ ";color:#d6b28f}
+.atlas-foot{letter-spacing:.01em}
+@media(max-width:820px){
+  .atlas-reading{grid-template-columns:1fr}
+  .atlas-reading-copy{min-height:310px;padding:34px 28px}
+  .atlas-chart svg{min-height:270px}
+}
+
 </style>
 </head>
 <body>
@@ -363,12 +444,12 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <div class="eyebrow">Yhteiskunnallinen yhdistys · Suomi</div>
+      <div class="eyebrow">HYVINVOINNIN VAALIJAT RY</div>
       <h1>Hyvinvointivaltio on enemmän kuin budjetti.</h1>
       <p class="lead">Se on verkosto, jossa yhden osan muutos vaikuttaa koko järjestelmään.</p>
       <div class="btns">
         <a class="btn btn-primary" href="#jarjestelma">Tutustu ajatukseemme</a>
-        <a class="btn btn-ghost" href="#atlas">Rakenteiden atlas</a>
+        <a class="btn btn-ghost" href="#atlas-live">Atlas</a>
       </div>
     </div>
     <figure>
@@ -494,60 +575,42 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
       <div class="atlas-foot">← → selaa teemoja · kirjoita hakusana · Enter avaa lähimmän osuman</div>
     </div>
 
-    <div class="atlas-deck">
-      <article class="atlas-card">
-        <div class="micro">Tilastokuvaaja</div>
-        <h3>Julkinen velka / BKT</h3>
-        <atlas-stat-card card="JULKINEN_VELKA_POLKU"></atlas-stat-card>
+    <div class="atlas-reading">
+      <article class="atlas-reading-visual">
+        <div class="micro">Rakenteen lukeminen</div>
+        <h3>Julkinen velka ei ole yksittäinen luku.</h3>
+        <div class="atlas-chart" role="img" aria-label="Tyylitelty kehityskulku julkisen velan suhteesta talouteen. Kuvaaja havainnollistaa suunnan ja rakenteellisen muutoksen, ei korvaa lähdedataa.">
+          <svg viewBox="0 0 760 330" preserveAspectRatio="none" aria-hidden="true">
+            <g class="grid">
+              <line x1="62" y1="55" x2="720" y2="55"/><line x1="62" y1="115" x2="720" y2="115"/>
+              <line x1="62" y1="175" x2="720" y2="175"/><line x1="62" y1="235" x2="720" y2="235"/>
+            </g>
+            <line class="axis" x1="62" y1="275" x2="720" y2="275"/>
+            <line class="axis" x1="62" y1="35" x2="62" y2="275"/>
+            <path class="curve-shadow" d="M78 246 C150 240 190 248 244 224 S342 204 390 218 S472 176 520 151 S610 126 700 68"/>
+            <path class="curve" d="M78 246 C150 240 190 248 244 224 S342 204 390 218 S472 176 520 151 S610 126 700 68"/>
+            <circle class="dot" cx="78" cy="246" r="6"/><circle class="dot" cx="390" cy="218" r="6"/><circle class="dot" cx="520" cy="151" r="6"/><circle class="dot" cx="700" cy="68" r="7"/>
+            <text class="year" x="72" y="300">1990</text>
+            <text class="year" x="285" y="300">2000</text>
+            <text class="year" x="475" y="300">2010</text>
+            <text class="year" x="655" y="300">2020+</text>
+            <text class="label" x="74" y="44">SUUNTA</text>
+            <text class="hint" x="548" y="48">RAKENTEELLINEN PAINE</text>
+          </svg>
+        </div>
+        <div class="atlas-chart-note"><span>kehityskulku</span><span>vertailu · viive · riippuvuus</span></div>
       </article>
-      <article class="atlas-card">
-        <div class="micro">Rakennematriisi</div>
-        <h3>Työ, väestö ja hyvinvointi</h3>
-        <atlas-matrix domains="työ,väestö,hyvinvointi" depth="2"></atlas-matrix>
-      </article>
-    </div>
-  </div>
-</section>
 
-<!-- 4. ATLAS -->
-<section id="atlas" class="atlas">
-  <div class="wrap atlas-grid">
-    <div>
-      <div class="eyebrow">03 -- Pitkä aikaväli</div>
-      <h2>Suomen rakennemuutosten atlas</h2>
-      <p class="lead" style="margin-top:28px;font-style:italic">Miten Suomesta tuli nykyinen Suomi?</p>
-      <p class="lead">Atlas tarkastelee suomalaisen yhteiskunnan rakennemuutoksia pitkällä aikavälillä. Menneisyys ei ole vain historiaa. Se auttaa ymmärtämään, miksi nykyinen järjestelmä toimii niin kuin toimii.</p>
-      <div class="btns"><a class="btn btn-primary" href="atlas.html">Avaa atlas</a></div>
+      <aside class="atlas-reading-copy">
+        <div class="micro">Mitä kuvaaja kertoo?</div>
+        <p class="atlas-claim">Kun yksi rakenne muuttuu, myös muiden toimintalogiikka muuttuu.</p>
+        <p>Atlas auttaa katsomaan samaa ilmiötä eri mittakaavoissa: ensin kehityskulkuna, sitten suhteina ja lopulta verkostona.</p>
+        <div class="atlas-mini-rule"></div>
+        <div class="atlas-reading-links">
+          <span>kuvaaja</span><span>aikajana</span><span>verkosto</span><span>matriisi</span>
+        </div>
+      </aside>
     </div>
-    <figure>
-      <svg viewBox="0 0 560 420" role="img" aria-label="Aikajana ja verkosto Suomen rakennemuutoksista 1900-luvulta 2020-luvulle" style="width:100%;height:auto;display:block">
-        <g stroke="#faf8f4" opacity="0.22" stroke-width="0.6"><path d="M40 60h480M40 130h480M40 200h480M40 270h480M40 340h480"/></g>
-        <path d="M40 370h480" stroke="#faf8f4" stroke-width="1" opacity="0.6"/>
-        <g fill="none" stroke="#c9a227" stroke-width="1.6"><path d="M60 340C150 320 170 200 250 180s130 60 180 -40 60 -70 70 -80"/></g>
-        <g fill="none" stroke="#faf8f4" stroke-width="1.2" opacity="0.75"><path d="M60 300C160 300 200 240 260 250s120 90 240 30"/></g>
-        <g fill="none" stroke="#8fb5a1" stroke-width="1.2" opacity="0.8"><path d="M60 250C140 260 190 300 280 300s150 -110 220 -150"/></g>
-        <g fill="#faf8f4">
-          <circle cx="60" cy="340" r="3.5"/><circle cx="250" cy="180" r="3.5"/><circle cx="430" cy="140" r="3.5"/><circle cx="500" cy="60" r="3.5"/>
-        </g>
-        <g font-family="Inter,sans-serif" font-size="10" fill="#faf8f4" opacity="0.75" letter-spacing="1.6">
-          <text x="48" y="392">1900</text><text x="180" y="392">1950</text><text x="310" y="392">1980</text><text x="420" y="392">2000</text><text x="490" y="392">2020</text>
-        </g>
-      </svg>
-      <figcaption class="figcap" style="color:rgba(250,248,244,.6)">Kuvio 3 -- Kehityskulkuja pitkällä aikavälillä</figcaption>
-<div class="atlas-deck" style="margin-top:38px">
-  <article class="atlas-card">
-    <div class="micro">Murrosaikajana</div>
-    <h3>Hyvinvoinnin murrokset</h3>
-    <atlas-timeline domain="hyvinvointi" limit="12"></atlas-timeline>
-  </article>
-  <article class="atlas-card">
-    <div class="micro">Yhteysverkko</div>
-    <h3>Hyvinvointivaltion rakentuminen</h3>
-    <atlas-network focus="hyvinvointivaltion-rakentuminen-1880" depth="2"></atlas-network>
-  </article>
-</div>
-
-    </figure>
   </div>
 </section>
 
