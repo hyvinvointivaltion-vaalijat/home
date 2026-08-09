@@ -7,7 +7,8 @@
 <meta name="description" content="Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script type="module" src="https://harrikayhko.fi/atlas/components/atlas-ui.js"></script>
 <style>
 :root{
   --paper:#faf8f4;
@@ -142,6 +143,190 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
   .cards,.writings,.pills,.f-grid{grid-template-columns:1fr}
   .btn{width:100%;justify-content:center}
 }
+
+/* =========================================================
+   ATLAS UI KIT — integrated visual layer
+   ========================================================= */
+:root{
+  --atlas-bg:#f4f1ea;
+  --atlas-paper:#fdfcf7;
+  --atlas-forest:#315b53;
+  --atlas-forest-deep:#203f3b;
+  --atlas-copper:#b56a34;
+  --atlas-line:#d9d3c7;
+  --atlas-muted:#68716f;
+  --atlas-radius:16px;
+  --atlas-shadow:0 24px 70px -42px rgba(25,55,50,.45);
+}
+.atlas-lab{
+  background:
+    radial-gradient(70% 100% at 90% 0%,rgba(181,106,52,.12),transparent 55%),
+    linear-gradient(180deg,#f4f1ea 0%,#eeeae2 100%);
+  color:#172421;
+  border-top:0;
+}
+.atlas-lab .wrap{max-width:1240px}
+.atlas-kicker{
+  color:var(--atlas-copper);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.68rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+}
+.atlas-intro{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,.72fr);
+  gap:48px;
+  align-items:end;
+}
+.atlas-intro h2{
+  color:var(--atlas-forest-deep);
+  margin-top:10px;
+}
+.atlas-intro .lead{color:#56605d}
+.atlas-note{
+  border-left:2px solid var(--atlas-copper);
+  padding:8px 0 8px 20px;
+  color:#5e6764;
+  font-size:.95rem;
+}
+.atlas-shell{
+  margin-top:48px;
+  background:rgba(253,252,247,.88);
+  border:1px solid var(--atlas-line);
+  border-radius:20px;
+  box-shadow:var(--atlas-shadow);
+  overflow:hidden;
+}
+.atlas-toolbar{
+  padding:22px;
+  border-bottom:1px solid var(--atlas-line);
+  background:rgba(253,252,247,.92);
+}
+.atlas-toolbar-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-bottom:12px;
+}
+.atlas-count{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--atlas-muted);
+  font-size:.68rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.atlas-theme-row{
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) 48px;
+  gap:10px;
+}
+.atlas-theme-row input{
+  min-width:0;
+  height:58px;
+  border:1px solid var(--atlas-line);
+  border-radius:13px;
+  background:#fffef9;
+  color:var(--atlas-forest-deep);
+  padding:0 18px;
+  font:600 1.15rem "Fraunces",Georgia,serif;
+  outline:none;
+}
+.atlas-theme-row input:focus{
+  border-color:var(--atlas-forest);
+  box-shadow:0 0 0 4px rgba(49,91,83,.12);
+}
+.atlas-nav{
+  border:1px solid var(--atlas-line);
+  border-radius:13px;
+  background:#fffef9;
+  color:var(--atlas-forest-deep);
+  font:400 1.8rem "Fraunces",Georgia,serif;
+  cursor:pointer;
+  transition:.18s;
+}
+.atlas-nav:hover{
+  background:var(--atlas-forest-deep);
+  color:#fff;
+  transform:translateY(-1px);
+}
+.atlas-meta{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  margin-top:9px;
+  color:var(--atlas-muted);
+  font:600 .65rem ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.atlas-meta .kind{color:var(--atlas-copper)}
+.atlas-status{
+  padding:12px 22px 0;
+  color:#737b78;
+  font:500 .72rem ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.atlas-stage{
+  padding:18px;
+  min-height:390px;
+}
+.atlas-foot{
+  padding:15px 22px 20px;
+  border-top:1px solid var(--atlas-line);
+  color:#737b78;
+  font-size:.8rem;
+}
+atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-article{
+  display:block;
+  min-height:340px;
+  --atlas-paper:#fdfcf7;
+  --atlas-line:#ded8ca;
+  --atlas-title:#1f4642;
+  --atlas-ink:#172421;
+  --atlas-accent:#b56a34;
+  --atlas-radius:14px;
+  --atlas-serif:"Fraunces",Georgia,serif;
+  --atlas-sans:"Source Sans 3",system-ui,sans-serif;
+}
+.atlas-deck{
+  display:grid;
+  grid-template-columns:1.12fr .88fr;
+  gap:18px;
+  margin-top:18px;
+}
+.atlas-card{
+  background:var(--atlas-paper);
+  border:1px solid var(--atlas-line);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 18px 50px -42px rgba(30,65,59,.5);
+}
+.atlas-card h3{
+  color:var(--atlas-forest-deep);
+  margin:7px 0 0;
+  font-size:1.4rem;
+}
+.atlas-card .micro{
+  color:var(--atlas-muted);
+  font:600 .62rem ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.atlas-card atlas-stat-card,
+.atlas-card atlas-network{
+  margin-top:16px;
+}
+@media(max-width:900px){
+  .atlas-intro,.atlas-deck{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .atlas-theme-row{grid-template-columns:42px minmax(0,1fr) 42px}
+  .atlas-stage{padding:10px}
+  .atlas-shell{border-radius:14px}
+}
+
 </style>
 </head>
 <body>
@@ -154,7 +339,7 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
     </a>
     <nav class="links">
       <a href="#jarjestelma">Ajatus</a>
-      <a href="#atlas">Atlas</a>
+      <a href="#atlas-live">Atlas</a>
       <a href="#teemat">Ajankohtaista</a>
       <a href="#kirjoitukset">Kirjoitukset</a>
       <a href="#yhdistys">Yhdistys</a>
@@ -164,7 +349,7 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
   </div>
   <div class="wrap"><div class="mobile" id="mobile">
     <a href="#jarjestelma">Ajatus</a>
-    <a href="#atlas">Rakennemuutosten atlas</a>
+    <a href="#atlas-live">Rakennemuutosten atlas</a>
     <a href="#teemat">Ajankohtaista</a>
     <a href="#kirjoitukset">Kirjoitukset</a>
     <a href="#yhdistys">Yhdistys</a>
@@ -276,6 +461,54 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
   </div>
 </section>
 
+
+<!-- LIVE ATLAS DASHBOARD -->
+<section id="atlas-live" class="atlas-lab">
+  <div class="wrap">
+    <div class="atlas-intro">
+      <div>
+        <div class="atlas-kicker">Atlas UI Kit · elävä aineisto</div>
+        <h2>Hyvinvointivaltio näkyy myös datassa.</h2>
+        <p class="lead">Staattisten kuvioiden sijaan sivu näyttää rakennemuutoksen tilastona, aikajanana, verkostona ja rakenteiden matriisina. Sama Atlas-ajattelu kulkee läpi koko sivun.</p>
+      </div>
+      <div class="atlas-note">Valitse teema, vaihda näkymää ja tarkastele samaa ilmiötä eri mittakaavoissa. Kuvaaja ei ole koriste: se on osa argumenttia.</div>
+    </div>
+
+    <div class="atlas-shell">
+      <div class="atlas-toolbar">
+        <div class="atlas-toolbar-top">
+          <span class="atlas-kicker">Teemaselain</span>
+          <span id="atlas-count" class="atlas-count"></span>
+        </div>
+        <div class="atlas-theme-row">
+          <button class="atlas-nav" id="atlas-prev" type="button" aria-label="Edellinen teema">‹</button>
+          <input id="atlas-theme" type="search" autocomplete="off" placeholder="Kirjoita tai selaa teemaa…" aria-label="Atlas-teema">
+          <button class="atlas-nav" id="atlas-next" type="button" aria-label="Seuraava teema">›</button>
+        </div>
+        <div class="atlas-meta">
+          <span id="atlas-kind" class="kind"></span><span>·</span><span>Atlas UI Kit</span>
+        </div>
+      </div>
+      <div id="atlas-status" class="atlas-status">Ladataan Atlas-komponenttia…</div>
+      <div id="atlas-stage" class="atlas-stage"></div>
+      <div class="atlas-foot">← → selaa teemoja · kirjoita hakusana · Enter avaa lähimmän osuman</div>
+    </div>
+
+    <div class="atlas-deck">
+      <article class="atlas-card">
+        <div class="micro">Tilastokuvaaja</div>
+        <h3>Julkinen velka / BKT</h3>
+        <atlas-stat-card card="JULKINEN_VELKA_POLKU"></atlas-stat-card>
+      </article>
+      <article class="atlas-card">
+        <div class="micro">Rakennematriisi</div>
+        <h3>Työ, väestö ja hyvinvointi</h3>
+        <atlas-matrix domains="työ,väestö,hyvinvointi" depth="2"></atlas-matrix>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- 4. ATLAS -->
 <section id="atlas" class="atlas">
   <div class="wrap atlas-grid">
@@ -301,6 +534,19 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
         </g>
       </svg>
       <figcaption class="figcap" style="color:rgba(250,248,244,.6)">Kuvio 3 -- Kehityskulkuja pitkällä aikavälillä</figcaption>
+<div class="atlas-deck" style="margin-top:38px">
+  <article class="atlas-card">
+    <div class="micro">Murrosaikajana</div>
+    <h3>Hyvinvoinnin murrokset</h3>
+    <atlas-timeline domain="hyvinvointi" limit="12"></atlas-timeline>
+  </article>
+  <article class="atlas-card">
+    <div class="micro">Yhteysverkko</div>
+    <h3>Hyvinvointivaltion rakentuminen</h3>
+    <atlas-network focus="hyvinvointivaltion-rakentuminen-1880" depth="2"></atlas-network>
+  </article>
+</div>
+
     </figure>
   </div>
 </section>
@@ -394,7 +640,7 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
         <a href="#top">Etusivu</a>
         <a href="#yhdistys">Yhdistys</a>
         <a href="#teemat">Ajankohtaista</a>
-        <a href="#atlas">Rakennemuutosten atlas</a>
+        <a href="#atlas-live">Rakennemuutosten atlas</a>
         <a href="#kirjoitukset">Kirjoitukset</a>
       </div>
       <div>
@@ -419,5 +665,95 @@ footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
   b.addEventListener('click',()=>{const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)});
   m.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{m.classList.remove('open');b.setAttribute('aria-expanded','false')}));
 </script>
+
+<script>
+(() => {
+  const themes = [
+    {label:"Työllisyysasteen polku", kind:"Tilastokuvaaja", tag:"atlas-stat-card", attrs:{card:"TYOLLISYYS_POLKU"}},
+    {label:"Julkinen velka / BKT", kind:"Tilastokuvaaja", tag:"atlas-stat-card", attrs:{card:"JULKINEN_VELKA_POLKU"}},
+    {label:"Väestön ikääntyminen", kind:"Tilastokuvaaja", tag:"atlas-stat-card", attrs:{card:"VAESTON_IKAANTYMINEN"}},
+    {label:"Työttömyysaste 1990–2024", kind:"Tilastokuvaaja", tag:"atlas-stat-card", attrs:{card:"TYOTTOMYYS_1990_2024"}},
+    {label:"Hyvinvoinnin murrokset", kind:"Murrosaikajana", tag:"atlas-timeline", attrs:{domain:"hyvinvointi",limit:"12"}},
+    {label:"Terveydenhuolto", kind:"Murrosaikajana", tag:"atlas-timeline", attrs:{domain:"terveys",limit:"12"}},
+    {label:"Koulutus", kind:"Murrosaikajana", tag:"atlas-timeline", attrs:{domain:"koulutus",limit:"12"}},
+    {label:"Hyvinvointivaltion rakentuminen", kind:"Yhteysverkko", tag:"atlas-network", attrs:{focus:"hyvinvointivaltion-rakentuminen-1880",depth:"2"}},
+    {label:"Hyvinvointialueiden käynnistyminen", kind:"Yhteysverkko", tag:"atlas-network", attrs:{focus:"hyvinvointialueet-2023",depth:"2"}},
+    {label:"Terveys, koulutus ja talous", kind:"Rakennematriisi", tag:"atlas-matrix", attrs:{domains:"terveys,koulutus,talous",depth:"2"}},
+    {label:"Työ, väestö ja hyvinvointi", kind:"Rakennematriisi", tag:"atlas-matrix", attrs:{domains:"työ,väestö,hyvinvointi",depth:"2"}},
+    {label:"Sote-uudistusten aikakausi", kind:"Aihekokonaisuus", tag:"atlas-topic", attrs:{item:"sote-pitka-uudistus"}},
+    {label:"Hyvinvointialueiden talouskriisi", kind:"Aihekokonaisuus", tag:"atlas-topic", attrs:{item:"hyvinvointialueiden-talouskriisi-2023"}}
+  ];
+
+  const input = document.getElementById("atlas-theme");
+  const prev = document.getElementById("atlas-prev");
+  const next = document.getElementById("atlas-next");
+  const count = document.getElementById("atlas-count");
+  const kind = document.getElementById("atlas-kind");
+  const stage = document.getElementById("atlas-stage");
+  const status = document.getElementById("atlas-status");
+  if(!input || !stage) return;
+
+  let index = 0;
+  let token = 0;
+
+  function sync(){
+    const t = themes[index];
+    input.value = t.label;
+    kind.textContent = t.kind;
+    count.textContent = `${index + 1} / ${themes.length}`;
+  }
+
+  function render(i){
+    index = (i + themes.length) % themes.length;
+    const t = themes[index];
+    sync();
+    stage.replaceChildren();
+
+    const el = document.createElement(t.tag);
+    Object.entries(t.attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    stage.appendChild(el);
+
+    const current = ++token;
+    status.textContent = "Ladataan visualisointia…";
+    customElements.whenDefined(t.tag).then(() => {
+      if(current === token) status.textContent = `Näkymä: ${t.kind} · ${t.label}`;
+    }).catch(() => {
+      if(current === token) status.textContent = "Atlas-komponenttia ei voitu ladata juuri nyt.";
+    });
+  }
+
+  function find(q){
+    q = q.trim().toLocaleLowerCase("fi-FI");
+    if(!q) return -1;
+    return themes.findIndex(t => t.label.toLocaleLowerCase("fi-FI").includes(q));
+  }
+
+  prev.addEventListener("click", () => render(index - 1));
+  next.addEventListener("click", () => render(index + 1));
+
+  input.addEventListener("keydown", e => {
+    if(e.key === "Enter"){
+      const hit = find(input.value);
+      if(hit >= 0) render(hit);
+    } else if(e.key === "ArrowLeft"){
+      e.preventDefault(); render(index - 1);
+    } else if(e.key === "ArrowRight"){
+      e.preventDefault(); render(index + 1);
+    }
+  });
+
+  input.addEventListener("input", () => {
+    const hit = find(input.value);
+    if(hit >= 0){
+      index = hit;
+      kind.textContent = themes[hit].kind;
+      count.textContent = `${hit + 1} / ${themes.length}`;
+    }
+  });
+
+  render(0);
+})();
+</script>
+
 </body>
 </html>
