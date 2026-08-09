@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hyvinvointivaltion Vaalijat ry -- Hyvinvointivaltio on verkosto</title>
+<meta name="description" content="Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf8f4;
+  --paper-2:#f2efe9;
+  --ink:#14181d;
+  --ink-soft:#4b535c;
+  --line:#ded8ce;
+  --blue:#123a63;
+  --blue-2:#2c5f8f;
+  --green:#2e4f3e;
+  --yellow:#c9a227;
+  --slate:#6c7f92;
+  --maxw:1200px;
+  --r:2px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:Inter,system-ui,sans-serif;font-weight:400;
+  font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:-.01em;line-height:1.05;margin:0}
+h1{font-size:clamp(2.6rem,7vw,5.4rem)}
+h2{font-size:clamp(2rem,4.4vw,3.4rem)}
+h3{font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.2}
+p{margin:0 0 1.1em}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);font-weight:500;margin-bottom:22px}
+.lead{font-size:clamp(1.1rem,1.7vw,1.35rem);color:var(--ink-soft);max-width:62ch}
+section{padding:clamp(72px,10vw,140px) 0;border-top:1px solid var(--line)}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+
+/* nav */
+header.nav{position:sticky;top:0;z-index:50;background:rgba(250,248,244,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}
+.mark{width:22px;height:22px;flex:0 0 auto}
+.brand span{font-family:"Instrument Serif",serif;font-size:1.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.links{display:flex;gap:30px;align-items:center}
+.links a{text-decoration:none;font-size:.95rem;color:var(--ink-soft)}
+.links a:hover{color:var(--blue)}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:var(--r);width:44px;height:40px;cursor:pointer;align-items:center;justify-content:center;flex:0 0 auto}
+.burger span{display:block;width:18px;height:1.5px;background:var(--ink);position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:var(--ink)}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.mobile{display:none;border-top:1px solid var(--line);padding:16px 0 26px}
+.mobile a{display:block;padding:12px 0;text-decoration:none;border-bottom:1px solid var(--line);font-size:1.05rem}
+.mobile.open{display:block}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:var(--r);text-decoration:none;font-size:.98rem;font-weight:500;border:1px solid var(--blue);transition:.18s}
+.btn-primary{background:var(--blue);color:var(--paper)}
+.btn-primary:hover{background:#0d2c4c}
+.btn-ghost{color:var(--blue);background:transparent}
+.btn-ghost:hover{background:rgba(18,58,99,.06)}
+.btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+
+/* hero */
+.hero{padding:clamp(70px,9vw,120px) 0 clamp(60px,8vw,110px);border-top:0}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(40px,6vw,80px);align-items:center}
+.hero h1{max-width:15ch}
+.hero .lead{margin-top:26px}
+figure{margin:0}
+.figcap{font-size:.78rem;color:var(--slate);letter-spacing:.06em;margin-top:14px}
+
+/* atlas */
+.atlas{background:var(--blue);color:var(--paper);border-top:0}
+.atlas h2,.atlas .eyebrow{color:var(--paper)}
+.atlas .eyebrow{opacity:.7}
+.atlas .lead{color:rgba(250,248,244,.78)}
+.atlas .btn{border-color:var(--paper)}
+.atlas .btn-primary{background:var(--paper);color:var(--blue)}
+.atlas .btn-primary:hover{background:#fff}
+.atlas-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px}
+.card{background:var(--paper);padding:38px 34px 34px;display:flex;flex-direction:column;gap:12px;transition:background .2s}
+.card:hover{background:var(--paper-2)}
+.card .num{font-size:.75rem;letter-spacing:.16em;color:var(--slate)}
+.card p{color:var(--ink-soft);font-size:1rem;margin:0}
+.more{margin-top:auto;padding-top:20px;font-size:.9rem;color:var(--blue);text-decoration:none;font-weight:500}
+.more:hover{text-decoration:underline}
+
+/* keywords */
+.keywords{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:44px}
+.keywords span{font-size:clamp(.95rem,1.6vw,1.15rem);letter-spacing:.14em;padding:10px 18px;border:1px solid var(--line);border-radius:var(--r);color:var(--blue)}
+.keywords span:nth-child(3n){color:var(--green)}
+.keywords span:nth-child(4n){color:var(--yellow)}
+
+/* two column text */
+.two{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,80px)}
+
+/* writings */
+.writings{display:grid;grid-template-columns:repeat(3,1fr);gap:44px 40px;margin-top:56px}
+.write{border-top:2px solid var(--ink);padding-top:20px}
+.write .meta{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+.write h3{margin:14px 0 10px}
+.write p{color:var(--ink-soft);font-size:1rem;margin:0}
+
+/* about list */
+.pills{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:48px}
+.pills div{background:var(--paper);padding:26px 20px;font-size:.95rem;letter-spacing:.04em;color:var(--green)}
+
+/* join */
+.join{background:var(--paper-2)}
+.join .inner{max-width:70ch}
+
+/* footer */
+footer{background:var(--ink);color:#cfd5db;padding:80px 0 40px;font-size:.95rem}
+footer h3{color:var(--paper);font-size:1.5rem;margin-bottom:14px}
+.f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px}
+.f-grid a{color:#cfd5db;text-decoration:none;display:block;padding:6px 0}
+.f-grid a:hover{color:#fff}
+.f-title{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:#8b96a3;margin-bottom:12px}
+.f-bottom{margin-top:56px;padding-top:24px;border-top:1px solid rgba(255,255,255,.14);display:flex;flex-wrap:wrap;gap:16px 28px;justify-content:space-between;color:#8b96a3;font-size:.85rem}
+.f-bottom a{color:#8b96a3;text-decoration:none}
+.f-bottom a:hover{color:#fff}
+
+@media (max-width:1000px){
+  .hero-grid,.atlas-grid,.two{grid-template-columns:1fr}
+  .cards,.writings{grid-template-columns:1fr 1fr}
+  .pills{grid-template-columns:1fr 1fr}
+  .f-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:680px){
+  body{font-size:17px}
+  .links{display:none}
+  .burger{display:flex}
+  .cards,.writings,.pills,.f-grid{grid-template-columns:1fr}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#123a63" stroke-width="1.1"><circle cx="12" cy="4" r="2"/><circle cx="4" cy="17" r="2"/><circle cx="20" cy="17" r="2"/><path d="M12 6v9M12 15l-6.6 1.4M12 15l6.6 1.4M5 15.2 11 6.4M19 15.2 13 6.4"/></g></svg>
+      <span>Hyvinvointivaltion Vaalijat ry</span>
+    </a>
+    <nav class="links">
+      <a href="#jarjestelma">Ajatus</a>
+      <a href="#atlas">Atlas</a>
+      <a href="#teemat">Ajankohtaista</a>
+      <a href="#kirjoitukset">Kirjoitukset</a>
+      <a href="#yhdistys">Yhdistys</a>
+      <a href="#liity" data-action="join">Liity mukaan</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Avaa valikko" aria-expanded="false"><span></span></button>
+  </div>
+  <div class="wrap"><div class="mobile" id="mobile">
+    <a href="#jarjestelma">Ajatus</a>
+    <a href="#atlas">Rakennemuutosten atlas</a>
+    <a href="#teemat">Ajankohtaista</a>
+    <a href="#kirjoitukset">Kirjoitukset</a>
+    <a href="#yhdistys">Yhdistys</a>
+    <a href="#liity">Liity mukaan</a>
+  </div></div>
+</header>
+
+<main id="top">
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Yhteiskunnallinen yhdistys · Suomi</div>
+      <h1>Hyvinvointivaltio on enemmän kuin budjetti.</h1>
+      <p class="lead">Se on verkosto, jossa yhden osan muutos vaikuttaa koko järjestelmään.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#jarjestelma">Tutustu ajatukseemme</a>
+        <a class="btn btn-ghost" href="#atlas">Rakenteiden atlas</a>
+      </div>
+    </div>
+    <figure>
+      <svg viewBox="0 0 560 460" role="img" aria-label="Abstrakti verkosto, jossa ihmiset, palvelut, kaupungit, luonto ja infrastruktuuri kytkeytyvät toisiinsa" style="width:100%;height:auto;display:block">
+        <rect width="560" height="460" fill="#f2efe9"/>
+        <g stroke="#6c7f92" stroke-width="0.7" opacity="0.5">
+          <path d="M70 380H500M70 320H500M70 260H500M70 200H500M70 140H500"/>
+        </g>
+        <g fill="none" stroke="#123a63" stroke-width="1" opacity="0.55">
+          <path d="M100 380 180 200 300 300 380 140 470 260 300 300 180 200 470 260M100 380 300 300M380 140 300 300M240 90 380 140M240 90 180 200M470 260 430 380M300 300 430 380M100 380 240 90"/>
+        </g>
+        <g opacity="0.9">
+          <path d="M60 400h440" stroke="#14181d" stroke-width="1.4"/>
+          <g fill="#2e4f3e" opacity="0.85">
+            <path d="M120 400l14-30 14 30zM152 400l10-22 10 22z"/>
+          </g>
+          <g fill="#123a63" opacity="0.9">
+            <rect x="330" y="352" width="16" height="48"/><rect x="352" y="336" width="10" height="64"/>
+            <rect x="368" y="366" width="20" height="34"/>
+          </g>
+          <g stroke="#123a63" stroke-width="1.2" fill="none"><path d="M240 400v-40M228 372l12-12 12 12"/></g>
+        </g>
+        <g>
+          <circle cx="100" cy="380" r="7" fill="#123a63"/>
+          <circle cx="180" cy="200" r="10" fill="#c9a227"/>
+          <circle cx="300" cy="300" r="14" fill="#123a63"/>
+          <circle cx="380" cy="140" r="8" fill="#2e4f3e"/>
+          <circle cx="470" cy="260" r="11" fill="#2c5f8f"/>
+          <circle cx="240" cy="90" r="6" fill="#6c7f92"/>
+          <circle cx="430" cy="380" r="6" fill="#2e4f3e"/>
+        </g>
+        <g fill="#4b535c" font-family="Inter,sans-serif" font-size="9" letter-spacing="1.6">
+          <text x="150" y="188">TYÖ</text><text x="318" y="298">PALVELUT</text>
+          <text x="388" y="132">LUOTTAMUS</text><text x="452" y="286">ASUMINEN</text>
+          <text x="76" y="418">LUONTO</text>
+        </g>
+      </svg>
+      <figcaption class="figcap">Kuvio 1 -- Yhteiskunta rakenteiden verkostona</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 2. JÄRJESTELMÄ -->
+<section id="jarjestelma">
+  <div class="wrap">
+    <div class="two">
+      <div><div class="eyebrow">01 -- Lähtökohta</div></div>
+      <div>
+        <h2>Hyvinvointivaltio on yhteinen järjestelmä</h2>
+        <p class="lead" style="margin-top:28px">Hyvinvointivaltiota tarkastellaan liian usein yksittäisinä menoina, palveluina tai budjettiriveinä. Todellisuudessa kyse on toisiinsa kytkeytyvästä kokonaisuudesta.</p>
+      </div>
+    </div>
+    <figure style="margin-top:clamp(48px,7vw,90px)">
+      <svg viewBox="0 0 1100 520" role="img" aria-label="Verkostokaavio: työ, koulutus, terveys, perhe, asuminen, talous, palvelut, luottamus, kansalaisuus ja ympäristö kytkeytyvät toisiinsa" style="width:100%;height:auto;display:block">
+        <g stroke="#123a63" stroke-width="0.8" opacity="0.35" fill="none">
+          <path d="M170 120 420 70 720 130 950 90 950 90 830 300 550 260 300 330 170 120 550 260 420 70 830 300 300 330 720 130 200 420 550 260 640 440 830 300 200 420 300 330 640 440 950 90 640 440 420 70 200 420 170 120"/>
+        </g>
+        <g font-family="Inter,sans-serif" font-size="19" letter-spacing="2.2" fill="#14181d">
+          <g fill="#123a63"><circle cx="170" cy="120" r="5"/><circle cx="550" cy="260" r="7"/><circle cx="830" cy="300" r="5"/></g>
+          <g fill="#2e4f3e"><circle cx="420" cy="70" r="5"/><circle cx="300" cy="330" r="5"/><circle cx="200" cy="420" r="5"/></g>
+          <g fill="#c9a227"><circle cx="720" cy="130" r="5"/><circle cx="640" cy="440" r="5"/></g>
+          <g fill="#6c7f92"><circle cx="950" cy="90" r="5"/></g>
+          <text x="186" y="112">TYÖ</text>
+          <text x="436" y="62">KOULUTUS</text>
+          <text x="736" y="122">TERVEYS</text>
+          <text x="966" y="82">PERHE</text>
+          <text x="846" y="292">ASUMINEN</text>
+          <text x="566" y="252">TALOUS</text>
+          <text x="316" y="322">PALVELUT</text>
+          <text x="216" y="412">LUOTTAMUS</text>
+          <text x="656" y="432">KANSALAISUUS</text>
+          <text x="60" y="490" fill="#4b535c" font-size="12" letter-spacing="1.6">YMPÄRISTÖ -- järjestelmän reunaehto</text>
+          <path d="M40 500h1020" stroke="#ded8ce" stroke-width="1"/>
+        </g>
+      </svg>
+      <figcaption class="figcap">Kuvio 2 -- Riippuvuudet järjestelmän osien välillä</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 3. MIKSI -->
+<section id="miksi">
+  <div class="wrap two">
+    <div><div class="eyebrow">02 -- Tehtävä</div></div>
+    <div>
+      <h2>Hyvinvointivaltiota pitää ymmärtää ennen kuin sitä voidaan uudistaa.</h2>
+      <p class="lead" style="margin-top:28px">Hyvinvointivaltion Vaalijat ry kokoaa yhteen näkökulmia suomalaisen yhteiskunnan rakenteisiin, muutoksiin ja tulevaisuuteen.</p>
+      <p class="lead">Emme tarkastele hyvinvointivaltiota staattisena rakenteena vaan muuttuvana järjestelmänä.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ATLAS -->
+<section id="atlas" class="atlas">
+  <div class="wrap atlas-grid">
+    <div>
+      <div class="eyebrow">03 -- Pitkä aikaväli</div>
+      <h2>Suomen rakennemuutosten atlas</h2>
+      <p class="lead" style="margin-top:28px;font-style:italic">Miten Suomesta tuli nykyinen Suomi?</p>
+      <p class="lead">Atlas tarkastelee suomalaisen yhteiskunnan rakennemuutoksia pitkällä aikavälillä. Menneisyys ei ole vain historiaa. Se auttaa ymmärtämään, miksi nykyinen järjestelmä toimii niin kuin toimii.</p>
+      <div class="btns"><a class="btn btn-primary" href="atlas.html">Avaa atlas</a></div>
+    </div>
+    <figure>
+      <svg viewBox="0 0 560 420" role="img" aria-label="Aikajana ja verkosto Suomen rakennemuutoksista 1900-luvulta 2020-luvulle" style="width:100%;height:auto;display:block">
+        <g stroke="#faf8f4" opacity="0.22" stroke-width="0.6"><path d="M40 60h480M40 130h480M40 200h480M40 270h480M40 340h480"/></g>
+        <path d="M40 370h480" stroke="#faf8f4" stroke-width="1" opacity="0.6"/>
+        <g fill="none" stroke="#c9a227" stroke-width="1.6"><path d="M60 340C150 320 170 200 250 180s130 60 180 -40 60 -70 70 -80"/></g>
+        <g fill="none" stroke="#faf8f4" stroke-width="1.2" opacity="0.75"><path d="M60 300C160 300 200 240 260 250s120 90 240 30"/></g>
+        <g fill="none" stroke="#8fb5a1" stroke-width="1.2" opacity="0.8"><path d="M60 250C140 260 190 300 280 300s150 -110 220 -150"/></g>
+        <g fill="#faf8f4">
+          <circle cx="60" cy="340" r="3.5"/><circle cx="250" cy="180" r="3.5"/><circle cx="430" cy="140" r="3.5"/><circle cx="500" cy="60" r="3.5"/>
+        </g>
+        <g font-family="Inter,sans-serif" font-size="10" fill="#faf8f4" opacity="0.75" letter-spacing="1.6">
+          <text x="48" y="392">1900</text><text x="180" y="392">1950</text><text x="310" y="392">1980</text><text x="420" y="392">2000</text><text x="490" y="392">2020</text>
+        </g>
+      </svg>
+      <figcaption class="figcap" style="color:rgba(250,248,244,.6)">Kuvio 3 -- Kehityskulkuja pitkällä aikavälillä</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 5. TEEMAT -->
+<section id="teemat">
+  <div class="wrap">
+    <div class="eyebrow">04 -- Ajankohtaista</div>
+    <h2>Kuusi muutosta, jotka muokkaavat hyvinvointivaltiota</h2>
+    <div class="cards">
+      <article class="card"><div class="num">T1</div><h3>Väestön ikääntyminen</h3><p>Huoltosuhteen muutos siirtää painetta työhön, palveluihin ja julkiseen talouteen samanaikaisesti.</p><a class="more" href="#teemat">Lue lisää →</a></article>
+      <article class="card"><div class="num">T2</div><h3>Työn muutos</h3><p>Työn muodot, osaamisvaatimukset ja työurien rakenne muuttuvat nopeammin kuin instituutiot.</p><a class="more" href="#teemat">Lue lisää →</a></article>
+      <article class="card"><div class="num">T3</div><h3>Julkisen talouden kestävyys</h3><p>Kestävyys ei ole yksin menokysymys vaan kysymys tuottavuudesta, työllisyydestä ja luottamuksesta.</p><a class="more" href="#teemat">Lue lisää →</a></article>
+      <article class="card"><div class="num">T4</div><h3>Alueellinen eriytyminen</h3><p>Muuttoliike ja väestörakenne muokkaavat kuntien kykyä ylläpitää palveluita eri puolilla maata.</p><a class="more" href="#teemat">Lue lisää →</a></article>
+      <article class="card"><div class="num">T5</div><h3>Sosiaali- ja terveyspalvelut</h3><p>Palvelujärjestelmän uudistukset kytkeytyvät rahoitukseen, henkilöstöön ja ennaltaehkäisyyn.</p><a class="more" href="#teemat">Lue lisää →</a></article>
+      <article class="card"><div class="num">T6</div><h3>Teknologinen murros</h3><p>Automaatio ja tekoäly muuttavat sekä työtä että julkisten palveluiden tuottamisen tapaa.</p><a class="more" href="#teemat">Lue lisää →</a></article>
+    </div>
+  </div>
+</section>
+
+<!-- 6. AJATTELUTAPA -->
+<section id="ajattelutapa">
+  <div class="wrap two">
+    <div><div class="eyebrow">05 -- Ajattelutapa</div></div>
+    <div>
+      <h2>Emme etsi yhtä oikeaa vastausta.</h2>
+      <p class="lead" style="margin-top:28px">Yhteiskunnalliset muutokset eivät etene suoraviivaisesti. Päätöksillä on viiveitä, sivuvaikutuksia ja palautekytkentöjä.</p>
+      <p class="lead">Hyvinvointivaltion tulevaisuutta pitää siksi tarkastella vaihtoehtoisina kehityskulkuina.</p>
+      <div class="keywords">
+        <span>RAKENTEET</span><span>MUUTOS</span><span>RIIPPUVUUDET</span><span>PALAUTE</span><span>RESILIENSSI</span><span>TULEVAISUUS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. KIRJOITUKSET -->
+<section id="kirjoitukset">
+  <div class="wrap">
+    <div class="eyebrow">06 -- Kirjoitukset</div>
+    <h2>Ajatuksia hyvinvointivaltiosta</h2>
+    <div class="writings">
+      <article class="write"><div class="meta">Rakenteet</div><h3>Kun korjaava kierre katkeaa</h3><p>Mitä tapahtuu, kun järjestelmän itseään korjaavat mekanismit heikkenevät vähitellen?</p></article>
+      <article class="write"><div class="meta">Järjestelmä</div><h3>Hyvinvointivaltio verkostona</h3><p>Miksi yksittäisen palvelun tarkastelu ei riitä kokonaisuuden ymmärtämiseen.</p></article>
+      <article class="write"><div class="meta">Työ</div><h3>Työn uusi järjestelmä</h3><p>Työn muutos ei ole vain työmarkkinakysymys vaan koko hyvinvointimallin kysymys.</p></article>
+      <article class="write"><div class="meta">Väestö</div><h3>Väestönmuutos ja järjestelmän kestävyys</h3><p>Ikärakenteen muutos vaikuttaa hitaasti mutta hyvin pitkäkestoisesti.</p></article>
+      <article class="write"><div class="meta">Talous</div><h3>Rahan jälkeen -- mistä arvo syntyy?</h3><p>Arvon lähteet muuttuvat, kun tuotanto, palvelut ja teknologia järjestyvät uudelleen.</p></article>
+      <article class="write"><div class="meta">Luottamus</div><h3>Luottamus infrastruktuurina</h3><p>Luottamus on hyvinvointivaltion näkymätön rakenne, joka kantaa tai murtuu hitaasti.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- 8. YHDISTYS -->
+<section id="yhdistys">
+  <div class="wrap two">
+    <div><div class="eyebrow">07 -- Yhdistys</div></div>
+    <div>
+      <h2>Hyvinvointivaltion Vaalijat ry</h2>
+      <p class="lead" style="margin-top:28px">Yhdistys toimii keskustelun, ymmärryksen ja yhteiskunnallisen ajattelun alustana.</p>
+    </div>
+  </div>
+  <div class="wrap"><div class="pills">
+    <div>Riippumaton</div><div>Yhteiskunnallinen</div><div>Rakentava</div><div>Tutkiva</div><div>Tulevaisuuteen suuntautuva</div>
+  </div></div>
+</section>
+
+<!-- 9. LIITY -->
+<section id="liity" class="join">
+  <div class="wrap inner">
+    <div class="eyebrow">08 -- Liity mukaan</div>
+    <h2>Hyvinvointivaltio tarvitsee vaalijoita.</h2>
+    <p class="lead" style="margin-top:28px">Hyvinvointivaltion tulevaisuus ei synny itsestään. Se syntyy siitä, että ymmärrämme mitä olemme rakentaneet, mitä ympärillämme muuttuu ja mitä haluamme säilyttää.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="#liity">Liity mukaan</a>
+      <a class="btn btn-ghost" href="#liity" data-action="newsletter">Tilaa uutiskirje</a>
+      <a class="btn btn-ghost" href="#liity" data-action="contact">Osallistu keskusteluun</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <h3>Hyvinvointivaltion Vaalijat ry</h3>
+        <p style="max-width:36ch;color:#a8b2bc">Rakennamme ymmärrystä suomalaisen hyvinvointivaltion muutoksesta.</p>
+      </div>
+      <div>
+        <div class="f-title">Sivusto</div>
+        <a href="#top">Etusivu</a>
+        <a href="#yhdistys">Yhdistys</a>
+        <a href="#teemat">Ajankohtaista</a>
+        <a href="#atlas">Rakennemuutosten atlas</a>
+        <a href="#kirjoitukset">Kirjoitukset</a>
+      </div>
+      <div>
+        <div class="f-title">Yhteystiedot</div>
+        <a href="mailto:info@hyvinvointivaltionvaalijat.fi">info@hyvinvointivaltionvaalijat.fi</a>
+        <p style="color:#8b96a3;margin:8px 0 0">Y-tunnus: lisätään myöhemmin</p>
+        <p style="color:#8b96a3;margin:4px 0 0">Sosiaalinen media: lisätään myöhemmin</p>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <div>© 2026 Hyvinvointivaltion Vaalijat ry</div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap">
+        <a href="#">Tietosuojaseloste</a>
+        <a href="#">Evästeet</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const b=document.getElementById('burger'),m=document.getElementById('mobile');
+  b.addEventListener('click',()=>{const o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+  m.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{m.classList.remove('open');b.setAttribute('aria-expanded','false')}));
+</script>
+</body>
+</html>
