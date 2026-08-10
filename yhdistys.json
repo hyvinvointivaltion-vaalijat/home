@@ -142,5 +142,18 @@
       "empty_text": "Pöytäkirjat julkaistaan hallituksen hyväksynnän jälkeen.",
       "items": []
     }
+  ],
+  "news": [
+    {
+      "id": 5,
+      "title": "Maailmanparannuspäivät",
+      "status": "julkaistu",
+      "pinned": false,
+      "sort_order": 1,
+      "kicker": "Syyskuu 2026",
+      "excerpt": "Maailmanparannuspäivät",
+      "body": "Maailmanparannuspäivät",
+      "published_at": "2026-08-10T18:19:58.006+00:00"
+    }
   ]
 }
