@@ -391,6 +391,7 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
     <div class="sub" id="connStatus">yhdistetään…</div>
   </div>
   <div class="exports">
+    <button class="btn" id="triggerGithubExport" style="display:none">Päivitä verkkosivun JSON</button>
     <button class="btn" id="logoutBtn" style="display:none">Kirjaudu ulos</button>
   </div>
 </header>
@@ -928,9 +929,11 @@ $("saveBoardMember").addEventListener("click", async () => {
       const { error } = await sb.from("association_board_members").insert(payload);
       if(error) throw error;
     }
-    toast("Hallituksen jäsen tallennettu.");
+    toast("Hallituksen jäsen tallennettu. Käynnistetään JSON-päivitys…");
     closeSheet("overlayBoardMember");
     await loadAll();
+    try{ await triggerJsonExport(); toast("Hallituksen tiedot tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
   }catch(err){
     toast("Tallennus epäonnistui: " + err.message, true);
   }
@@ -942,9 +945,11 @@ $("deleteBoardMember").addEventListener("click", async () => {
   try{
     const { error } = await sb.from("association_board_members").delete().eq("id", state.editingBoardMemberId);
     if(error) throw error;
-    toast("Hallituksen jäsen poistettu.");
+    toast("Hallituksen jäsen poistettu. Käynnistetään JSON-päivitys…");
     closeSheet("overlayBoardMember");
     await loadAll();
+    try{ await triggerJsonExport(); toast("Poisto tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Poisto tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
   }catch(err){
     toast("Poisto epäonnistui: " + err.message, true);
   }
@@ -1118,9 +1123,11 @@ $("saveMeeting").addEventListener("click", async () => {
       const { error } = await sb.from("association_meetings").insert(payload);
       if(error) throw error;
     }
-    toast("Asiakirja tallennettu.");
+    toast("Asiakirja tallennettu. Käynnistetään JSON-päivitys…");
     closeSheet("overlayMeeting");
     await loadAll();
+    try{ await triggerJsonExport(); toast("Asiakirja tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
   }catch(err){
     toast("Tallennus epäonnistui: " + err.message, true);
   }
@@ -1132,9 +1139,11 @@ $("deleteMeeting").addEventListener("click", async () => {
   try{
     const { error } = await sb.from("association_meetings").delete().eq("id", state.editingMeetingId);
     if(error) throw error;
-    toast("Asiakirja poistettu.");
+    toast("Asiakirja poistettu. Käynnistetään JSON-päivitys…");
     closeSheet("overlayMeeting");
     await loadAll();
+    try{ await triggerJsonExport(); toast("Poisto tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Poisto tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
   }catch(err){
     toast("Poisto epäonnistui: " + err.message, true);
   }
@@ -1353,6 +1362,48 @@ document.querySelectorAll("#newsStatusFilter .chip").forEach(chip => {
   });
 });
 
+async function triggerJsonExport(){
+  if(!state.session){
+    throw new Error("Kirjautunut Supabase-istunto puuttuu.");
+  }
+
+  const { data, error } = await sb.functions.invoke("trigger-github-export", {
+    body: { workflow: "export-json.yml", ref: "main" }
+  });
+
+  if(error) throw error;
+  if(!data?.ok){
+    throw new Error(data?.error || "GitHub Actions -käynnistys epäonnistui");
+  }
+
+  return data;
+}
+
+$("triggerGithubExport").addEventListener("click", async () => {
+  const button = $("triggerGithubExport");
+  if(!state.session){
+    toast("Kirjaudu ensin sisään.", true);
+    return;
+  }
+
+  button.disabled = true;
+  const originalText = button.textContent;
+  button.textContent = "Käynnistetään…";
+
+  try{
+    await triggerJsonExport();
+    toast("yhdistys.json-päivitys käynnistetty GitHubissa.");
+    button.textContent = "✓ Päivitys käynnistetty";
+    setTimeout(() => { button.textContent = originalText; }, 2500);
+  }catch(err){
+    console.error("JSON-exportin käynnistys epäonnistui:", err);
+    toast("JSON-export epäonnistui: " + (err?.message || "tuntematon virhe"), true);
+    button.textContent = originalText;
+  }finally{
+    button.disabled = false;
+  }
+});
+
 $("saveNews").addEventListener("click", async () => {
   const title = $("news_title").value.trim();
   if(!title){
@@ -1388,9 +1439,17 @@ $("saveNews").addEventListener("click", async () => {
       if(error) throw error;
     }
 
-    toast("Tiedote tallennettu Supabaseen.");
+    toast("Tiedote tallennettu Supabaseen. Käynnistetään JSON-päivitys…");
     closeSheet("overlayNews");
     await loadAll();
+
+    try{
+      await triggerJsonExport();
+      toast("Tiedote tallennettu ja yhdistys.json-päivitys käynnistetty.");
+    }catch(exportErr){
+      console.error("JSON-exportin käynnistys epäonnistui:", exportErr);
+      toast("Tiedote tallennettu, mutta JSON-päivityksen käynnistys epäonnistui: " + exportErr.message, true);
+    }
   }catch(err){
     toast("Tiedotteen tallennus epäonnistui: " + err.message, true);
   }
@@ -1403,9 +1462,11 @@ $("deleteNews").addEventListener("click", async () => {
   try{
     const { error } = await sb.from("association_news").delete().eq("id", state.editingNewsId);
     if(error) throw error;
-    toast("Tiedote poistettu.");
+    toast("Tiedote poistettu. Käynnistetään JSON-päivitys…");
     closeSheet("overlayNews");
     await loadAll();
+    try{ await triggerJsonExport(); toast("Poisto tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Poisto tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
   }catch(err){
     toast("Poisto epäonnistui: " + err.message, true);
   }
@@ -1435,8 +1496,10 @@ $("saveRules").addEventListener("click", async () => {
   try{
     const { error } = await sb.from("association_rules").update(payload).eq("id", "main");
     if(error) throw error;
-    toast("Säännöt tallennettu.");
+    toast("Säännöt tallennettu. Käynnistetään JSON-päivitys…");
     await loadAll();
+    try{ await triggerJsonExport(); toast("Säännöt tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
   }catch(err){
     toast("Tallennus epäonnistui: " + err.message, true);
   }
@@ -1483,6 +1546,7 @@ function showLogin(){
   $("overlayLogin").classList.add("open");
   $("appShell").style.display = "none";
   $("logoutBtn").style.display = "none";
+  $("triggerGithubExport").style.display = "none";
   setTimeout(() => $("loginEmail").focus(), 30);
 }
 
@@ -1490,6 +1554,7 @@ function showApp(){
   $("overlayLogin").classList.remove("open");
   $("appShell").style.display = "block";
   $("logoutBtn").style.display = "inline-flex";
+  $("triggerGithubExport").style.display = "inline-flex";
 }
 
 async function attemptLogin(){
