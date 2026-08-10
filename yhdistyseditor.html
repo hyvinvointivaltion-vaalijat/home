@@ -223,6 +223,25 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
 .pill.status-valmis{background:#e4ecd8;color:var(--forest-deep)}
 .pill.status-allekirjoitettu{background:var(--forest-deep);color:var(--paper)}
 
+
+.news-card{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:var(--paper);
+  padding:16px;
+  margin-top:10px;
+}
+.news-card.pinned{border-color:var(--copper);box-shadow:inset 3px 0 var(--copper)}
+.news-card-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.news-card h3{margin:3px 0 6px;font-family:var(--serif);font-size:1.08rem;color:var(--forest-deep)}
+.news-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;color:var(--muted);font:11px var(--mono)}
+.news-excerpt{margin:8px 0 0;color:var(--ink);font-size:13.5px}
+.news-body-preview{margin:8px 0 0;color:var(--muted);font-size:12.5px;white-space:pre-line}
+.news-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill.status-julkaistu{background:#e4ecd8;color:var(--forest-deep)}
+.pill.status-arkistoitu{background:#eee7dc;color:var(--muted)}
+.pill.pinned{background:#fbf2df;color:#7a5417}
+
 .empty{
   padding:30px;
   text-align:center;
@@ -385,6 +404,7 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
 <nav class="tabs">
   <button data-tab="board" class="active">Hallitus &amp; yhteystiedot <span class="count" id="countBoard">–</span></button>
   <button data-tab="meetings">Kokoukset <span class="count" id="countMeetings">–</span></button>
+  <button data-tab="news">Ajankohtaista <span class="count" id="countNews">–</span></button>
   <button data-tab="rules">Säännöt</button>
 </nav>
 
@@ -446,6 +466,26 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
     <div class="empty" id="meetingsEmpty" style="display:none">Ei asiakirjoja vielä.</div>
   </section>
 
+  <!-- ============ AJANKOHTAISTA ============ -->
+  <section class="panel" id="panel-news">
+    <div class="intro-note">
+      Yhdistyksen julkiset tiedotteet. Kirjoita sisältö täällä, tallenna Supabaseen ja käynnistä
+      tarvittaessa yläreunan GitHub Actions -vienti, joka päivittää julkaistavan JSON-tiedoston.
+    </div>
+    <div class="toolbar">
+      <input type="search" id="searchNews" placeholder="Hae otsikosta, ingressistä tai sisällöstä…" />
+      <div class="chip-group" id="newsStatusFilter">
+        <button class="chip active" data-news-status="all">Kaikki</button>
+        <button class="chip" data-news-status="luonnos">Luonnokset</button>
+        <button class="chip" data-news-status="julkaistu">Julkaistut</button>
+        <button class="chip" data-news-status="arkistoitu">Arkistoidut</button>
+      </div>
+      <button class="btn primary" id="newNews">+ Uusi tiedote</button>
+    </div>
+    <div id="newsList"></div>
+    <div class="empty" id="newsEmpty" style="display:none">Ei tiedotteita.</div>
+  </section>
+
   <!-- ============ SÄÄNNÖT ============ -->
   <section class="panel" id="panel-rules">
     <div class="intro-note">
@@ -494,6 +534,54 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
     <div class="sheet-foot">
       <button class="btn danger" id="deleteBoardMember" style="display:none">Poista</button>
       <button class="btn primary" id="saveBoardMember">Tallenna</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MUOKKAUSPANEELI: AJANKOHTAISTA ============ -->
+<div class="overlay" id="overlayNews">
+  <div class="sheet" style="max-width:760px">
+    <div class="sheet-head">
+      <h2 id="newsFormTitle">Uusi tiedote</h2>
+      <button class="close-x" data-close="overlayNews">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="row2">
+        <div class="field"><label>Yläotsikko / tunniste</label><input type="text" id="news_kicker" placeholder="esim. Yhdistys · Elokuu 2026"></div>
+        <div class="field"><label>Järjestysnumero</label><input type="number" id="news_sort_order" min="1" value="1"></div>
+      </div>
+      <div class="field"><label>Otsikko</label><input type="text" id="news_title"></div>
+      <div class="field"><label>Ingressi</label><textarea id="news_excerpt" placeholder="Lyhyt teksti, joka näkyy kortissa."></textarea></div>
+      <div class="field"><label>Varsinainen sisältö</label><textarea id="news_body" style="min-height:220px" placeholder="Tiedotteen varsinainen teksti."></textarea></div>
+      <div class="row2">
+        <div class="field"><label>Tila</label>
+          <select id="news_status">
+            <option value="luonnos">Luonnos</option>
+            <option value="julkaistu">Julkaistu</option>
+            <option value="arkistoitu">Arkistoitu</option>
+          </select>
+        </div>
+        <div class="field"><label>Julkaistu</label><input type="datetime-local" id="news_published_at"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Kuvan URL (valinnainen)</label><input type="text" id="news_image_url" placeholder="https://…"></div>
+        <div class="field"><label>Linkin URL (valinnainen)</label><input type="text" id="news_link_url" placeholder="https://…"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Linkin teksti</label><input type="text" id="news_link_label" placeholder="Lue lisää"></div>
+        <div class="field">
+          <label>Nosta etusivulle</label>
+          <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font:14px inherit;color:var(--ink)">
+            <input type="checkbox" id="news_pinned"> Kiinnitetty tiedote
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn danger" id="deleteNews" style="display:none">Poista</button>
+      <span style="display:flex;gap:10px">
+        <button class="btn primary" id="saveNews">Tallenna tiedote</button>
+      </span>
     </div>
   </div>
 </div>
@@ -613,12 +701,15 @@ const state = {
   boardMembers: [],
   meetings: [],
   rules: null,
+  news: [],
   editingBoardMemberId: null,
+  editingNewsId: null,
   editingMeetingId: null,
   meetingTypeFilter: "all",
   sort: {
     board: { key: "sort_order", dir: "asc" },
-    meetings: { key: "meeting_date", dir: "desc" }
+    meetings: { key: "meeting_date", dir: "desc" },
+    news: { key: "published_at", dir: "desc" }
   }
 };
 
@@ -738,16 +829,24 @@ async function loadAll(){
     const rulesRes = await sb.from("association_rules").select("*").eq("id", "main").maybeSingle();
     if(rulesRes.error) throw rulesRes.error;
 
+    const newsRes = await sb.from("association_news").select("*")
+      .order("pinned", { ascending: false })
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("sort_order", { ascending: true });
+    if(newsRes.error) throw newsRes.error;
+
     state.association = assocRes.data;
     state.boardMembers = boardRes.data;
     state.meetings = meetingsRes.data;
     state.rules = rulesRes.data;
+    state.news = newsRes.data;
 
     $("connStatus").textContent =
-      `yhdistetty · ${state.boardMembers.length} hallituksen jäsentä · ${state.meetings.length} kokousasiakirjaa`;
+      `yhdistetty · ${state.boardMembers.length} hallituksen jäsentä · ${state.meetings.length} kokousasiakirjaa · ${state.news.length} tiedotetta`;
 
     renderBoardMembers();
     renderMeetings();
+    renderNews();
     renderRules();
   }catch(err){
     $("connStatus").textContent = "virhe ladattaessa dataa -- katso selaimen konsoli (F12 / Kehittäjätyökalut)";
@@ -1159,6 +1258,160 @@ function printMeeting(m){
 }
 
 /* ==========================================================
+   AJANKOHTAISTA
+   ========================================================== */
+const NEWS_STATUS_LABELS = {
+  luonnos: "Luonnos",
+  julkaistu: "Julkaistu",
+  arkistoitu: "Arkistoitu"
+};
+
+state.newsStatusFilter = "all";
+
+function fmtDateTime(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("fi-FI", { dateStyle:"medium", timeStyle:"short" });
+}
+
+function toDateTimeLocal(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(Number.isNaN(d.getTime())) return "";
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function renderNews(){
+  const q = $("searchNews").value.trim().toLocaleLowerCase("fi-FI");
+  const filter = state.newsStatusFilter;
+
+  const rows = state.news.filter(n => {
+    const text = [n.title,n.kicker,n.excerpt,n.body].filter(Boolean).join(" ").toLocaleLowerCase("fi-FI");
+    return (filter === "all" || n.status === filter) && (!q || text.includes(q));
+  });
+
+  $("countNews").textContent = state.news.length;
+  $("newsEmpty").style.display = rows.length ? "none" : "block";
+
+  $("newsList").innerHTML = rows.map(n => `
+    <article class="news-card ${n.pinned ? "pinned" : ""}">
+      <div class="news-card-head">
+        <div>
+          <div class="news-meta">
+            ${n.kicker ? `<span>${esc(n.kicker)}</span>` : ""}
+            <span class="pill status-${esc(n.status)}">${esc(NEWS_STATUS_LABELS[n.status] || n.status)}</span>
+            ${n.pinned ? `<span class="pill pinned">Nostettu</span>` : ""}
+            ${n.published_at ? `<span>${esc(fmtDateTime(n.published_at))}</span>` : ""}
+          </div>
+          <h3>${esc(n.title)}</h3>
+          ${n.excerpt ? `<div class="news-excerpt">${esc(n.excerpt)}</div>` : ""}
+          ${n.body ? `<div class="news-body-preview">${esc(n.body.slice(0,320))}${n.body.length > 320 ? "…" : ""}</div>` : ""}
+        </div>
+        <div class="news-actions">
+          <button class="btn small" data-edit-news="${n.id}">Muokkaa</button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  document.querySelectorAll("[data-edit-news]").forEach(btn => {
+    btn.addEventListener("click", () => openNewsForm(Number(btn.dataset.editNews)));
+  });
+}
+
+function openNewsForm(id){
+  state.editingNewsId = id || null;
+  const n = id ? state.news.find(x => x.id === id) : null;
+
+  $("newsFormTitle").textContent = n ? "Muokkaa tiedotetta" : "Uusi tiedote";
+  $("news_kicker").value = n ? (n.kicker || "") : "";
+  $("news_title").value = n ? (n.title || "") : "";
+  $("news_excerpt").value = n ? (n.excerpt || "") : "";
+  $("news_body").value = n ? (n.body || "") : "";
+  $("news_status").value = n ? (n.status || "luonnos") : "luonnos";
+  $("news_published_at").value = n ? toDateTimeLocal(n.published_at) : "";
+  $("news_image_url").value = n ? (n.image_url || "") : "";
+  $("news_link_url").value = n ? (n.link_url || "") : "";
+  $("news_link_label").value = n ? (n.link_label || "") : "";
+  $("news_pinned").checked = n ? Boolean(n.pinned) : false;
+  $("news_sort_order").value = n ? (n.sort_order || 1) : (state.news.length + 1);
+  $("deleteNews").style.display = n ? "inline-flex" : "none";
+  openSheet("overlayNews");
+}
+
+$("newNews").addEventListener("click", () => openNewsForm(null));
+$("searchNews").addEventListener("input", renderNews);
+
+document.querySelectorAll("#newsStatusFilter .chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll("#newsStatusFilter .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    state.newsStatusFilter = chip.dataset.newsStatus;
+    renderNews();
+  });
+});
+
+$("saveNews").addEventListener("click", async () => {
+  const title = $("news_title").value.trim();
+  if(!title){
+    toast("Otsikko on pakollinen", true);
+    return;
+  }
+
+  const status = $("news_status").value;
+  let publishedAt = $("news_published_at").value;
+  if(status === "julkaistu" && !publishedAt) publishedAt = new Date().toISOString();
+
+  const payload = {
+    title,
+    kicker: $("news_kicker").value.trim() || null,
+    excerpt: $("news_excerpt").value.trim() || null,
+    body: $("news_body").value.trim() || null,
+    status,
+    published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
+    image_url: $("news_image_url").value.trim() || null,
+    link_url: $("news_link_url").value.trim() || null,
+    link_label: $("news_link_label").value.trim() || null,
+    pinned: $("news_pinned").checked,
+    sort_order: Number($("news_sort_order").value) || 1,
+    updated_at: new Date().toISOString()
+  };
+
+  try{
+    if(state.editingNewsId){
+      const { error } = await sb.from("association_news").update(payload).eq("id", state.editingNewsId);
+      if(error) throw error;
+    }else{
+      const { error } = await sb.from("association_news").insert(payload);
+      if(error) throw error;
+    }
+
+    toast("Tiedote tallennettu Supabaseen.");
+    closeSheet("overlayNews");
+    await loadAll();
+  }catch(err){
+    toast("Tiedotteen tallennus epäonnistui: " + err.message, true);
+  }
+});
+
+$("deleteNews").addEventListener("click", async () => {
+  if(!state.editingNewsId) return;
+  if(!confirm("Poistetaanko tämä tiedote pysyvästi?")) return;
+
+  try{
+    const { error } = await sb.from("association_news").delete().eq("id", state.editingNewsId);
+    if(error) throw error;
+    toast("Tiedote poistettu.");
+    closeSheet("overlayNews");
+    await loadAll();
+  }catch(err){
+    toast("Poisto epäonnistui: " + err.message, true);
+  }
+});
+
+/* ==========================================================
    SÄÄNNÖT
    ========================================================== */
 function renderRules(){
@@ -1273,7 +1526,7 @@ $("loginEmail").addEventListener("keydown", e => { if(e.key === "Enter") attempt
 
 $("logoutBtn").addEventListener("click", async () => {
   try{ await sb.auth.signOut(); }catch(err){ /* ei kriittinen */ }
-  state.boardMembers = []; state.meetings = []; state.rules = null;
+  state.boardMembers = []; state.meetings = []; state.news = []; state.rules = null;
   showLogin();
   toast("Kirjauduttu ulos.");
 });
