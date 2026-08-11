@@ -586,6 +586,54 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 }
 
 </style>
+
+<style id="phenomenon-gateway-css">
+  .sphere-phenomenon{
+    cursor:pointer;
+    transition:opacity .22s ease, transform .22s ease, text-decoration-color .22s ease;
+  }
+  .sphere-phenomenon:hover{
+    opacity:1 !important;
+    transform:translateY(-1px);
+    text-decoration:underline;
+    text-decoration-thickness:1px;
+    text-underline-offset:4px;
+  }
+  .sphere-phenomenon.main{
+    font-weight:600;
+  }
+  .sphere-gateway{
+    margin-top:18px;
+    min-height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    opacity:0;
+    transform:translateY(6px);
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .sphere-gateway.visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .sphere-gateway-title{
+    font-family:var(--serif, Georgia, serif);
+    font-size:1.05rem;
+    letter-spacing:.01em;
+  }
+  .sphere-gateway-link{
+    border-bottom:1px solid currentColor;
+    padding-bottom:3px;
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+</style>
+
 </head>
 <body>
 
@@ -706,6 +754,13 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
       <div class="welfare-sphere" id="welfare-sphere">
         <div class="sphere-stage">
           <div class="sphere-engrave" aria-hidden="true"></div>
+<div id="sphere-gateway" class="sphere-gateway" aria-live="polite">
+  <span id="sphere-gateway-title" class="sphere-gateway-title"></span>
+  <span id="sphere-gateway-link" class="sphere-gateway-link" role="button" tabindex="0">
+    Tutki visualisointia →
+  </span>
+</div>
+
 <svg id="welfare-sphere-svg" viewBox="0 0 1200 650" role="img"
             aria-label="Navigoitava hyvinvointivaltion käsitepallo. Palloa voi kääntää 360 astetta; näkymä kertoo vuosikymmenen, tarkastelukulman ja siihen liittyvät keskeiset murrokset.">
             <defs>
@@ -1687,6 +1742,121 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   });
 
   render();
+})();
+</script>
+
+
+<script id="phenomenon-gateway-js">
+(() => {
+  const gateway = document.getElementById("sphere-gateway");
+  const gatewayTitle = document.getElementById("sphere-gateway-title");
+  const gatewayLink = document.getElementById("sphere-gateway-link");
+
+  if (!gateway || !gatewayTitle || !gatewayLink) return;
+
+  const atlasRoutes = {
+    "TYÖN MURROS": "#atlas",
+    "PALVELUJEN PAINE": "#atlas",
+    "VÄESTÖN KESKITTYMINEN": "#atlas",
+    "JULKISEN TALOUDEN MURROS": "#atlas",
+    "VELKA": "#atlas",
+    "LUOTTAMUKSEN MUUTOS": "#atlas",
+    "TOIMINTAKYVYN MUUTOS": "#atlas",
+    "KOULUTUKSEN LAAJENEMINEN": "#atlas",
+    "DEMOGRAFINEN MURROS": "#atlas",
+    "TUOTTAVUUDEN MURROS": "#atlas"
+  };
+
+  function slugify(value) {
+    return value
+      .toLocaleLowerCase("fi-FI")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ä/g, "a")
+      .replace(/ö/g, "o")
+      .replace(/å/g, "a")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+
+  function showGateway(label) {
+    if (!label) return;
+    gatewayTitle.textContent = label;
+    gateway.dataset.phenomenon = label;
+    gateway.classList.add("visible");
+  }
+
+  function openAtlas(label) {
+    const id = slugify(label);
+
+    // If the page already exposes an Atlas navigation function,
+    // use it. Otherwise fall back to the Atlas section.
+    if (typeof window.openAtlasForPhenomenon === "function") {
+      window.openAtlasForPhenomenon(label, id);
+      return;
+    }
+
+    const atlas = document.querySelector("#atlas, [data-section='atlas'], .atlas-section");
+    if (atlas) {
+      atlas.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Preserve the selected phenomenon for a later Atlas bridge.
+    window.location.hash = `atlas-${id}`;
+    window.dispatchEvent(new CustomEvent("atlas:phenomenon", {
+      detail: { label, id }
+    }));
+  }
+
+  gatewayLink.addEventListener("click", () => {
+    openAtlas(gateway.dataset.phenomenon);
+  });
+
+  gatewayLink.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openAtlas(gateway.dataset.phenomenon);
+    }
+  });
+
+  /*
+   * The existing sphere code can call this whenever the active
+   * front-facing phenomenon changes.
+   */
+  window.updateSphereGateway = showGateway;
+})();
+</script>
+
+
+<script id="sphere-gateway-adapter">
+(() => {
+  const observer = new MutationObserver(() => {
+    const candidates = [
+      document.querySelector("#sphere-status"),
+      document.querySelector("#sphere-active"),
+      document.querySelector(".sphere-active"),
+      document.querySelector("[data-sphere-active]")
+    ];
+
+    for (const el of candidates) {
+      const text = el?.textContent?.trim();
+      if (!text) continue;
+
+      const match = text.match(/(?:^|·)\s*([^·|]+?)(?:\s*·|$)/);
+      const label = match ? match[1].trim() : text;
+
+      if (label && typeof window.updateSphereGateway === "function") {
+        window.updateSphereGateway(label);
+        break;
+      }
+    }
+  });
+
+  observer.observe(document.body, {
+    subtree: true,
+    childList: true,
+    characterData: true
+  });
 })();
 </script>
 
