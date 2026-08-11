@@ -23,169 +23,156 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f7f4ee}
 
     const ATLAS = "https://harrikayhko.fi/atlas/murros/index.html";
     const routes = [
-      ["Rengas", `${ATLAS}#rengas`],
-      ["Verkko", `${ATLAS}#verkko`],
-      ["Matriisi", `${ATLAS}#matriisi`],
-      ["Päättely", `${ATLAS}#paattely`],
-      ["Maisema 3D", `${ATLAS}#maisema`],
-      ["Tulkinta", "https://harrikayhko.fi/atlas/tulkinta.html"]
+      ["Rengas", "rengas"],
+      ["Verkko", "verkko"],
+      ["Matriisi", "matriisi"],
+      ["Päättely", "paattely"],
+      ["Maisema 3D", "maisema"],
+      ["Tulkinta", "tulkinta"]
     ];
 
     const style = doc.createElement("style");
     style.id = "association-atlas-menu-style";
     style.textContent = `
-      /* V5: Murrosatlaksen alkuperäiset näkymät yhdistyssivun ylävalikossa. */
-      .links .atlas-nav-item{
-        position:relative;
-        display:flex;
-        align-items:center;
-      }
+      .links .atlas-nav-item{position:relative;display:flex;align-items:center}
       .links .atlas-nav-trigger{
-        position:relative;
-        appearance:none;
-        border:0;
-        padding:0;
-        background:transparent;
-        color:var(--ink-soft);
-        font:600 .9rem/1 "Source Sans 3",Inter,system-ui,sans-serif;
-        cursor:pointer;
-        transition:color .2s;
+        position:relative;appearance:none;border:0;padding:0;background:transparent;
+        color:var(--ink-soft);font:600 .9rem/1 "Source Sans 3",Inter,system-ui,sans-serif;
+        cursor:pointer;transition:color .2s
       }
       .links .atlas-nav-trigger::after{
-        content:"";
-        position:absolute;
-        left:0;
-        right:100%;
-        bottom:-7px;
-        height:1px;
-        background:var(--copper);
-        transition:right .32s var(--ease);
+        content:"";position:absolute;left:0;right:100%;bottom:-7px;height:1px;
+        background:var(--copper);transition:right .32s var(--ease)
       }
       .links .atlas-nav-item:hover .atlas-nav-trigger,
-      .links .atlas-nav-item.open .atlas-nav-trigger{
-        color:var(--ink);
-      }
+      .links .atlas-nav-item.open .atlas-nav-trigger{color:var(--ink)}
       .links .atlas-nav-item:hover .atlas-nav-trigger::after,
-      .links .atlas-nav-item.open .atlas-nav-trigger::after{
-        right:0;
-      }
-      .atlas-nav-trigger .chev{
-        display:inline-block;
-        margin-left:5px;
-        font-size:.72em;
-        transform:translateY(-1px);
-        transition:transform .2s;
-      }
-      .atlas-nav-item.open .chev{transform:translateY(-1px) rotate(180deg)}
+      .links .atlas-nav-item.open .atlas-nav-trigger::after{right:0}
+      .atlas-nav-trigger .chev{display:inline-block;margin-left:5px;font-size:.72em;transition:transform .2s}
+      .atlas-nav-item.open .chev{transform:rotate(180deg)}
 
       .atlas-nav-menu{
-        position:absolute;
-        top:calc(100% + 18px);
-        left:50%;
-        z-index:90;
-        min-width:470px;
-        padding:7px;
-        display:grid;
-        grid-template-columns:repeat(3,minmax(0,1fr));
-        gap:3px;
-        background:rgba(247,244,238,.97);
-        border:1px solid var(--line);
-        border-radius:14px;
-        box-shadow:0 22px 55px -28px rgba(13,42,44,.48);
-        backdrop-filter:blur(16px);
-        opacity:0;
-        visibility:hidden;
-        pointer-events:none;
-        transform:translate(-50%,-5px);
-        transition:opacity .18s ease, transform .18s ease, visibility .18s;
+        position:absolute;top:calc(100% + 18px);left:50%;z-index:90;min-width:470px;
+        padding:7px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;
+        background:rgba(247,244,238,.97);border:1px solid var(--line);border-radius:14px;
+        box-shadow:0 22px 55px -28px rgba(13,42,44,.48);backdrop-filter:blur(16px);
+        opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,-5px);
+        transition:opacity .18s ease,transform .18s ease,visibility .18s
       }
       .atlas-nav-item:hover .atlas-nav-menu,
       .atlas-nav-item.open .atlas-nav-menu{
-        opacity:1;
-        visibility:visible;
-        pointer-events:auto;
-        transform:translate(-50%,0);
+        opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0)
       }
-      .links .atlas-nav-menu a{
-        display:flex;
-        align-items:center;
-        gap:8px;
-        min-height:39px;
-        padding:8px 10px;
-        border-radius:9px;
-        color:var(--ink-soft);
-        text-decoration:none;
-        font-size:.78rem;
-        font-weight:600;
-        white-space:nowrap;
+      .links .atlas-nav-menu button{
+        display:flex;align-items:center;gap:8px;min-height:39px;padding:8px 10px;border:0;
+        border-radius:9px;background:transparent;color:var(--ink-soft);font:600 .78rem/1.25 "Source Sans 3",sans-serif;
+        cursor:pointer;white-space:nowrap;text-align:left
       }
-      .links .atlas-nav-menu a::after{display:none}
-      .links .atlas-nav-menu a::before{
-        content:"";
-        width:6px;height:6px;flex:none;border-radius:50%;
-        background:currentColor;opacity:.45;
+      .links .atlas-nav-menu button::before{
+        content:"";width:6px;height:6px;flex:none;border-radius:50%;background:currentColor;opacity:.45
       }
-      .links .atlas-nav-menu a:hover{
-        background:var(--card);
-        color:var(--ink);
-      }
-      .links .atlas-nav-menu a:hover::before{
-        background:var(--copper);opacity:1;
-      }
+      .links .atlas-nav-menu button:hover{background:var(--card);color:var(--ink)}
+      .links .atlas-nav-menu button:hover::before{background:var(--copper);opacity:1}
       .atlas-nav-menu .atlas-menu-head{
-        grid-column:1/-1;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:4px 8px 6px;
-        border-bottom:1px solid var(--line-soft);
-        margin-bottom:2px;
+        grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
+        padding:4px 8px 6px;border-bottom:1px solid var(--line-soft);margin-bottom:2px
       }
       .atlas-nav-menu .atlas-menu-head b{
-        font-size:.65rem;
-        letter-spacing:.16em;
-        text-transform:uppercase;
-        color:var(--slate);
+        font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--slate)
       }
-      .atlas-nav-menu .atlas-menu-head span{
-        font-size:.68rem;color:var(--slate)
+      .atlas-nav-menu .atlas-menu-head span{font-size:.68rem;color:var(--slate)}
+
+      /* Atlas pysyy yhdistyssivun sisällä */
+      #association-atlas-overlay{
+        position:fixed;inset:var(--nav-h,74px) 0 0;z-index:55;
+        display:none;background:var(--paper,#f7f4ee)
+      }
+      #association-atlas-overlay.open{display:flex;flex-direction:column}
+      .association-atlas-bar{
+        flex:none;display:flex;align-items:center;gap:16px;min-height:46px;padding:7px 22px;
+        border-bottom:1px solid var(--line);background:rgba(247,244,238,.96);backdrop-filter:blur(12px)
+      }
+      .association-atlas-bar strong{
+        font:600 .68rem/1 "Source Sans 3",sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--slate)
+      }
+      .association-atlas-current{
+        color:var(--deep);font:500 1rem/1.2 Fraunces,Georgia,serif
+      }
+      .association-atlas-close{
+        margin-left:auto;border:1px solid var(--line);border-radius:999px;padding:7px 12px;
+        background:var(--card);color:var(--deep);font:600 .74rem/1 "Source Sans 3",sans-serif;cursor:pointer
+      }
+      .association-atlas-frame{display:block;flex:1;width:100%;min-height:0;border:0;background:var(--paper)}
+
+      .mobile .atlas-mobile-group{border-bottom:1px solid var(--line-soft)}
+      .mobile .atlas-mobile-trigger{
+        width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 2px;
+        border:0;background:transparent;font:600 1rem "Source Sans 3",sans-serif;color:inherit;cursor:pointer
+      }
+      .mobile .atlas-mobile-list{display:none;grid-template-columns:1fr 1fr;gap:2px 12px;padding:0 0 12px 14px}
+      .mobile .atlas-mobile-group.open .atlas-mobile-list{display:grid}
+      .mobile .atlas-mobile-list button{
+        padding:8px 2px;border:0;background:transparent;text-align:left;font:500 .88rem "Source Sans 3",sans-serif;
+        color:var(--ink-soft);cursor:pointer
       }
 
-      /* Yhdistyssivun mobiilivalikkoon oma Atlas-ryhmä. */
-      .mobile .atlas-mobile-group{
-        border-bottom:1px solid var(--line-soft);
-      }
-      .mobile .atlas-mobile-trigger{
-        width:100%;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:11px 2px;
-        border:0;
-        background:transparent;
-        font:600 1rem "Source Sans 3",Inter,system-ui,sans-serif;
-        color:inherit;
-        cursor:pointer;
-      }
-      .mobile .atlas-mobile-list{
-        display:none;
-        grid-template-columns:1fr 1fr;
-        gap:2px 12px;
-        padding:0 0 12px 14px;
-      }
-      .mobile .atlas-mobile-group.open .atlas-mobile-list{display:grid}
-      .mobile .atlas-mobile-list a{
-        padding:8px 2px;
-        border-bottom:0;
-        font-size:.88rem;
-        font-weight:500;
-        color:var(--ink-soft);
-      }
-      @media(max-width:1080px){
+      body.atlas-overlay-open{overflow:hidden!important}
+
+      @media(max-width:760px){
+        #association-atlas-overlay{inset:var(--nav-h,74px) 0 0}
+        .association-atlas-bar{padding:7px 12px}
+        .association-atlas-bar strong{display:none}
         .atlas-nav-menu{min-width:420px}
       }
     `;
     doc.head.appendChild(style);
+
+    const overlay = doc.createElement("section");
+    overlay.id = "association-atlas-overlay";
+    overlay.setAttribute("aria-label", "Rakennemuutosten Atlas");
+    overlay.innerHTML = `
+      <div class="association-atlas-bar">
+        <strong>Rakennemuutosten Atlas</strong>
+        <span class="association-atlas-current">Rengas</span>
+        <button class="association-atlas-close" type="button">Sulje Atlas ×</button>
+      </div>
+      <iframe class="association-atlas-frame"
+              title="Rakennemuutosten Atlas"
+              loading="eager"
+              allow="fullscreen"></iframe>`;
+    doc.body.appendChild(overlay);
+
+    const atlasFrame = overlay.querySelector(".association-atlas-frame");
+    const current = overlay.querySelector(".association-atlas-current");
+
+    function openAtlas(view) {
+      const isTulkinta = view === "tulkinta";
+      const src = isTulkinta
+        ? "https://harrikayhko.fi/atlas/tulkinta.html"
+        : `${ATLAS}#${view}`;
+
+      const label = routes.find(([,key]) => key === view)?.[0] || "Atlas";
+      current.textContent = label;
+
+      if (atlasFrame.src !== src) atlasFrame.src = src;
+      overlay.classList.add("open");
+      doc.body.classList.add("atlas-overlay-open");
+
+      // Sulje mahdolliset yhdistyssivun nav-valikot.
+      doc.querySelector(".atlas-nav-item")?.classList.remove("open");
+      const burger = doc.querySelector(".burger[aria-expanded='true']");
+      if (burger) burger.click();
+    }
+
+    function closeAtlas() {
+      overlay.classList.remove("open");
+      doc.body.classList.remove("atlas-overlay-open");
+    }
+
+    overlay.querySelector(".association-atlas-close").addEventListener("click", closeAtlas);
+    doc.addEventListener("keydown", e => {
+      if (e.key === "Escape" && overlay.classList.contains("open")) closeAtlas();
+    });
 
     const desktopLinks = doc.querySelector("header.nav .links");
     if (desktopLinks) {
@@ -208,8 +195,8 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f7f4ee}
         menu.setAttribute("role", "menu");
         menu.innerHTML =
           `<div class="atlas-menu-head"><b>Rakennemuutosten Atlas</b><span>valitse näkymä</span></div>` +
-          routes.map(([label,url]) =>
-            `<a role="menuitem" href="${url}" target="_top">${label}</a>`
+          routes.map(([label,key]) =>
+            `<button role="menuitem" type="button" data-atlas-view="${key}">${label}</button>`
           ).join("");
 
         trigger.addEventListener("click", e => {
@@ -219,6 +206,12 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f7f4ee}
           trigger.setAttribute("aria-expanded", String(open));
         });
 
+        menu.addEventListener("click", e => {
+          const button = e.target.closest("[data-atlas-view]");
+          if (!button) return;
+          openAtlas(button.dataset.atlasView);
+        });
+
         item.append(trigger, menu);
         oldAtlas.replaceWith(item);
 
@@ -226,13 +219,6 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f7f4ee}
           if (!item.contains(e.target)) {
             item.classList.remove("open");
             trigger.setAttribute("aria-expanded", "false");
-          }
-        });
-        doc.addEventListener("keydown", e => {
-          if (e.key === "Escape") {
-            item.classList.remove("open");
-            trigger.setAttribute("aria-expanded", "false");
-            trigger.focus();
           }
         });
       }
@@ -251,12 +237,22 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f7f4ee}
             <span>Atlas</span><span aria-hidden="true">⌄</span>
           </button>
           <div class="atlas-mobile-list">
-            ${routes.map(([label,url]) => `<a href="${url}" target="_top">${label}</a>`).join("")}
+            ${routes.map(([label,key]) =>
+              `<button type="button" data-atlas-view="${key}">${label}</button>`
+            ).join("")}
           </div>`;
-        group.querySelector("button").addEventListener("click", () => {
+
+        group.querySelector(".atlas-mobile-trigger").addEventListener("click", () => {
           const open = group.classList.toggle("open");
-          group.querySelector("button").setAttribute("aria-expanded", String(open));
+          group.querySelector(".atlas-mobile-trigger").setAttribute("aria-expanded", String(open));
         });
+
+        group.querySelector(".atlas-mobile-list").addEventListener("click", e => {
+          const button = e.target.closest("[data-atlas-view]");
+          if (!button) return;
+          openAtlas(button.dataset.atlasView);
+        });
+
         oldAtlasMobile.replaceWith(group);
       }
     }
