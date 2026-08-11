@@ -450,60 +450,246 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   .welfare-map{overflow-x:auto;overflow-y:hidden}
 }
 
-/* 01 · Navigoitava käsitepallo */
+/* 01 · Navigoitava käsitepallo — frameless / engraved */
+.welfare-figure{margin-top:clamp(42px,6vw,82px)}
 .welfare-sphere{
-  position:relative; overflow:hidden; border:1px solid var(--line);
-  border-radius:26px; background:
-    radial-gradient(circle at 31% 48%, rgba(32,81,76,.08), transparent 28%),
-    linear-gradient(180deg,#fffdf8 0%,#f7f3eb 100%);
-  box-shadow:0 34px 80px -58px rgba(13,42,44,.48);
+  position:relative;
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
 }
-.sphere-head{
-  display:flex;justify-content:space-between;align-items:flex-end;gap:28px;
-  padding:24px 30px 10px;border-bottom:1px solid rgba(221,214,201,.65);
+.sphere-head,.sphere-footer{display:none}
+.sphere-stage{
+  position:relative;
+  min-height:720px;
+  touch-action:none;
+  user-select:none;
+  cursor:grab;
 }
-.sphere-kicker{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);font-weight:700}
-.sphere-claim{margin-top:5px;font-size:.96rem;color:var(--ink-soft)}
-.sphere-help{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--copper);font-weight:700;white-space:nowrap}
-.sphere-stage{position:relative;min-height:650px;touch-action:none;user-select:none;cursor:grab}
 .sphere-stage.is-dragging{cursor:grabbing}
-#welfare-sphere-svg{display:block;width:100%;height:auto;min-height:650px}
-.sphere-axis text{font:600 11px "Source Sans 3",sans-serif;letter-spacing:.14em;fill:#7a837f}
-.sphere-axis .axis-title{font-size:10px;fill:#20514c}
-.sphere-center-copy text{font:600 12px "Source Sans 3",sans-serif;letter-spacing:.16em;fill:#f7f4ee;opacity:.7}
-.sphere-center-copy text:first-child{font-size:11px}
+#welfare-sphere-svg{
+  display:block;
+  width:100%;
+  height:auto;
+  min-height:720px;
+  overflow:visible;
+}
+.sphere-axis text{
+  font:600 10px "Source Sans 3",sans-serif;
+  letter-spacing:.18em;
+  fill:#8a918c;
+}
+.sphere-axis .axis-title{
+  font-size:9px;
+  fill:#6f7c77;
+}
+.sphere-center-copy text{
+  font:600 11px "Source Sans 3",sans-serif;
+  letter-spacing:.18em;
+  fill:#e8e4da;
+  opacity:.72;
+}
+.sphere-center-copy text:first-child{font-size:12px}
 .sphere-node{cursor:pointer}
-.sphere-node circle{transition:r .18s ease,opacity .18s ease,stroke-width .18s ease}
-.sphere-node text{font:600 10px "Source Sans 3",sans-serif;letter-spacing:.11em;fill:#f7f4ee;pointer-events:none}
+.sphere-node circle{
+  transition:r .18s ease,opacity .18s ease,stroke-width .18s ease;
+}
+.sphere-node text{
+  font:600 9px "Source Sans 3",sans-serif;
+  letter-spacing:.12em;
+  fill:#f4f0e7;
+  pointer-events:none;
+}
 .sphere-node .node-dot{filter:url(#nodeShadow)}
+
+/* Kaiverretut navigointiohjeet — ei laatikoita */
+.sphere-annotation{
+  position:absolute;
+  z-index:4;
+  color:#8a918c;
+  font-size:.64rem;
+  line-height:1.45;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+  pointer-events:none;
+}
+.sphere-annotation strong{
+  display:block;
+  color:#4f625d;
+  font-size:.68rem;
+  letter-spacing:.2em;
+  margin-bottom:5px;
+}
+.sphere-annotation span{
+  display:block;
+  color:#909791;
+  font-weight:500;
+  letter-spacing:.11em;
+  text-transform:none;
+}
+.sphere-annotation::after{
+  content:"";
+  position:absolute;
+  display:block;
+  border-color:#cfc8bb;
+  border-style:solid;
+  opacity:.8;
+}
+.ann-time{
+  left:8%;
+  top:7%;
+  width:190px;
+}
+.ann-time::after{
+  left:58px;
+  top:52px;
+  width:96px;
+  height:54px;
+  border-width:1px 0 0 1px;
+  transform:skewX(-28deg);
+}
+.ann-zone{
+  left:2%;
+  top:49%;
+  width:150px;
+}
+.ann-zone::after{
+  left:132px;
+  top:10px;
+  width:92px;
+  height:1px;
+  border-width:1px 0 0 0;
+}
+.ann-rotate{
+  right:6%;
+  top:13%;
+  width:180px;
+  text-align:right;
+}
+.ann-rotate::after{
+  right:116px;
+  top:50px;
+  width:92px;
+  height:62px;
+  border-width:1px 1px 0 0;
+  transform:skewX(26deg);
+}
+.ann-view{
+  right:2%;
+  bottom:17%;
+  width:190px;
+  text-align:right;
+}
+.ann-view::after{
+  right:146px;
+  top:-8px;
+  width:110px;
+  height:52px;
+  border-width:0 1px 1px 0;
+  transform:skewX(-20deg);
+}
+.ann-center{
+  left:50%;
+  bottom:2%;
+  transform:translateX(-50%);
+  width:300px;
+  text-align:center;
+}
+.ann-center::after{
+  left:50%;
+  bottom:42px;
+  width:1px;
+  height:54px;
+  border-width:0 0 0 1px;
+}
+
 .sphere-readout{
-  position:absolute;right:34px;top:50%;transform:translateY(-50%);
-  width:min(38%,390px);padding:28px 30px;border-radius:20px;
-  background:rgba(13,42,44,.96);color:#f7f4ee;
-  box-shadow:0 25px 60px -34px rgba(13,42,44,.65);
+  position:absolute;
+  right:3%;
+  bottom:5%;
+  width:min(31%,340px);
+  padding:0 0 0 22px;
+  border-left:1px solid rgba(180,99,44,.55);
+  background:transparent;
+  color:var(--ink);
+  box-shadow:none;
 }
-.readout-meta{display:flex;justify-content:space-between;gap:16px;color:#c9962a;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
-.readout-title{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.65rem,2.6vw,2.35rem);line-height:1.06;letter-spacing:-.025em;margin:18px 0 14px}
-.readout-text{color:#bfcac5;font-size:1rem;line-height:1.55}
-.sphere-footer{
-  display:flex;gap:28px;flex-wrap:wrap;padding:13px 30px 18px;border-top:1px solid rgba(221,214,201,.7);
-  font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:#7a837f;font-weight:600
+.readout-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  color:#a15f32;
+  font-size:.62rem;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  font-weight:700;
 }
-.sphere-footer .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#20514c;margin-right:7px}
-.sphere-footer .dot.copper{background:#b4632c}.sphere-footer .dot.light{background:#9aa6a2}
+.readout-title{
+  font-family:"Fraunces",Georgia,serif;
+  color:var(--deep);
+  font-size:clamp(1.35rem,2.15vw,2rem);
+  line-height:1.08;
+  letter-spacing:-.025em;
+  margin:10px 0 9px;
+}
+.readout-text{
+  color:var(--ink-soft);
+  font-size:.9rem;
+  line-height:1.5;
+}
+.sphere-engrave{
+  position:absolute;
+  inset:4% 9%;
+  border:1px solid rgba(190,184,173,.34);
+  border-radius:50%;
+  pointer-events:none;
+  transform:scaleX(.72);
+}
+.sphere-engrave::before,.sphere-engrave::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(190,184,173,.22);
+  border-radius:50%;
+}
+.sphere-engrave::before{inset:6% 11%}
+.sphere-engrave::after{inset:12% 22%}
+
 @media(max-width:900px){
-  .sphere-head{align-items:flex-start;flex-direction:column;gap:8px}
-  .sphere-help{white-space:normal}
-  .sphere-stage{min-height:780px}
-  #welfare-sphere-svg{min-height:780px}
-  .sphere-readout{right:20px;left:20px;top:auto;bottom:20px;transform:none;width:auto}
+  .sphere-stage{min-height:900px}
+  #welfare-sphere-svg{min-height:900px}
+  .sphere-annotation{font-size:.58rem}
+  .ann-time{left:4%;top:3%}
+  .ann-rotate{right:3%;top:5%}
+  .ann-zone{left:2%;top:42%}
+  .ann-view{right:3%;bottom:29%}
+  .ann-center{bottom:22%}
+  .sphere-readout{
+    right:8%;
+    left:8%;
+    bottom:3%;
+    width:auto;
+  }
+  .sphere-engrave{inset:8% 3% 18%}
 }
 @media(max-width:620px){
-  .sphere-stage{min-height:720px}
-  #welfare-sphere-svg{min-height:720px}
-  .sphere-readout{padding:22px}
-  .readout-title{font-size:1.65rem}
-  .sphere-footer{gap:12px}
+  .sphere-stage{min-height:850px}
+  #welfare-sphere-svg{min-height:850px}
+  .sphere-annotation span{font-size:.55rem}
+  .ann-time{left:3%;top:2%;width:130px}
+  .ann-zone{left:2%;top:38%;width:115px}
+  .ann-rotate{right:2%;top:4%;width:130px}
+  .ann-view{right:2%;bottom:30%;width:135px}
+  .ann-center{bottom:23%;width:240px}
+  .sphere-readout{
+    right:7%;
+    left:7%;
+    bottom:2%;
+    padding-left:16px;
+  }
+  .readout-title{font-size:1.55rem}
 }
 
 </style>
@@ -622,22 +808,36 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 
     <figure class="welfare-figure reveal">
       <div class="welfare-sphere" id="welfare-sphere">
-        <div class="sphere-head">
-          <div>
-            <div class="sphere-kicker">HYVINVOINTIVALTION KESKEINEN LOGIIKKA</div>
-            <div class="sphere-claim">Aika kulkee sivusuunnassa. Vyöhykkeet syvyyteen ja korkeuteen.</div>
-          </div>
-          <div class="sphere-help">VEDÄ 360° · KLIKKAA KÄSITETTÄ</div>
-        </div>
-
         <div class="sphere-stage">
+          <div class="sphere-engrave" aria-hidden="true"></div>
+
+          <div class="sphere-annotation ann-time">
+            <strong>01 / aika</strong>
+            <span>liikuta näkökulmaa sivusuunnassa</span>
+          </div>
+
+          <div class="sphere-annotation ann-zone">
+            <strong>02 / vyöhyke</strong>
+            <span>korkeus vaihtaa järjestelmän tasoa</span>
+          </div>
+
+          <div class="sphere-annotation ann-rotate">
+            <strong>03 / 360°</strong>
+            <span>vedä palloa ja katso samaa rakennetta toisesta kulmasta</span>
+          </div>
+
+          <div class="sphere-annotation ann-view">
+            <strong>04 / käsite</strong>
+            <span>etualalle tuleva näkökulma muuttaa tulkintaa</span>
+          </div>
+
           <svg id="welfare-sphere-svg" viewBox="0 0 1200 650" role="img"
             aria-label="Navigoitava hyvinvointivaltion käsitepallo. Vaaka-akseli kuvaa aikaa ja pystysuunta hyvinvointivaltion vyöhykkeitä. Palloa voi kääntää 360 astetta.">
             <defs>
               <radialGradient id="sphereCore" cx="38%" cy="32%" r="72%">
-                <stop offset="0%" stop-color="#3c7c72"/>
-                <stop offset="55%" stop-color="#174742"/>
-                <stop offset="100%" stop-color="#082629"/>
+                <stop offset="0%" stop-color="#496e67"/>
+                <stop offset="55%" stop-color="#274f4a"/>
+                <stop offset="100%" stop-color="#143936"/>
               </radialGradient>
               <radialGradient id="sphereGlow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stop-color="#fffdf8" stop-opacity=".20"/>
@@ -655,9 +855,9 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
             </defs>
 
             <g class="sphere-world">
-              <circle cx="600" cy="325" r="252" fill="url(#sphereCore)" filter="url(#sphereShadow)"/>
-              <circle cx="600" cy="325" r="252" fill="none" stroke="#c8d2cc" stroke-opacity=".20"/>
-              <circle cx="600" cy="325" r="220" fill="url(#sphereGlow)" opacity=".65"/>
+              <circle cx="600" cy="325" r="252" fill="url(#sphereCore)" fill-opacity=".92"/>
+              <circle cx="600" cy="325" r="252" fill="none" stroke="#8f9c95" stroke-opacity=".28" stroke-width="1.1"/>
+              <circle cx="600" cy="325" r="220" fill="url(#sphereGlow)" opacity=".28"/>
 
               <g clip-path="url(#sphereClip)" id="sphere-grid"></g>
               <g clip-path="url(#sphereClip)" id="sphere-links"></g>
@@ -668,7 +868,7 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
             </g>
 
             <g class="sphere-axis" pointer-events="none">
-              <line x1="112" y1="585" x2="1088" y2="585" stroke="#ddd6c9"/>
+              <line x1="180" y1="585" x2="1020" y2="585" stroke="#d5cfc3" stroke-opacity=".38"/>
               <text x="112" y="610" text-anchor="start">1950</text>
               <text x="356" y="610" text-anchor="middle">1970</text>
               <text x="600" y="610" text-anchor="middle">1990</text>
@@ -697,12 +897,6 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
               Hyvinvointi näkyy lopulta siinä, pystyykö ihminen osallistumaan työhön, perheeseen, yhteisöön ja yhteiseen päätöksentekoon.
             </div>
           </div>
-        </div>
-
-        <div class="sphere-footer">
-          <div><span class="dot"></span> navigoi ajassa</div>
-          <div><span class="dot copper"></span> vaihda vyöhykettä</div>
-          <div><span class="dot light"></span> näkökulma muuttaa käsitettä</div>
         </div>
       </div>
       <figcaption class="figcap">Kuvio 2 — Hyvinvointivaltio navigoitavana käsiteavaruuden pallona: aika sivusuunnassa, vyöhykkeet pystysuunnassa.</figcaption>
