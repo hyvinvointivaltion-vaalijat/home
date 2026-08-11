@@ -38,6 +38,8 @@ button{font:inherit;color:inherit}
 .icon-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
 #viewRoot{position:relative;flex:1;min-width:0;min-height:0;overflow:hidden;background:var(--paper)}
 .view-frame{display:block;width:100%;height:100%;border:0;background:var(--paper)}
+.murros-crop{position:absolute;inset:0;overflow:hidden;background:var(--paper)}
+.murros-crop .view-frame{position:absolute;left:0;top:calc(-1 * var(--murros-inner-nav,64px));width:100%;height:calc(100% + var(--murros-inner-nav,64px));}
 .loader{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .loader[hidden]{display:none}
 @media(max-width:1050px){.brand .sub{display:none}.tab{padding:7px 10px}}
@@ -93,11 +95,13 @@ button{font:inherit;color:inherit}
     },
     rengas: {
       title: 'Rengas',
-      url: 'https://harrikayhko.fi/atlas/murros/rengas.html'
+      url: 'https://harrikayhko.fi/atlas/murros/index.html#rengas',
+      cropMurrosTopbar: true
     },
     verkko: {
       title: 'Verkko',
-      url: 'https://harrikayhko.fi/atlas/murros/verkko.html'
+      url: 'https://harrikayhko.fi/atlas/murros/index.html#verkko',
+      cropMurrosTopbar: true
     },
     matriisi: {
       title: 'Matriisi',
@@ -172,7 +176,9 @@ button{font:inherit;color:inherit}
 
     if (frame) {
       frame.src = 'about:blank';
+      const crop = frame.closest('.murros-crop');
       frame.remove();
+      crop?.remove();
     }
 
     frame = document.createElement('iframe');
@@ -187,7 +193,15 @@ button{font:inherit;color:inherit}
     }, { once:true });
 
     frame.src = view.url;
-    root.appendChild(frame);
+
+    if (view.cropMurrosTopbar) {
+      const crop = document.createElement('div');
+      crop.className = 'murros-crop';
+      crop.appendChild(frame);
+      root.appendChild(crop);
+    } else {
+      root.appendChild(frame);
+    }
     document.title = `${view.title} · Hyvinvointivaltion Vaalijat ry`;
   }
 
