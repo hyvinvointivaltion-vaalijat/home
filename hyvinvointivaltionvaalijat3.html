@@ -9,10 +9,23 @@
 <meta property="og:title" content="Hyvinvointivaltion Vaalijat ry — Hyvinvointivaltio on verkosto" />
 <meta property="og:description" content="Rakenteet, riippuvuudet ja muutos: elävä Atlas-aineisto ja yhdistyksen toiminta yhdellä sivulla." />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Hyvinvointivaltion Vaalijat ry — Hyvinvointivaltio on verkosto" />
+<meta name="twitter:description" content="Rakenteet, riippuvuudet ja muutos: elävä Atlas-aineisto ja yhdistyksen toiminta yhdellä sivulla." />
+<meta property="og:locale" content="fi_FI" />
+<meta property="og:site_name" content="Hyvinvointivaltion Vaalijat ry" />
+<meta name="robots" content="index,follow" />
+<meta name="theme-color" content="#0d2a2c" />
+<meta name="color-scheme" content="light" />
+<link rel="canonical" href="./" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://harrikayhko.fi" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="modulepreload" href="https://harrikayhko.fi/atlas/components/atlas-ui.js" crossorigin>
 <script type="module" src="https://harrikayhko.fi/atlas/components/atlas-ui.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"NGO","name":"Hyvinvointivaltion Vaalijat ry","description":"Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena.","email":"juha.nurmela1@gmail.com","telephone":"+358408319466","areaServed":"FI","inLanguage":"fi"}
+</script>
 <style>
 :root{
   --paper:#f7f4ee;
@@ -55,6 +68,11 @@ a{color:inherit}
 ::selection{background:rgba(180,99,44,.2)}
 :focus-visible{outline:2px solid var(--copper);outline-offset:4px;border-radius:4px}
 button,input{font:inherit}
+.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--deep);color:#f4f0e7;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
+.skip:focus{left:0}
+[hidden]{display:none !important}
+.welfare-sphere:focus-visible{outline:2px solid var(--copper);outline-offset:6px}
+.f-muted{color:rgba(205,215,211,.45)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
 .eyebrow{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);font-weight:600}
 .lead{font-size:clamp(1.08rem,1.55vw,1.3rem);color:var(--ink-soft);max-width:64ch}
@@ -696,13 +714,15 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 </head>
 <body>
 
+<a class="skip" href="#main">Siirry sisältöön</a>
+
 <header class="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top">
       <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#20514c" stroke-width="1.1"><circle cx="12" cy="4" r="2"/><circle cx="4" cy="17" r="2"/><circle cx="20" cy="17" r="2"/><path d="M12 6v9M12 15l-6.6 1.4M12 15l6.6 1.4M5 15.2 11 6.4M19 15.2 13 6.4"/></g></svg>
       <span>Hyvinvointivaltion Vaalijat ry</span>
     </a>
-    <nav class="links">
+    <nav class="links" aria-label="Päänavigaatio">
       <a href="#jarjestelma">Ajatus</a>
       <a href="#atlas-live">Atlas</a>
       <a href="#teemat">Ajankohtaista</a>
@@ -711,9 +731,9 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
       <a href="#hallitus">Hallitus</a>
       <a href="#liity" data-action="join">Liity mukaan</a>
     </nav>
-    <button class="burger" id="burger" aria-label="Avaa valikko" aria-expanded="false"><span></span></button>
+    <button class="burger" id="burger" aria-label="Avaa valikko" aria-expanded="false" aria-controls="mobile"><span></span></button>
   </div>
-  <div class="wrap"><div class="mobile" id="mobile">
+  <div class="wrap"><nav class="mobile" id="mobile" aria-label="Mobiilivalikko" hidden>
     <a href="#jarjestelma">Ajatus</a>
     <a href="#atlas-live">Rakennemuutosten atlas</a>
     <a href="#teemat">Ajankohtaista</a>
@@ -722,11 +742,12 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
     <a href="#hallitus">Hallitus</a>
     <a href="#asiakirjat">Asiakirjat</a>
     <a href="#liity">Liity mukaan</a>
-  </div></div>
-  <div class="nav-progress"></div>
+  </nav></div>
+  <div class="nav-progress" role="progressbar" aria-hidden="true"></div>
 </header>
 
-<main id="top">
+<main id="main">
+<span id="top" aria-hidden="true"></span>
 
 <!-- HERO -->
 <section class="hero">
@@ -962,12 +983,7 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
           <button type="button" data-card="VAESTON_IKAANTYMINEN" role="tab" aria-selected="false">väestö</button>
           <button type="button" data-card="TYOTTOMYYS_1990_2024" role="tab" aria-selected="false">työttömyys</button>
         </div>
-        <div class="atlas-indicator-visual" id="reading-indicator" aria-live="polite">
-          <atlas-stat-card
-            id="reading-atlas-card"
-            card="JULKINEN_VELKA_POLKU">
-          </atlas-stat-card>
-        </div>
+        <div class="atlas-indicator-visual" id="reading-indicator" aria-live="polite"></div>
         <div class="atlas-chart-note"><span>kehityskulku</span><span>vertailu · viive · riippuvuus</span></div>
       </article>
       <aside class="atlas-reading-copy" id="atlas-reading-copy">
@@ -1114,7 +1130,7 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 
 </main>
 
-<button class="backtop" id="backtop" type="button" aria-label="Takaisin ylös">↑</button>
+<button class="backtop" id="backtop" type="button" aria-label="Takaisin ylös" hidden>↑</button>
 
 <footer>
   <div class="wrap">
@@ -1145,8 +1161,8 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
     <div class="f-bottom">
       <div>© 2026 Hyvinvointivaltion Vaalijat ry</div>
       <div style="display:flex;gap:24px;flex-wrap:wrap">
-        <a href="#">Tietosuojaseloste</a>
-        <a href="#">Evästeet</a>
+        <span class="f-muted">Tietosuojaseloste (tulossa)</span>
+        <span class="f-muted">Evästeet (tulossa)</span>
       </div>
     </div>
   </div>
@@ -1161,24 +1177,36 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   const navLinks = [...document.querySelectorAll('.links a[href^="#"]')];
 
   if (b && m) {
-    b.addEventListener('click', () => {
-      const open = m.classList.toggle('open');
+    const setMenu = (open) => {
+      m.classList.toggle('open', open);
+      m.hidden = !open;
       b.setAttribute('aria-expanded', String(open));
+      b.setAttribute('aria-label', open ? 'Sulje valikko' : 'Avaa valikko');
+    };
+    setMenu(false);
+    b.addEventListener('click', () => setMenu(!m.classList.contains('open')));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && m.classList.contains('open')) { setMenu(false); b.focus(); }
     });
-    m.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      m.classList.remove('open');
-      b.setAttribute('aria-expanded', 'false');
-    }));
+    m.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   }
 
-  const onScroll = () => {
-    header?.classList.toggle('is-scrolled', window.scrollY > 8);
-    backtop?.classList.toggle('show', window.scrollY > 700);
+  let ticking = false;
+  const apply = () => {
+    ticking = false;
+    const y = window.scrollY;
+    header?.classList.toggle('is-scrolled', y > 8);
+    if (backtop) { const show = y > 700; backtop.classList.toggle('show', show); backtop.hidden = !show; }
   };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(apply); } };
   window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
+  apply();
 
-  backtop?.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  backtop?.addEventListener('click', () => {
+    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    document.getElementById('main')?.focus?.();
+  });
 
   const targets = navLinks
     .map(a => document.querySelector(a.getAttribute('href')))
@@ -1235,10 +1263,16 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
      * oma chart-renderöinti varmasti käynnistyy kortin vaihtuessa.
      */
     if(readingIndicator){
-      const card=document.createElement("atlas-stat-card");
-      card.id="reading-atlas-card";
-      card.setAttribute("card", profile.card);
-      readingIndicator.replaceChildren(card);
+      /* Kortti luodaan vasta kun komponentti on määritelty ja
+         attribuutti asetetaan ennen liittämistä — muuten Atlas UI Kit
+         yrittää ladata korttia "undefined". */
+      const mount = () => {
+        const card=document.createElement("atlas-stat-card");
+        card.id="reading-atlas-card";
+        card.setAttribute("card", profile.card);
+        readingIndicator.replaceChildren(card);
+      };
+      customElements.whenDefined("atlas-stat-card").then(mount).catch(mount);
     }
   }
   if(readingTabs){
@@ -1325,7 +1359,9 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
     stage.replaceChildren();
 
     const t = themes[index];
-    updateReadingIndicator(t);
+    /* Rakenteen lukemisen indikaattoria ohjataan omilla välilehdillään;
+       teemavalinnassa ei ole card-tunnusta, joten sitä ei nollata tässä. */
+
 
     const el = document.createElement(t.tag);
     Object.entries(t.attrs).forEach(([k, v]) => el.setAttribute(k, v));
@@ -1506,12 +1542,16 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 
   const bar = document.querySelector('.nav-progress');
   if(bar){
+    let raf = 0;
     const upd = () => {
+      raf = 0;
       const h = document.documentElement;
       const p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
       bar.style.width = (p * 100).toFixed(2) + '%';
     };
-    document.addEventListener('scroll', upd, { passive: true });
+    const q = () => { if (!raf) raf = requestAnimationFrame(upd); };
+    document.addEventListener('scroll', q, { passive: true });
+    window.addEventListener('resize', q, { passive: true });
     upd();
   }
 })();
@@ -1702,6 +1742,20 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
     drawGrid(); drawLinks(); renderNodes(); updateReadout();
   }
 
+  stage.setAttribute("tabindex","0");
+  stage.setAttribute("role","application");
+  stage.setAttribute("aria-label","Käsitepallo: kierrä nuolinäppäimillä, palauta Home-näppäimellä");
+  stage.addEventListener("keydown",e=>{
+    const step = e.shiftKey ? 18 : 6;
+    let used = true;
+    if(e.key==="ArrowLeft") yaw -= step;
+    else if(e.key==="ArrowRight") yaw += step;
+    else if(e.key==="ArrowUp") pitch = Math.max(-38, pitch - step);
+    else if(e.key==="ArrowDown") pitch = Math.min(38, pitch + step);
+    else if(e.key==="Home"){ yaw=0; pitch=0; }
+    else used = false;
+    if(used){ e.preventDefault(); nearestFront(); render(); }
+  });
   stage.addEventListener("pointerdown",e=>{
     dragging=true; px=e.clientX; py=e.clientY; stage.classList.add("is-dragging"); stage.setPointerCapture(e.pointerId);
   });
