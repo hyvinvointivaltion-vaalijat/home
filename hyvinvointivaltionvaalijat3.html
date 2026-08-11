@@ -311,11 +311,44 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 .reading-indicator-tabs button{border:1px solid var(--atlas-line);background:#f7f4ec;color:var(--atlas-muted);padding:7px 11px;font:600 .64rem "Source Sans 3",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.18s ease}
 .reading-indicator-tabs button:hover{border-color:var(--atlas-forest);color:var(--atlas-forest-deep);background:#fffef9}
 .reading-indicator-tabs button.active{background:var(--atlas-forest-deep);border-color:var(--atlas-forest-deep);color:#fffdf8}
-.atlas-indicator-visual{position:relative;border:1px solid #ded8ca;border-radius:14px;background:#fbfaf5;overflow:hidden;min-height:330px;padding:0 14px 14px}
-.indicator-curve{height:92px;margin:0 -14px;opacity:.95;border-bottom:1px solid #e1dbcf;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(246,242,233,.25))}
-.indicator-curve svg{display:block;width:100%;height:100%}
-.atlas-indicator-component{position:relative;padding:0 2px}
-.atlas-indicator-component atlas-stat-card{--atlas-paper:#fbfaf5;--atlas-line:#ded8ca;--atlas-title:#1f4642;--atlas-ink:#172421;--atlas-accent:#b4632c;--atlas-radius:10px}
+.atlas-indicator-visual{
+  position:relative;
+  border:1px solid #ded8ca;
+  border-radius:14px;
+  background:#fbfaf5;
+  overflow:hidden;
+  min-height:330px;
+  padding:0;
+}
+.atlas-indicator-visual atlas-stat-card{
+  display:block;
+  width:100%;
+  min-height:330px;
+  --atlas-paper:#fbfaf5;
+  --atlas-line:#e2dccf;
+  --atlas-title:#173f3b;
+  --atlas-ink:#172421;
+  --atlas-accent:#b4632c;
+  --atlas-radius:0;
+  --atlas-serif:"Fraunces",Georgia,serif;
+  --atlas-sans:"Source Sans 3",system-ui,sans-serif;
+}
+.atlas-indicator-visual atlas-stat-card::part(card){
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+.atlas-chart-note{
+  display:flex;
+  justify-content:space-between;
+  padding-top:12px;
+  color:#7a837f;
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
 .atlas-reading-copy{
   background:#173f3b;color:#f7f4ee;padding:clamp(30px,4vw,48px);
   min-height:100%;display:flex;flex-direction:column;justify-content:space-between;
@@ -367,6 +400,13 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   .reveal{opacity:1;transform:none}
+}
+
+@media(max-width:700px){
+  .atlas-indicator-visual,
+  .atlas-indicator-visual atlas-stat-card{
+    min-height:280px;
+  }
 }
 </style>
 </head>
@@ -561,16 +601,10 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
           <button type="button" data-card="TYOTTOMYYS_1990_2024" role="tab" aria-selected="false">työttömyys</button>
         </div>
         <div class="atlas-indicator-visual" id="reading-indicator" aria-live="polite">
-          <div class="indicator-curve" aria-hidden="true">
-            <svg viewBox="0 0 760 110" preserveAspectRatio="none">
-              <path class="curve-shadow" d="M8 83 C90 77 125 88 190 66 S305 43 365 59 S470 45 535 28 S650 20 752 5"/>
-              <path class="curve" d="M8 83 C90 77 125 88 190 66 S305 43 365 59 S470 45 535 28 S650 20 752 5"/>
-              <circle class="dot" cx="8" cy="83" r="4"/><circle class="dot" cx="365" cy="59" r="4"/><circle class="dot" cx="535" cy="28" r="4"/><circle class="dot" cx="752" cy="5" r="5"/>
-            </svg>
-          </div>
-          <div class="atlas-indicator-component">
-            <atlas-stat-card card="JULKINEN_VELKA_POLKU"></atlas-stat-card>
-          </div>
+          <atlas-stat-card
+            id="reading-atlas-card"
+            card="JULKINEN_VELKA_POLKU">
+          </atlas-stat-card>
         </div>
         <div class="atlas-chart-note"><span>kehityskulku</span><span>vertailu · viive · riippuvuus</span></div>
       </article>
@@ -825,17 +859,25 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   const readingDescription=document.getElementById("reading-description");
   const readingTitle=document.getElementById("reading-visual-title");
   const readingTabs=document.getElementById("reading-indicator-tabs");
+
   function updateReadingIndicator(profile){
-    if(!readingIndicator)return;
-    if(readingClaim)readingClaim.textContent=profile.claim;
-    if(readingDescription)readingDescription.textContent=profile.description;
-    if(readingTitle)readingTitle.textContent=profile.title;
-    const component=readingIndicator.querySelector(".atlas-indicator-component");
-    if(!component)return;
-    component.replaceChildren();
-    const el=document.createElement("atlas-stat-card");
-    el.setAttribute("card",profile.card);
-    component.appendChild(el);
+    if(readingClaim) readingClaim.textContent=profile.claim;
+    if(readingDescription) readingDescription.textContent=profile.description;
+    if(readingTitle) readingTitle.textContent=profile.title;
+
+    /*
+     * Rakenteen lukemisen kuvaaja tulee nyt oikeasti
+     * Atlas UI Kitistä. Emme piirrä käyrää itse.
+     *
+     * Komponentti luodaan uudelleen, jotta myös Atlas UI Kitin
+     * oma chart-renderöinti varmasti käynnistyy kortin vaihtuessa.
+     */
+    if(readingIndicator){
+      const card=document.createElement("atlas-stat-card");
+      card.id="reading-atlas-card";
+      card.setAttribute("card", profile.card);
+      readingIndicator.replaceChildren(card);
+    }
   }
   if(readingTabs){
     readingTabs.addEventListener("click",event=>{
