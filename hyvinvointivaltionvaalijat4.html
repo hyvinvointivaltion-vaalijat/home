@@ -832,26 +832,6 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
         <div class="sphere-stage">
           <div class="sphere-engrave" aria-hidden="true"></div>
 
-          <div class="sphere-annotation ann-time">
-            <strong>01 / aika</strong>
-            <span>liikuta näkökulmaa sivusuunnassa</span>
-          </div>
-
-          <div class="sphere-annotation ann-zone">
-            <strong>02 / vyöhyke</strong>
-            <span>korkeus vaihtaa järjestelmän tasoa</span>
-          </div>
-
-          <div class="sphere-annotation ann-rotate">
-            <strong>03 / 360°</strong>
-            <span>vedä palloa ja katso samaa rakennetta toisesta kulmasta</span>
-          </div>
-
-          <div class="sphere-annotation ann-view">
-            <strong>04 / käsite</strong>
-            <span>etualalle tuleva näkökulma muuttaa tulkintaa</span>
-          </div>
-
           <svg id="welfare-sphere-svg" viewBox="0 0 1200 650" role="img"
             aria-label="Navigoitava hyvinvointivaltion käsitepallo. Vaaka-akseli kuvaa aikaa ja pystysuunta hyvinvointivaltion vyöhykkeitä. Palloa voi kääntää 360 astetta.">
             <defs>
@@ -888,11 +868,13 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
               <ellipse id="sphere-meridian" cx="600" cy="325" rx="78" ry="248" fill="none" stroke="#f4f0e7" stroke-opacity=".16" stroke-width="1.2"/>
             </g>
 
-            /* 01 · Navigoitava käsitepallo: vuosikymmen + tarkastelukulma */
+            
+/* 01 · Navigoitava käsitepallo: vuosikymmen + tarkastelukulma */
 (() => {
   const svg=document.getElementById("welfare-sphere-svg");
   const stage=document.getElementById("welfare-sphere");
   if(!svg||!stage)return;
+
   const grid=document.getElementById("sphere-grid");
   const links=document.getElementById("sphere-links");
   const nodes=document.getElementById("sphere-nodes");
@@ -900,121 +882,258 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   const zoneEl=document.getElementById("sphere-zone");
   const titleEl=document.getElementById("sphere-title");
   const textEl=document.getElementById("sphere-text");
+
   const cx=600,cy=325,R=248;
-
-  /* Yksi navigaatioakseli: kierto valitsee vuosikymmenen.
-     Pystysuuntainen liike valitsee tarkasteluvyöhykkeen.
-     Pallon ympärillä näkyvät avainilmiöt vaihtuvat yhdistelmän mukaan. */
-  const eras=[
-    ["1950-luku",["Jälleenrakennus","Perusturvan synty","Koulutus laajenee","Työkyky","Yhteinen suunta"]],
-    ["1960-luku",["Kasvun rahoituspohja","Universaali turva","Palveluista järjestelmä","Inhimillinen pääoma","Mahdollisuuksien tasaaminen"]],
-    ["1970-luku",["Yhteinen rahoitus","Turvan kattavuus","Palvelut infrastruktuurina","Toimintakyky","Tasa-arvon lupaus"]],
-    ["1980-luku",["Rahoitusmalli vakiintuu","Riskit jakoon","Palvelujärjestelmä kasvaa","Työkyky ja osaaminen","Luottamus"]],
-    ["1990-luku",["Rahoituspohjan murtuma","Työttömyysriski","Palvelujen paine","Toimintakyvyn menetys","Luottamuksen testi"]],
-    ["2000-luku",["Kasvun hitaus","Elämäntilanteiden eriytyminen","Palvelujen vaikuttavuus","Osaaminen","Valinnan ja luottamuksen jännite"]],
-    ["2010-luku",["Kestävyysvaje","Riskien monimuotoistuminen","Palvelut verkostoksi","Toimintakyky","Osallisuus"]],
-    ["2020-luku",["Rahoituksen uusi kysymys","Joustava turva","Palvelujen uusi arvo","Kyvykkyys pääomana","Luottamus ja jatkuvuus"]],
-    ["2030-luku",["Uusi rahoituslogiikka","Turvan uudelleenmuotoilu","Palvelut ja teknologia","Kyvykkyyden rakentaminen","Osallistuva hyvinvointivaltio"]]
-  ];
-  const texts=[
-    ["Yhteiset voimavarat rakentavat järjestelmän perustan.","Turva alkaa siirtyä yksilöltä yhteisesti kannettavaksi.","Koulutus ja terveys muodostavat yhteistä infrastruktuuria.","Työ, terveys ja toimeentulo kytkeytyvät toisiinsa.","Hyvinvointivaltio rakentuu yhteisenä projektina."],
-    ["Työ ja tuotanto avaavat tilaa yhteisten järjestelmien laajentamiselle.","Riskien jakamisesta tulee kattavampi yhteiskunnallinen periaate.","Palvelut alkavat muodostaa toisiinsa kytkeytyvää järjestelmää.","Osaaminen ja terveys nähdään yhteisenä voimavarana.","Mahdollisuuksia rakennetaan tasaamalla lähtökohtia."],
-    ["Verotus ja tulonsiirrot muodostavat universaalin mallin perustaa.","Elämän riskit kytkeytyvät yhä vahvemmin yhteisiin instituutioihin.","Palveluverkko ulottuu laajasti eri väestöryhmiin ja alueille.","Hyvinvointi ja taloudellinen tuottavuus kytkeytyvät.","Hyvinvointivaltio lupaa mahdollisuuksia riippumatta lähtökohdasta."],
-    ["Vakaaseen työ- ja veropohjaan rakentuu laaja hyvinvointivaltio.","Turva muodostaa ennakoitavan kerroksen ihmisten elämään.","Palvelujen saatavuudesta tulee legitimiteetin keskeinen osa.","Hyvinvointi ja tuottavuus kytkeytyvät yhä selvemmin.","Järjestelmän jatkuvuus vahvistaa luottamusta instituutioihin."],
-    ["Lama paljastaa järjestelmän riippuvuuden talouden suunnasta.","Massatyöttömyys muuttaa käsitystä työstä ja sosiaalisesta turvasta.","Julkisen talouden kriisi osuu palvelujen rahoitukseen.","Pitkä työttömyys tekee riskistä pitkäkestoisen.","Kriisi koettelee yhteisen turvan oikeudenmukaisuutta."],
-    ["Rahoituspohjan kasvu ei tue järjestelmää kuten aiemmin.","Turvan tarpeet eriytyvät työelämän ja perherakenteiden mukana.","Huomio siirtyy määristä palvelujen vaikuttavuuteen.","Teknologia ja työn muutos nostavat osaamisen keskiöön.","Tehokkuuden ja yhteisen vastuun välinen jännite kasvaa."],
-    ["Ikääntyminen, hidas kasvu ja velka kiristävät rahoituspohjaa.","Työelämän, perheiden ja väestön muutokset muuttavat riskejä.","Ratkaisevaa on palvelujen yhteensopivuus, ei vain määrä.","Terveys, osaaminen ja arjen toimintakyky nousevat tuotoksiksi.","Osallisuus alkaa näyttäytyä hyvinvoinnin aktiivisena lähteenä."],
-    ["Rahoitus nähdään yhteisen toimintakyvyn ylläpitämisenä.","Turvan pitää seurata muuttuvia elämäntilanteita ilman vastuun hajoamista.","Vaikuttavuus, saavutettavuus ja yhteensopivuus korostuvat.","Terveys, osaaminen ja toimintakyky ovat keskeisiä varantoja.","Jatkuvuus riippuu siitä, voiko ihminen luottaa järjestelmään."],
-    ["Rahoituksen tehtävä on kasvattaa yhteistä kapasiteettia, ei vain kattaa menoja.","Turvan pitää sopia liikkuviin työuriin, ikääntymiseen ja uusiin riskeihin.","Tuotannon tapa muuttuu, mutta vastuu vaikuttavuudesta säilyy.","Ennaltaehkäisy, osaaminen ja toimintakyky ovat investointeja.","Legitimiteetti syntyy turvan, mahdollisuuksien ja yhteisen suunnan yhdistelmästä."]
-  ];
-  const zones=["RAHOITUS","TURVA","PALVELUT","KYVYKKYYS","OSALLISUUS"];
-  let yaw=0,pitch=0,dragging=false,px=0,py=0;
   const ns="http://www.w3.org/2000/svg";
-  const E=(tag,a={})=>{const n=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>n.setAttribute(k,v));return n};
-  const rad=d=>d*Math.PI/180;
-  const project=(lonDeg,latDeg)=>{
-    const lon=rad(lonDeg+yaw),lat=rad(latDeg),p=rad(pitch);
-    const x=Math.cos(lat)*Math.sin(lon),y=Math.sin(lat),z=Math.cos(lat)*Math.cos(lon);
-    const y2=y*Math.cos(p)-z*Math.sin(p),z2=y*Math.sin(p)+z*Math.cos(p);
-    return{x:cx+R*x,y:cy-R*y2,z:z2};
+  const E=(tag,a={})=>{
+    const n=document.createElementNS(ns,tag);
+    Object.entries(a).forEach(([k,v])=>n.setAttribute(k,v));
+    return n;
   };
-  const eraIndex=()=>Math.round((((yaw%360)+360)%360)/40)%eras.length;
-  const zoneIndex=()=>Math.max(0,Math.min(4,Math.round((1-Math.max(-1,Math.min(1,pitch/38)))*2)));
-  const viewAngle=()=>Math.round((((yaw%360)+360)%360)/40)*40%360;
+  const rad=d=>d*Math.PI/180;
 
-  function gridPathLat(lat){let d="";for(let lon=-180;lon<=180;lon+=4){const q=project(lon,lat);d+=`${lon===-180?"M":"L"}${q.x.toFixed(1)} ${q.y.toFixed(1)} `}return d}
-  function gridPathLon(lon){let d="";for(let lat=-90;lat<=90;lat+=4){const q=project(lon,lat);d+=`${lat===-90?"M":"L"}${q.x.toFixed(1)} ${q.y.toFixed(1)} `}return d}
+  /*
+   * Vuosikymmenet kulkevat pallon 360 asteen ympäri.
+   * Tarkastelukulma on jatkuva 0–359°.
+   *
+   * Pallo ei sisällä vuosipisteitä. Sen ympärille nostetaan
+   * kulloisenkin vuosikymmenen ja tarkastelukulman avainilmiöt.
+   */
+  const eras=[
+    ["1950-luku",["Jälleenrakennus","Perusturvan synty","Koulutus laajenee","Työkyky","Yhteinen suunta","Asuminen"]],
+    ["1960-luku",["Kasvun rahoituspohja","Universaali turva","Palveluista järjestelmä","Inhimillinen pääoma","Mahdollisuuksien tasaaminen","Kaupungistuminen"]],
+    ["1970-luku",["Yhteinen rahoitus","Turvan kattavuus","Palvelut infrastruktuurina","Toimintakyky","Tasa-arvon lupaus","Työelämän murros"]],
+    ["1980-luku",["Rahoitusmalli vakiintuu","Riskit jakoon","Palvelujärjestelmä kasvaa","Työkyky ja osaaminen","Luottamus","Hyvinvoinnin kasvu"]],
+    ["1990-luku",["Rahoituspohjan murtuma","Työttömyysriski","Palvelujen paine","Toimintakyvyn menetys","Luottamuksen testi","Rakennemuutos"]],
+    ["2000-luku",["Kasvun hitaus","Elämäntilanteiden eriytyminen","Palvelujen vaikuttavuus","Osaaminen","Valinnan ja luottamuksen jännite","Digitalisaatio"]],
+    ["2010-luku",["Kestävyysvaje","Riskien monimuotoistuminen","Palvelut verkostoksi","Toimintakyky","Osallisuus","Väestön keskittyminen"]],
+    ["2020-luku",["Rahoituksen uusi kysymys","Joustava turva","Palvelujen uusi arvo","Kyvykkyys pääomana","Luottamus ja jatkuvuus","Epävarmuuden kasvu"]],
+    ["2030-luku",["Uusi rahoituslogiikka","Turvan uudelleenmuotoilu","Palvelut ja teknologia","Kyvykkyyden rakentaminen","Osallistuva hyvinvointivaltio","Ikääntyvä yhteiskunta"]]
+  ];
+
+  const texts=[
+    "Hyvinvointivaltion perusrakenteet alkavat muodostua sodanjälkeisen jälleenrakennuksen ympärille.",
+    "Kasvu avaa tilaa universaalien turva- ja palvelujärjestelmien rakentamiselle.",
+    "Hyvinvointivaltiosta tulee laaja yhteinen infrastruktuuri, joka ulottuu arjen eri alueille.",
+    "Järjestelmä vakiintuu ja sen ympärille syntyy vahva jatkuvuuden ja luottamuksen odotus.",
+    "Kriisi paljastaa, kuinka riippuvainen hyvinvointivaltio on rahoituspohjasta ja työstä.",
+    "Painopiste siirtyy järjestelmän laajentamisesta vaikuttavuuteen, osaamiseen ja tehokkuuteen.",
+    "Ikääntyminen, hidas kasvu ja velka muuttavat kysymyksen hyvinvointivaltion kestävyydestä.",
+    "Hyvinvointivaltion arvoa arvioidaan yhä enemmän toimintakyvyn, jatkuvuuden ja luottamuksen kautta.",
+    "Seuraava kysymys on, miten hyvinvointivaltio kasvattaa yhteistä kapasiteettia muuttuvassa yhteiskunnassa."
+  ];
+
+  const viewpoints=[
+    ["RAHOITUS","Mistä yhteinen rahoitus syntyy?"],
+    ["TYÖ","Miten työ ylläpitää järjestelmää?"],
+    ["TURVA","Miten riskit jaetaan?"],
+    ["PALVELUT","Mitä yhteisesti tuotetaan?"],
+    ["TOIMINTAKYKY","Mitä järjestelmä mahdollistaa?"],
+    ["OSALLISUUS","Mihin ihmiset voivat osallistua?"],
+    ["LUOTTAMUS","Miksi järjestelmään luotetaan?"],
+    ["MUUTOS","Mikä rakenteessa on muuttumassa?"]
+  ];
+
+  let yaw=0,dragging=false,px=0;
+
+  const normalize=a=>((a%360)+360)%360;
+
+  // 9 vuosikymmentä jakavat 360°:n navigointikehän.
+  const eraIndex=()=>Math.min(eras.length-1,Math.floor(normalize(yaw)/40));
+  const angle=()=>Math.round(normalize(yaw));
+  const viewpointIndex=()=>Math.floor((angle()+22.5)/45)%8;
+
+  function project(lonDeg,latDeg){
+    const lon=rad(lonDeg+yaw);
+    const lat=rad(latDeg);
+    const x=Math.cos(lat)*Math.sin(lon);
+    const y=Math.sin(lat);
+    const z=Math.cos(lat)*Math.cos(lon);
+    return {
+      x:cx+R*x,
+      y:cy-R*y,
+      z
+    };
+  }
+
   function drawGrid(){
     grid.replaceChildren();
-    [-60,-30,0,30,60].forEach(lat=>grid.appendChild(E("path",{d:gridPathLat(lat),fill:"none",stroke:"#f4f0e7","stroke-opacity":lat===0?".35":".12","stroke-width":lat===0?"1.4":"1"})));
-    [-90,-60,-30,0,30,60,90].forEach(lon=>grid.appendChild(E("path",{d:gridPathLon(lon),fill:"none",stroke:"#f4f0e7","stroke-opacity":lon===0?".28":".10","stroke-width":lon===0?"1.3":"1"})));
+
+    // Hienovarainen kaiverrus: ei vuosipisteitä.
+    [-55,-28,0,28,55].forEach(lat=>{
+      let d="";
+      for(let lon=-180;lon<=180;lon+=6){
+        const q=project(lon,lat);
+        d+=`${lon===-180?"M":"L"}${q.x.toFixed(1)} ${q.y.toFixed(1)} `;
+      }
+      grid.appendChild(E("path",{
+        d,fill:"none",
+        stroke:"#f4f0e7",
+        "stroke-opacity":lat===0?".20":".07",
+        "stroke-width":lat===0?"1.1":".8"
+      }));
+    });
+
+    [-90,-45,0,45,90].forEach(lon=>{
+      let d="";
+      for(let lat=-90;lat<=90;lat+=6){
+        const q=project(lon,lat);
+        d+=`${lat===-90?"M":"L"}${q.x.toFixed(1)} ${q.y.toFixed(1)} `;
+      }
+      grid.appendChild(E("path",{
+        d,fill:"none",
+        stroke:"#f4f0e7",
+        "stroke-opacity":lon===0?".15":".06",
+        "stroke-width":lon===0?"1.0":".8"
+      }));
+    });
   }
-  function drawLinks(){
-    links.replaceChildren();
-    for(let i=0;i<5;i++){
-      const a=project(-120+i*60,-48+i*24),b=project(120-i*60,48-i*24);
-      links.appendChild(E("path",{d:`M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${cx} ${cy} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`,fill:"none",stroke:"#bfcac5","stroke-opacity":".10","stroke-width":"1"}));
-    }
-  }
-  function renderConcepts(){
+
+  function renderKeyPhenomena(){
     nodes.replaceChildren();
-    const ei=eraIndex(),zi=zoneIndex(),names=eras[ei][1];
-    names.forEach((name,i)=>{
-      const q=project(-118+i*59,54-i*27);
-      if(q.z<-.15)return;
-      const scale=.72+.28*((q.z+1)/2),active=i===zi;
-      const g=E("g",{class:"sphere-node",transform:`translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})`});
-      g.appendChild(E("circle",{class:"node-dot",r:((active?8:5.4)*scale).toFixed(2),fill:active?"#d28a4c":"#f4f0e7",opacity:(.38+.62*Math.max(q.z,0)).toFixed(2),stroke:active?"#fff5e7":"none","stroke-width":active?"2":"0"}));
-      if(q.z>.12){const t=E("text",{x:"0",y:String(-12*scale),"text-anchor":"middle",opacity:Math.min(1,.35+.65*q.z)});t.textContent=name.toUpperCase();g.appendChild(t)}
+
+    const ei=eraIndex();
+    const vi=viewpointIndex();
+    const concepts=eras[ei][1];
+
+    // Kuusi ilmiötä sijoitetaan ympäri palloa.
+    // Tarkastelukulma kierrättää niiden järjestystä ja näkyvyyttä.
+    const positions=[
+      [-140,48],[-72,18],[0,-8],[72,-22],[140,20],[35,58]
+    ];
+
+    concepts.forEach((name,i)=>{
+      const itemIndex=(i+vi)%concepts.length;
+      const q=project(...positions[i]);
+
+      if(q.z<-.18)return;
+
+      const front=.25+.75*Math.max(0,q.z);
+      const active=i===0 || q.z>.52;
+      const scale=.78+.28*Math.max(q.z,0);
+
+      const g=E("g",{
+        transform:`translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})`,
+        opacity:front.toFixed(2)
+      });
+
+      g.appendChild(E("circle",{
+        r:(active?6.5:4.2).toFixed(1),
+        fill:active?"#d28a4c":"#f4f0e7",
+        "fill-opacity":active?".95":".55"
+      }));
+
+      if(q.z>.05){
+        const t=E("text",{
+          x:"0",
+          y:String(-11*scale),
+          "text-anchor":"middle",
+          "font-size":active?"11":"9",
+          "letter-spacing":"1.4",
+          fill:"#f4f0e7",
+          "fill-opacity":Math.min(1,.30+.70*q.z)
+        });
+        t.textContent=concepts[itemIndex].toUpperCase();
+        g.appendChild(t);
+      }
+
       nodes.appendChild(g);
     });
   }
+
   function updateReadout(){
-    const ei=eraIndex(),zi=zoneIndex(),item=eras[ei][1][zi];
+    const ei=eraIndex();
+    const vi=viewpointIndex();
+    const vp=viewpoints[vi];
+
     eraEl.textContent=eras[ei][0];
-    zoneEl.textContent=`${zones[zi]} · ${viewAngle()}°`;
-    titleEl.textContent=item;
-    textEl.textContent=texts[ei][zi];
+    zoneEl.textContent=`${vp[0]} · ${angle()}°`;
+    titleEl.textContent=vp[1];
+
+    textEl.textContent=
+      `${eras[ei][0]}: ${texts[ei]} Tarkastelukulma painottaa ${vp[0].toLowerCase()}-näkökulmaa.`;
   }
-  function render(){drawGrid();drawLinks();renderConcepts();updateReadout()}
+
+  function render(){
+    drawGrid();
+    renderKeyPhenomena();
+    updateReadout();
+  }
+
+  /*
+   * Navigointi: koko pallo on vetopinta.
+   * Sekä hiiri että kosketus käyttävät Pointer Events -rajapintaa.
+   */
+  stage.style.touchAction="none";
+  stage.style.cursor="grab";
+
+  stage.addEventListener("pointerdown",e=>{
+    dragging=true;
+    px=e.clientX;
+    stage.style.cursor="grabbing";
+    try{stage.setPointerCapture(e.pointerId)}catch{}
+  });
+
+  stage.addEventListener("pointermove",e=>{
+    if(!dragging)return;
+    const dx=e.clientX-px;
+    px=e.clientX;
+
+    // Yksi vaakasuuntainen liike = pallon kierto.
+    yaw+=dx*.65;
+    render();
+  });
+
+  const stopDrag=e=>{
+    dragging=false;
+    stage.style.cursor="grab";
+    if(e && e.pointerId!==undefined){
+      try{stage.releasePointerCapture(e.pointerId)}catch{}
+    }
+  };
+
+  stage.addEventListener("pointerup",stopDrag);
+  stage.addEventListener("pointercancel",stopDrag);
+  stage.addEventListener("pointerleave",e=>{
+    if(dragging && !stage.hasPointerCapture?.(e.pointerId))stopDrag(e);
+  });
+
   stage.tabIndex=0;
   stage.setAttribute("role","application");
-  stage.setAttribute("aria-label","Navigointipallo: vuosikymmen ja tarkastelukulma");
+  stage.setAttribute(
+    "aria-label",
+    "Navigointipallo. Vedä palloa vaakasuunnassa. Navigointi näyttää vuosikymmenen, tarkastelukulman ja sen keskeiset ilmiöt."
+  );
+
   stage.addEventListener("keydown",e=>{
-    const step=e.shiftKey?20:8;let used=true;
-    if(e.key==="ArrowLeft")yaw-=step;
-    else if(e.key==="ArrowRight")yaw+=step;
-    else if(e.key==="ArrowUp")pitch=Math.max(-38,pitch-step);
-    else if(e.key==="ArrowDown")pitch=Math.min(38,pitch+step);
-    else if(e.key==="Home"){yaw=0;pitch=0}
+    let used=true;
+
+    if(e.key==="ArrowLeft")yaw-=5;
+    else if(e.key==="ArrowRight")yaw+=5;
+    else if(e.key==="Home")yaw=0;
     else used=false;
-    if(used){e.preventDefault();render()}
+
+    if(used){
+      e.preventDefault();
+      render();
+    }
   });
-  stage.addEventListener("pointerdown",e=>{dragging=true;px=e.clientX;py=e.clientY;stage.classList.add("is-dragging");stage.setPointerCapture(e.pointerId)});
-  stage.addEventListener("pointermove",e=>{if(!dragging)return;const dx=e.clientX-px,dy=e.clientY-py;px=e.clientX;py=e.clientY;yaw+=dx*.55;pitch=Math.max(-38,Math.min(38,pitch+dy*.30));render()});
-  stage.addEventListener("pointerup",e=>{dragging=false;stage.classList.remove("is-dragging");try{stage.releasePointerCapture(e.pointerId)}catch{}});
-  stage.addEventListener("pointercancel",()=>{dragging=false;stage.classList.remove("is-dragging")});
-  stage.addEventListener("dblclick",()=>{yaw=0;pitch=0;render()});
+
   render();
 })();
 
-            <g class="sphere-center-copy" pointer-events="none">
-              <text x="600" y="300" text-anchor="middle">HYVINVOINTI</text>
-              <text x="600" y="326" text-anchor="middle">ON JÄRJESTELMÄ</text>
-              <text x="600" y="350" text-anchor="middle">EI YKSI PALVELU</text>
-            </g>
-          </svg>
+</svg>
 
           <div class="sphere-readout" id="sphere-readout" aria-live="polite">
-            <div class="readout-meta"><span id="sphere-era">2025+</span><span id="sphere-zone">OSALLISUUS</span></div>
-            <div class="readout-title" id="sphere-title">Osallisuus on hyvinvointivaltion päämäärä — ja voimavara.</div>
+            <div class="readout-meta"><span id="sphere-era">1950-luku</span><span id="sphere-zone">RAHOITUS · 0°</span></div>
+            <div class="readout-title" id="sphere-title">Mistä yhteinen rahoitus syntyy?</div>
             <div class="readout-text" id="sphere-text">
-              Hyvinvointi näkyy lopulta siinä, pystyykö ihminen osallistumaan työhön, perheeseen, yhteisöön ja yhteiseen päätöksentekoon.
+              Vedä palloa vaakasuunnassa. Vuosikymmen, tarkastelukulma ja avainilmiöt vaihtuvat yhdessä.
             </div>
           </div>
         </div>
       </div>
-      <figcaption class="figcap">Kuvio 2 — Navigointi valitsee vuosikymmenen ja tarkastelukulman; avainilmiöt vaihtuvat näkymän mukana.</figcaption>
+      <figcaption class="figcap">Kuvio 2 — Palloa kiertämällä vaihtuvat vuosikymmen, tarkastelukulma ja sitä luonnehtivat avainilmiöt.</figcaption>
     </figure>
   </div>
 </section>
