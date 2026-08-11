@@ -146,14 +146,16 @@
   "news": [
     {
       "id": 5,
-      "title": "Maailmanparannuspäivät",
+      "title": "Maailmanparannuspäivät 26-27.9.2026",
       "status": "julkaistu",
       "pinned": false,
       "sort_order": 1,
       "kicker": "Syyskuu 2026",
-      "excerpt": "Maailmanparannuspäivät",
-      "body": "Maailmanparannuspäivät",
-      "published_at": "2026-08-10T18:19:58.006+00:00"
+      "excerpt": "Suomen Sosiaalifoorumi tekee näyttävän paluun Maailmanparannuspäivien nimellä! Lapinlahden Lähteellä Helsingissä 26.–27.9. järjestettävä tapahtuma kokoaa yhteen kansalaisjärjestöjä, liikkeitä, tutkijoita, aktivisteja, ammattiliittoja ja kaikkia yhteiskunnallisesta muutoksesta kiinnostuneita keskustelemaan aikamme tärkeimmistä kysymyksistä.",
+      "body": "Viikonlopun aikana ohjelmassa on kymmeniä maksuttomia paneelikeskusteluja, työpajoja, luentoja ja kulttuuriohjelmaa. Teemoja ovat muun muassa rauha, demokratia, työelämä, ilmasto, talous, antirasismi, feminismi, kansainvälinen solidaarisuus, järjestäytyminen sekä vaihtoehdot nykyiselle yhteiskunnalliselle kehitykselle. Ohjelma tarjoaa sekä uusia näkökulmia että konkreettisia välineitä yhteiskunnalliseen vaikuttamiseen.\n\nMaailmanparannuspäivät on paikka kohdata uusia ihmisiä, jakaa kokemuksia ja rakentaa yhteistyötä yli monenlaisten rajojen. Tapahtuma on avoin kaikille – olitpa pitkän linjan vaikuttaja tai vasta ensimmäisiä askelia yhteiskunnallisen toiminnan parissa ottava.\n\nTutustu koko ohjelmaan, merkitse osatapahtumpia kalenteriisi ja kutsu mukaan myös ystäväsi. \n\nNähdään syyskuussa Lapinlahden Lähteellä!",
+      "published_at": "2026-08-10T18:19:00+00:00",
+      "link_url": "https://sosiaalifoorumi.fi/2026/maailmanparannuspaivien-26-27-9-ohjelma-julkaistu/",
+      "link_label": "Maailmanparannuspäivä"
     }
   ]
 }
