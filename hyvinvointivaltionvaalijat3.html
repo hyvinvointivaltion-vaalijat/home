@@ -449,6 +449,63 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   .welfare-map svg{min-width:680px;transform-origin:left top}
   .welfare-map{overflow-x:auto;overflow-y:hidden}
 }
+
+/* 01 · Navigoitava käsitepallo */
+.welfare-sphere{
+  position:relative; overflow:hidden; border:1px solid var(--line);
+  border-radius:26px; background:
+    radial-gradient(circle at 31% 48%, rgba(32,81,76,.08), transparent 28%),
+    linear-gradient(180deg,#fffdf8 0%,#f7f3eb 100%);
+  box-shadow:0 34px 80px -58px rgba(13,42,44,.48);
+}
+.sphere-head{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:28px;
+  padding:24px 30px 10px;border-bottom:1px solid rgba(221,214,201,.65);
+}
+.sphere-kicker{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);font-weight:700}
+.sphere-claim{margin-top:5px;font-size:.96rem;color:var(--ink-soft)}
+.sphere-help{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--copper);font-weight:700;white-space:nowrap}
+.sphere-stage{position:relative;min-height:650px;touch-action:none;user-select:none;cursor:grab}
+.sphere-stage.is-dragging{cursor:grabbing}
+#welfare-sphere-svg{display:block;width:100%;height:auto;min-height:650px}
+.sphere-axis text{font:600 11px "Source Sans 3",sans-serif;letter-spacing:.14em;fill:#7a837f}
+.sphere-axis .axis-title{font-size:10px;fill:#20514c}
+.sphere-center-copy text{font:600 12px "Source Sans 3",sans-serif;letter-spacing:.16em;fill:#f7f4ee;opacity:.7}
+.sphere-center-copy text:first-child{font-size:11px}
+.sphere-node{cursor:pointer}
+.sphere-node circle{transition:r .18s ease,opacity .18s ease,stroke-width .18s ease}
+.sphere-node text{font:600 10px "Source Sans 3",sans-serif;letter-spacing:.11em;fill:#f7f4ee;pointer-events:none}
+.sphere-node .node-dot{filter:url(#nodeShadow)}
+.sphere-readout{
+  position:absolute;right:34px;top:50%;transform:translateY(-50%);
+  width:min(38%,390px);padding:28px 30px;border-radius:20px;
+  background:rgba(13,42,44,.96);color:#f7f4ee;
+  box-shadow:0 25px 60px -34px rgba(13,42,44,.65);
+}
+.readout-meta{display:flex;justify-content:space-between;gap:16px;color:#c9962a;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+.readout-title{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.65rem,2.6vw,2.35rem);line-height:1.06;letter-spacing:-.025em;margin:18px 0 14px}
+.readout-text{color:#bfcac5;font-size:1rem;line-height:1.55}
+.sphere-footer{
+  display:flex;gap:28px;flex-wrap:wrap;padding:13px 30px 18px;border-top:1px solid rgba(221,214,201,.7);
+  font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:#7a837f;font-weight:600
+}
+.sphere-footer .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#20514c;margin-right:7px}
+.sphere-footer .dot.copper{background:#b4632c}.sphere-footer .dot.light{background:#9aa6a2}
+@media(max-width:900px){
+  .sphere-head{align-items:flex-start;flex-direction:column;gap:8px}
+  .sphere-help{white-space:normal}
+  .sphere-stage{min-height:780px}
+  #welfare-sphere-svg{min-height:780px}
+  .sphere-readout{right:20px;left:20px;top:auto;bottom:20px;transform:none;width:auto}
+}
+@media(max-width:620px){
+  .sphere-stage{min-height:720px}
+  #welfare-sphere-svg{min-height:720px}
+  .sphere-readout{padding:22px}
+  .readout-title{font-size:1.65rem}
+  .sphere-footer{gap:12px}
+}
+
 </style>
 </head>
 <body>
@@ -564,124 +621,91 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
     </div>
 
     <figure class="welfare-figure reveal">
-      <div class="welfare-map">
-        <svg viewBox="0 0 1200 690" role="img"
-          aria-label="Hyvinvointivaltion järjestelmä: yhteiset voimavarat, riskien jakaminen, palvelut ja turva, kyvykkyydet, osallisuus ja luottamus muodostavat toisiaan vahvistavan kehän">
+      <div class="welfare-sphere" id="welfare-sphere">
+        <div class="sphere-head">
+          <div>
+            <div class="sphere-kicker">HYVINVOINTIVALTION KESKEINEN LOGIIKKA</div>
+            <div class="sphere-claim">Aika kulkee sivusuunnassa. Vyöhykkeet syvyyteen ja korkeuteen.</div>
+          </div>
+          <div class="sphere-help">VEDÄ 360° · KLIKKAA KÄSITETTÄ</div>
+        </div>
 
-          <defs>
-            <radialGradient id="welfareCore" cx="50%" cy="42%" r="68%">
-              <stop offset="0%" stop-color="#2f6b62"/>
-              <stop offset="100%" stop-color="#0d2a2c"/>
-            </radialGradient>
+        <div class="sphere-stage">
+          <svg id="welfare-sphere-svg" viewBox="0 0 1200 650" role="img"
+            aria-label="Navigoitava hyvinvointivaltion käsitepallo. Vaaka-akseli kuvaa aikaa ja pystysuunta hyvinvointivaltion vyöhykkeitä. Palloa voi kääntää 360 astetta.">
+            <defs>
+              <radialGradient id="sphereCore" cx="38%" cy="32%" r="72%">
+                <stop offset="0%" stop-color="#3c7c72"/>
+                <stop offset="55%" stop-color="#174742"/>
+                <stop offset="100%" stop-color="#082629"/>
+              </radialGradient>
+              <radialGradient id="sphereGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fffdf8" stop-opacity=".20"/>
+                <stop offset="100%" stop-color="#fffdf8" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="sphereShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#0d2a2c" flood-opacity=".20"/>
+              </filter>
+              <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#0d2a2c" flood-opacity=".20"/>
+              </filter>
+              <clipPath id="sphereClip">
+                <circle cx="600" cy="325" r="248"/>
+              </clipPath>
+            </defs>
 
-            <linearGradient id="welfareBand" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#20514c" stop-opacity=".08"/>
-              <stop offset="50%" stop-color="#b4632c" stop-opacity=".18"/>
-              <stop offset="100%" stop-color="#20514c" stop-opacity=".08"/>
-            </linearGradient>
+            <g class="sphere-world">
+              <circle cx="600" cy="325" r="252" fill="url(#sphereCore)" filter="url(#sphereShadow)"/>
+              <circle cx="600" cy="325" r="252" fill="none" stroke="#c8d2cc" stroke-opacity=".20"/>
+              <circle cx="600" cy="325" r="220" fill="url(#sphereGlow)" opacity=".65"/>
 
-            <filter id="welfareShadow" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#0d2a2c" flood-opacity=".12"/>
-            </filter>
+              <g clip-path="url(#sphereClip)" id="sphere-grid"></g>
+              <g clip-path="url(#sphereClip)" id="sphere-links"></g>
+              <g id="sphere-nodes"></g>
 
-            <marker id="arrowForest" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto">
-              <path d="M0,0 L7,3.5 L0,7 z" fill="#20514c"/>
-            </marker>
+              <ellipse id="sphere-equator" cx="600" cy="325" rx="246" ry="62" fill="none" stroke="#f4f0e7" stroke-opacity=".22" stroke-width="1.2"/>
+              <ellipse id="sphere-meridian" cx="600" cy="325" rx="78" ry="248" fill="none" stroke="#f4f0e7" stroke-opacity=".16" stroke-width="1.2"/>
+            </g>
 
-            <marker id="arrowCopper" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto">
-              <path d="M0,0 L7,3.5 L0,7 z" fill="#b4632c"/>
-            </marker>
-          </defs>
+            <g class="sphere-axis" pointer-events="none">
+              <line x1="112" y1="585" x2="1088" y2="585" stroke="#ddd6c9"/>
+              <text x="112" y="610" text-anchor="start">1950</text>
+              <text x="356" y="610" text-anchor="middle">1970</text>
+              <text x="600" y="610" text-anchor="middle">1990</text>
+              <text x="844" y="610" text-anchor="middle">2010</text>
+              <text x="1088" y="610" text-anchor="end">2025+</text>
+              <text x="600" y="635" text-anchor="middle" class="axis-title">AIKA →</text>
 
-          <!-- editorial header -->
-          <text x="62" y="58" class="small">HYVINVOINTIVALTION KESKEINEN LOGIIKKA</text>
-          <text x="62" y="94" class="claim">Turva → kyvykkyys → osallisuus → luottamus → takaisin yhteisiin voimavaroihin.</text>
-          <line x1="62" y1="118" x2="1138" y2="118" class="legend-line"/>
+              <text x="72" y="165" text-anchor="end">RAHOITUS</text>
+              <text x="72" y="245" text-anchor="end">TURVA</text>
+              <text x="72" y="325" text-anchor="end">PALVELUT</text>
+              <text x="72" y="405" text-anchor="end">KYVYKKYYS</text>
+              <text x="72" y="485" text-anchor="end">OSALLISUUS</text>
+            </g>
 
-          <!-- subtle system field -->
-          <ellipse cx="600" cy="376" rx="430" ry="220" class="ring"/>
-          <ellipse cx="600" cy="376" rx="330" ry="166" class="ring accent"/>
-          <ellipse cx="600" cy="376" rx="230" ry="116" class="ring"/>
+            <g class="sphere-center-copy" pointer-events="none">
+              <text x="600" y="300" text-anchor="middle">HYVINVOINTI</text>
+              <text x="600" y="326" text-anchor="middle">ON JÄRJESTELMÄ</text>
+              <text x="600" y="350" text-anchor="middle">EI YKSI PALVELU</text>
+            </g>
+          </svg>
 
-          <!-- circulating flows -->
-          <path class="flow slow" d="M188 238 C315 148 462 142 600 205 C740 268 900 242 1014 315"
-                stroke="#20514c" stroke-width="2.2" opacity=".42" marker-end="url(#arrowForest)"/>
-          <path class="flow fast" d="M1014 315 C1050 410 948 505 812 528 C650 555 500 555 368 510 C245 468 168 384 188 238"
-                stroke="#b4632c" stroke-width="2.1" opacity=".42" marker-end="url(#arrowCopper)"/>
+          <div class="sphere-readout" id="sphere-readout" aria-live="polite">
+            <div class="readout-meta"><span id="sphere-era">2025+</span><span id="sphere-zone">OSALLISUUS</span></div>
+            <div class="readout-title" id="sphere-title">Osallisuus on hyvinvointivaltion päämäärä — ja voimavara.</div>
+            <div class="readout-text" id="sphere-text">
+              Hyvinvointi näkyy lopulta siinä, pystyykö ihminen osallistumaan työhön, perheeseen, yhteisöön ja yhteiseen päätöksentekoon.
+            </div>
+          </div>
+        </div>
 
-          <!-- six system dimensions -->
-          <g class="node">
-            <circle cx="184" cy="230" r="62" fill="#fffdf8" stroke="#20514c" stroke-width="2" filter="url(#welfareShadow)"/>
-            <circle cx="184" cy="230" r="7" fill="#20514c"/>
-            <text x="184" y="218" text-anchor="middle" class="label">YHTEISET</text>
-            <text x="184" y="240" text-anchor="middle" class="label">VOIMAVARAT</text>
-            <text x="184" y="260" text-anchor="middle" class="small">työ · verotus · tuotanto</text>
-          </g>
-
-          <g class="node">
-            <circle cx="392" cy="151" r="58" fill="#fffdf8" stroke="#c9962a" stroke-width="2" filter="url(#welfareShadow)"/>
-            <circle cx="392" cy="151" r="7" fill="#c9962a"/>
-            <text x="392" y="144" text-anchor="middle" class="label">RISKIEN</text>
-            <text x="392" y="166" text-anchor="middle" class="label">JAKAMINEN</text>
-            <text x="392" y="185" text-anchor="middle" class="small">elämänvaiheet · kriisit</text>
-          </g>
-
-          <g class="node">
-            <circle cx="816" cy="151" r="58" fill="#fffdf8" stroke="#2f6b62" stroke-width="2" filter="url(#welfareShadow)"/>
-            <circle cx="816" cy="151" r="7" fill="#2f6b62"/>
-            <text x="816" y="144" text-anchor="middle" class="label">PALVELUT</text>
-            <text x="816" y="166" text-anchor="middle" class="label">JA TURVA</text>
-            <text x="816" y="185" text-anchor="middle" class="small">sosiaaliturva · terveys · koulutus</text>
-          </g>
-
-          <g class="node">
-            <circle cx="1016" cy="314" r="62" fill="#fffdf8" stroke="#b4632c" stroke-width="2" filter="url(#welfareShadow)"/>
-            <circle cx="1016" cy="314" r="7" fill="#b4632c"/>
-            <text x="1016" y="302" text-anchor="middle" class="label">TOIMINTA-</text>
-            <text x="1016" y="324" text-anchor="middle" class="label">KYKY</text>
-            <text x="1016" y="344" text-anchor="middle" class="small">terveys · osaaminen · arki</text>
-          </g>
-
-          <g class="node">
-            <circle cx="808" cy="520" r="60" fill="#fffdf8" stroke="#20514c" stroke-width="2" filter="url(#welfareShadow)"/>
-            <circle cx="808" cy="520" r="7" fill="#20514c"/>
-            <text x="808" y="508" text-anchor="middle" class="label">OSALLISUUS</text>
-            <text x="808" y="530" text-anchor="middle" class="label">JA MAHDOLLISUUDET</text>
-            <text x="808" y="550" text-anchor="middle" class="small">työ · perhe · yhteisö · kansalaisuus</text>
-          </g>
-
-          <g class="node">
-            <circle cx="390" cy="514" r="60" fill="#fffdf8" stroke="#6c7f92" stroke-width="2" filter="url(#welfareShadow)"/>
-            <circle cx="390" cy="514" r="7" fill="#6c7f92"/>
-            <text x="390" y="507" text-anchor="middle" class="label">LUOTTAMUS</text>
-            <text x="390" y="529" text-anchor="middle" class="label">JA JATKUVUUS</text>
-            <text x="390" y="549" text-anchor="middle" class="small">ennakoitavuus · legitimiteetti</text>
-          </g>
-
-          <!-- center -->
-          <g filter="url(#welfareShadow)">
-            <circle cx="600" cy="365" r="112" fill="url(#welfareCore)"/>
-            <circle cx="600" cy="365" r="126" fill="none" stroke="#20514c" stroke-width="1.2" opacity=".22"/>
-          </g>
-
-          <text x="600" y="350" text-anchor="middle" class="center-small">YHTEINEN</text>
-          <text x="600" y="390" text-anchor="middle" class="center-title">HYVINVOINTI</text>
-          <text x="600" y="414" text-anchor="middle" class="center-small">EI LOPPUTULOS VAAN KIERTOKULKU</text>
-
-          <!-- internal causal arrows -->
-          <path d="M525 307 C486 276 456 250 430 218" fill="none" stroke="#20514c" stroke-width="1.6" opacity=".42" marker-end="url(#arrowForest)"/>
-          <path d="M676 306 C718 273 746 250 778 218" fill="none" stroke="#20514c" stroke-width="1.6" opacity=".42" marker-end="url(#arrowForest)"/>
-          <path d="M706 405 C754 436 776 456 786 470" fill="none" stroke="#b4632c" stroke-width="1.6" opacity=".42" marker-end="url(#arrowCopper)"/>
-          <path d="M524 425 C480 454 454 469 438 481" fill="none" stroke="#6c7f92" stroke-width="1.6" opacity=".42" marker-end="url(#arrowForest)"/>
-
-          <!-- bottom synthesis -->
-          <rect x="62" y="610" width="1076" height="42" rx="21" fill="url(#welfareBand)" stroke="#ded8ce"/>
-          <text x="600" y="637" text-anchor="middle" class="small">
-            MITÄ YKSI MUUTOS TEKEE MUILLE?  ·  RAHOITUS  ·  PALVELUT  ·  TOIMINTAKYKY  ·  LUOTTAMUS
-          </text>
-        </svg>
+        <div class="sphere-footer">
+          <div><span class="dot"></span> navigoi ajassa</div>
+          <div><span class="dot copper"></span> vaihda vyöhykettä</div>
+          <div><span class="dot light"></span> näkökulma muuttaa käsitettä</div>
+        </div>
       </div>
-      <figcaption class="figcap">Kuvio 2 — Hyvinvointivaltio riskien jakamisen, kyvykkyyden ja luottamuksen kiertona</figcaption>
+      <figcaption class="figcap">Kuvio 2 — Hyvinvointivaltio navigoitavana käsiteavaruuden pallona: aika sivusuunnassa, vyöhykkeet pystysuunnassa.</figcaption>
     </figure>
   </div>
 </section>
@@ -1298,5 +1322,211 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
   }
 })();
 </script>
+
+<script>
+/* 01 · Navigoitava käsitepallo: aika = vaaka, vyöhykkeet = pysty, 360° = pallon kierto */
+(() => {
+  const svg = document.getElementById("welfare-sphere-svg");
+  const stage = document.getElementById("welfare-sphere");
+  if (!svg || !stage) return;
+
+  const grid = document.getElementById("sphere-grid");
+  const links = document.getElementById("sphere-links");
+  const nodesLayer = document.getElementById("sphere-nodes");
+  const readoutEra = document.getElementById("sphere-era");
+  const readoutZone = document.getElementById("sphere-zone");
+  const readoutTitle = document.getElementById("sphere-title");
+  const readoutText = document.getElementById("sphere-text");
+
+  const cx = 600, cy = 325, R = 248;
+  const times = ["1950", "1970", "1990", "2010", "2025+"];
+  const zones = ["RAHOITUS", "TURVA", "PALVELUT", "KYVYKKYYS", "OSALLISUUS"];
+  const zoneLabels = ["Rahoitus", "Turva", "Palvelut", "Kyvykkyys", "Osallisuus"];
+
+  const matrix = [
+    [
+      ["Jälleenrakennuksen rahoitus", "Veropohjaa ja yhteisiä voimavaroja rakennetaan sodanjälkeisen yhteiskunnan perustaksi."],
+      ["Perusturvan alku", "Riskien jakaminen alkaa laajentua yhteisiksi instituutioiksi."],
+      ["Kansakoulusta palvelujärjestelmään", "Koulutus ja terveys alkavat muodostaa laajempaa yhteistä infrastruktuuria."],
+      ["Työkyky yhteisenä kysymyksenä", "Toimintakyky kytkeytyy työhön, terveyteen ja yhteiskuntaan osallistumiseen."],
+      ["Yhteiskuntaan mukaan", "Hyvinvoinnin mitta ei ole vain turva vaan mahdollisuus kuulua yhteiseen yhteiskuntaan."]
+    ],
+    [
+      ["Kasvun rahoituspohja", "Laajeneva työ ja tuotanto antavat tilaa universaalien järjestelmien rakentamiselle."],
+      ["Universaali turva", "Sosiaaliturvan logiikka siirtyy kohti kattavampaa riskien jakamista."],
+      ["Palveluista infrastruktuuriksi", "Terveys, koulutus ja sosiaalipalvelut muodostavat hyvinvointivaltion selkärangan."],
+      ["Inhimillinen pääoma", "Osaamisesta ja terveydestä tulee kasvun ja hyvinvoinnin yhteisiä tuotannontekijöitä."],
+      ["Mahdollisuuksien tasaaminen", "Osallisuutta rakennetaan tasaamalla lähtökohtia, ei vain korjaamalla seurauksia."]
+    ],
+    [
+      ["Veropohjan paine", "Kansantalouden rakennemuutos alkaa näkyä siinä, millä yhteisiä palveluja voidaan rahoittaa."],
+      ["Riskit monimuotoistuvat", "Työelämän, perheiden ja väestön muutokset muuttavat turvan tarpeita."],
+      ["Palvelujärjestelmän laajeneminen", "Hyvinvointivaltion tehtävät kasvavat samalla kun niiden yhteensovittaminen vaikeutuu."],
+      ["Työkyvystä toimintakykyyn", "Hyvinvointi ei palaudu työmarkkina-asemaan: terveys, osaaminen ja arki kytkeytyvät yhteen."],
+      ["Luottamus ja osallistuminen", "Järjestelmän legitimiteetti riippuu siitä, koetaanko se oikeudenmukaiseksi ja toimivaksi."]
+    ],
+    [
+      ["Kestävyys ja rahoitus", "Ikääntyminen, hidas kasvu ja velka tekevät rahoituspohjasta järjestelmän keskeisen solmukohdan."],
+      ["Turvan kohdentamisen dilemma", "Universaalisuuden, kohdentamisen ja kannustimien välistä tasapainoa joudutaan arvioimaan uudelleen."],
+      ["Palvelut verkostoksi", "Palvelujen määrä ei yksin ratkaise: ratkaisevaa on niiden yhteensopivuus ja vaikuttavuus."],
+      ["Ennaltaehkäisevä toimintakyky", "Terveys, osaaminen ja arjen toimintakyky ovat yhä enemmän järjestelmän tuottavuuden ehtoja."],
+      ["Osallisuus järjestelmän tuotoksena", "Työ, yhteisöt ja kansalaisuus palauttavat hyvinvointia takaisin yhteiseen järjestelmään."]
+    ],
+    [
+      ["Uusi arvopohja", "Rahoitus ei ole vain menojen kattamista vaan yhteisen toimintakyvyn ylläpitämistä."],
+      ["Joustava turva", "Turvan pitää seurata muuttuvia elämäntilanteita ilman että vastuu katoaa järjestelmään."],
+      ["Vaikuttavuus ennen volyymia", "Palvelujen arvo syntyy siitä, mitä ne muuttavat ihmisten elämässä ja yhteiskunnassa."],
+      ["Kyvykkyys on pääomaa", "Terveys, osaaminen ja toimintakyky ovat hyvinvointivaltion tulevaisuuden keskeisiä varantoja."],
+      ["Luottamus → jatkuvuus", "Hyvinvointivaltio toimii vain, jos ihmiset voivat luottaa siihen — ja osallistua sen uudistamiseen."]
+    ]
+  ];
+
+  const points = [];
+  for (let ti = 0; ti < times.length; ti++) {
+    for (let zi = 0; zi < zones.length; zi++) {
+      points.push({
+        id: `${ti}-${zi}`, ti, zi,
+        lon: -64 + ti * 32,
+        lat: 48 - zi * 24,
+        title: matrix[ti][zi][0],
+        text: matrix[ti][zi][1]
+      });
+    }
+  }
+
+  let yaw = 0, pitch = 0, active = points[4 * 5 + 4];
+  let dragging = false, px = 0, py = 0;
+
+  const ns = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs={}) => {
+    const n = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([k,v]) => n.setAttribute(k,v));
+    return n;
+  };
+
+  function rad(d){ return d * Math.PI / 180; }
+
+  function project(lonDeg, latDeg){
+    const lon = rad(lonDeg + yaw);
+    const lat = rad(latDeg);
+    const p = rad(pitch);
+    let x = Math.cos(lat) * Math.sin(lon);
+    let y = Math.sin(lat);
+    let z = Math.cos(lat) * Math.cos(lon);
+    const y2 = y * Math.cos(p) - z * Math.sin(p);
+    const z2 = y * Math.sin(p) + z * Math.cos(p);
+    return {x:cx + R*x, y:cy - R*y2, z:z2};
+  }
+
+  function pathForLat(lat){
+    const pts=[];
+    for(let lon=-180;lon<=180;lon+=4){
+      const p=project(lon,lat);
+      pts.push([p.x,p.y,p.z]);
+    }
+    let d="";
+    pts.forEach((p,i)=>{ d += `${i?"L":"M"}${p[0].toFixed(1)} ${p[1].toFixed(1)} `; });
+    return {d,pts};
+  }
+
+  function pathForLon(lon){
+    const pts=[];
+    for(let lat=-90;lat<=90;lat+=4){
+      const p=project(lon,lat);
+      pts.push([p.x,p.y,p.z]);
+    }
+    let d="";
+    pts.forEach((p,i)=>{ d += `${i?"L":"M"}${p[0].toFixed(1)} ${p[1].toFixed(1)} `; });
+    return {d,pts};
+  }
+
+  function drawGrid(){
+    grid.replaceChildren();
+    [-60,-30,0,30,60].forEach(lat=>{
+      const q=pathForLat(lat);
+      grid.appendChild(el("path",{d:q.d,fill:"none",stroke:"#f4f0e7","stroke-opacity":lat===0?".35":".12","stroke-width":lat===0?"1.4":"1"}));
+    });
+    [-90,-60,-30,0,30,60,90].forEach(lon=>{
+      const q=pathForLon(lon);
+      grid.appendChild(el("path",{d:q.d,fill:"none",stroke:"#f4f0e7","stroke-opacity":lon===0?".28":".10","stroke-width":lon===0?"1.3":"1"}));
+    });
+  }
+
+  function drawLinks(){
+    links.replaceChildren();
+    for(let ti=0;ti<times.length-1;ti++){
+      for(let zi=0;zi<zones.length;zi++){
+        const a=points[ti*5+zi], b=points[(ti+1)*5+zi];
+        const pa=project(a.lon,a.lat), pb=project(b.lon,b.lat);
+        if(pa.z>.02 && pb.z>.02){
+          links.appendChild(el("path",{d:`M${pa.x.toFixed(1)} ${pa.y.toFixed(1)} Q${((pa.x+pb.x)/2).toFixed(1)} ${((pa.y+pb.y)/2-8).toFixed(1)} ${pb.x.toFixed(1)} ${pb.y.toFixed(1)}`,fill:"none",stroke:"#bfcac5","stroke-opacity":".16","stroke-width":"1.2"}));
+        }
+      }
+    }
+  }
+
+  function renderNodes(){
+    nodesLayer.replaceChildren();
+    points.forEach(p=>{
+      const q=project(p.lon,p.lat);
+      if(q.z < -0.25) return;
+      const scale=.62 + .38*((q.z+1)/2);
+      const g=el("g",{class:"sphere-node","data-id":p.id,transform:`translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})`});
+      const r=(p===active?9:5.2)*scale;
+      const c=el("circle",{class:"node-dot",r:r.toFixed(2),fill:p===active?"#d28a4c":"#f4f0e7",opacity:(.35+.65*Math.max(q.z,0)).toFixed(2),stroke:p===active?"#fff5e7":"none","stroke-width":p===active?"2":"0"});
+      g.appendChild(c);
+      if(q.z>.18){
+        const t=el("text",{x:"0",y:String(-11*scale),"text-anchor":"middle",opacity:Math.min(1,.3+.7*q.z)});
+        t.textContent=times[p.ti];
+        g.appendChild(t);
+      }
+      g.addEventListener("click",e=>{
+        e.stopPropagation(); active=p; updateReadout(); render();
+      });
+      nodesLayer.appendChild(g);
+    });
+  }
+
+  function nearestFront(){
+    let best=active, score=-Infinity;
+    points.forEach(p=>{
+      const q=project(p.lon,p.lat);
+      const scoreNow=q.z - Math.abs(q.x-cx)/R*.12;
+      if(q.z>.05 && scoreNow>score){score=scoreNow;best=p;}
+    });
+    active=best;
+  }
+
+  function updateReadout(){
+    readoutEra.textContent=times[active.ti];
+    readoutZone.textContent=zoneLabels[active.zi].toUpperCase();
+    readoutTitle.textContent=active.title;
+    readoutText.textContent=active.text;
+  }
+
+  function render(){
+    drawGrid(); drawLinks(); renderNodes(); updateReadout();
+  }
+
+  stage.addEventListener("pointerdown",e=>{
+    dragging=true; px=e.clientX; py=e.clientY; stage.classList.add("is-dragging"); stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener("pointermove",e=>{
+    if(!dragging)return;
+    const dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY;
+    yaw += dx*.42; pitch = Math.max(-38,Math.min(38,pitch + dy*.24));
+    nearestFront(); render();
+  });
+  stage.addEventListener("pointerup",e=>{
+    dragging=false; stage.classList.remove("is-dragging");
+    try{stage.releasePointerCapture(e.pointerId)}catch{}
+  });
+  stage.addEventListener("pointercancel",()=>{dragging=false;stage.classList.remove("is-dragging")});
+  stage.addEventListener("dblclick",()=>{yaw=0;pitch=0;active=points[24];render()});
+
+  render();
+})();
+</script>
+
 </body>
 </html>
