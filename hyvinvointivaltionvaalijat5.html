@@ -61,6 +61,7 @@ button{font:inherit;color:inherit}
 
   <nav class="tabs" aria-label="Näkymä">
     <button class="tab" data-view="yhdistys" aria-selected="true"><span class="dot"></span>Yhdistys</button>
+    <button class="tab" data-view="murroskartta" aria-selected="false"><span class="dot"></span>Murroskartta</button>
     <button class="tab" data-view="rengas" aria-selected="false"><span class="dot"></span>Rengas</button>
     <button class="tab" data-view="verkko" aria-selected="false"><span class="dot"></span>Verkko</button>
     <button class="tab" data-view="matriisi" aria-selected="false"><span class="dot"></span>Matriisi</button>
@@ -92,6 +93,10 @@ button{font:inherit;color:inherit}
       title: 'Yhdistys',
       url: './hyvinvointivaltionvaalijat4.html',
       sameOrigin: true
+    },
+    murroskartta: {
+      title: 'Murroskartta',
+      url: 'https://harrikayhko.fi/atlas/murroskartta.html'
     },
     rengas: {
       title: 'Rengas',
@@ -219,8 +224,8 @@ button{font:inherit;color:inherit}
   window.addEventListener('keydown', event => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
     const map = {
-      '1':'yhdistys','2':'rengas','3':'verkko','4':'matriisi',
-      '5':'paattely','6':'maisema','7':'tulkinta'
+      '1':'yhdistys','2':'murroskartta','3':'rengas','4':'verkko',
+      '5':'matriisi','6':'paattely','7':'maisema','8':'tulkinta'
     };
     if (map[event.key]) location.hash = map[event.key];
   });
