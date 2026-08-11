@@ -408,6 +408,47 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
     min-height:280px;
   }
 }
+
+/* 01 · Lähtökohta — hyvinvointivaltion kiteytysvisualisointi */
+.welfare-figure{margin-top:clamp(44px,6vw,84px)}
+.welfare-map{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(32,81,76,.055), transparent 32%),
+    linear-gradient(180deg,#fffdf8 0%,#f8f5ee 100%);
+  box-shadow:0 34px 80px -58px rgba(13,42,44,.48);
+}
+.welfare-map svg{display:block;width:100%;height:auto}
+.welfare-map .node{cursor:default}
+.welfare-map .node circle{transition:transform .35s var(--ease),filter .35s var(--ease)}
+.welfare-map .node:hover circle{transform:scale(1.12);filter:drop-shadow(0 5px 8px rgba(13,42,44,.16))}
+.welfare-map .flow{
+  fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:8 12;animation:welfareFlow 16s linear infinite;
+}
+.welfare-map .flow.slow{animation-duration:24s}
+.welfare-map .flow.fast{animation-duration:11s}
+.welfare-map .label{font-family:"Source Sans 3",Inter,sans-serif;fill:var(--ink);font-size:15px;font-weight:600;letter-spacing:.08em}
+.welfare-map .small{font-family:"Source Sans 3",Inter,sans-serif;fill:var(--slate);font-size:11px;letter-spacing:.16em}
+.welfare-map .claim{font-family:"Fraunces",Georgia,serif;fill:var(--deep);font-size:28px;letter-spacing:-.02em}
+.welfare-map .center-title{font-family:"Fraunces",Georgia,serif;fill:#fffdf8;font-size:31px;letter-spacing:-.02em}
+.welfare-map .center-small{font-family:"Source Sans 3",Inter,sans-serif;fill:rgba(255,253,248,.72);font-size:10px;font-weight:600;letter-spacing:.2em}
+.welfare-map .legend-line{stroke:var(--line);stroke-width:1}
+.welfare-map .ring{fill:none;stroke:var(--line-soft);stroke-width:1}
+.welfare-map .ring.accent{stroke:rgba(32,81,76,.20)}
+@keyframes welfareFlow{to{stroke-dashoffset:-240}}
+@media (prefers-reduced-motion:reduce){
+  .welfare-map .flow{animation:none}
+  .welfare-map .node circle{transition:none}
+}
+@media (max-width:760px){
+  .welfare-map{border-radius:18px}
+  .welfare-map svg{min-width:680px;transform-origin:left top}
+  .welfare-map{overflow-x:auto;overflow-y:hidden}
+}
 </style>
 </head>
 <body>
@@ -508,36 +549,139 @@ atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-arti
 <section id="jarjestelma">
   <div class="wrap">
     <div class="shead">
-      <div class="rail reveal"><span class="num">01</span><div class="eyebrow">Lähtökohta</div></div>
+      <div class="rail reveal">
+        <span class="num">01</span>
+        <div class="eyebrow">Lähtökohta</div>
+      </div>
       <div class="reveal">
         <h2>Hyvinvointivaltio on yhteinen järjestelmä</h2>
-        <p class="lead" style="margin-top:26px">Hyvinvointivaltiota tarkastellaan liian usein yksittäisinä menoina, palveluina tai budjettiriveinä. Todellisuudessa kyse on toisiinsa kytkeytyvästä kokonaisuudesta.</p>
+        <p class="lead" style="margin-top:26px">
+          Hyvinvointivaltio ei ole ensisijaisesti menoerä tai palveluluettelo.
+          Se on järjestelmä, joka jakaa riskejä, rakentaa toimintakykyä ja
+          palauttaa osan syntyvästä arvosta takaisin yhteiseen käyttöön.
+        </p>
       </div>
     </div>
-    <figure class="reveal" style="margin-top:clamp(44px,6vw,84px)">
-      <svg viewBox="0 0 1100 520" role="img" aria-label="Verkostokaavio: työ, koulutus, terveys, perhe, asuminen, talous, palvelut, luottamus, kansalaisuus ja ympäristö kytkeytyvät toisiinsa" style="width:100%;height:auto;display:block">
-        <g stroke="#123a63" stroke-width="0.8" opacity="0.35" fill="none">
-          <path d="M170 120 420 70 720 130 950 90 950 90 830 300 550 260 300 330 170 120 550 260 420 70 830 300 300 330 720 130 200 420 550 260 640 440 830 300 200 420 300 330 640 440 950 90 640 440 420 70 200 420 170 120"/>
-        </g>
-        <g font-family="Inter,sans-serif" font-size="19" letter-spacing="2.2" fill="#14181d">
-          <g fill="#123a63"><circle cx="170" cy="120" r="5"/><circle cx="550" cy="260" r="7"/><circle cx="830" cy="300" r="5"/></g>
-          <g fill="#2e4f3e"><circle cx="420" cy="70" r="5"/><circle cx="300" cy="330" r="5"/><circle cx="200" cy="420" r="5"/></g>
-          <g fill="#c9a227"><circle cx="720" cy="130" r="5"/><circle cx="640" cy="440" r="5"/></g>
-          <g fill="#6c7f92"><circle cx="950" cy="90" r="5"/></g>
-          <text x="186" y="112">TYÖ</text>
-          <text x="436" y="62">KOULUTUS</text>
-          <text x="736" y="122">TERVEYS</text>
-          <text x="966" y="82">PERHE</text>
-          <text x="846" y="292">ASUMINEN</text>
-          <text x="566" y="252">TALOUS</text>
-          <text x="316" y="322">PALVELUT</text>
-          <text x="216" y="412">LUOTTAMUS</text>
-          <text x="656" y="432">KANSALAISUUS</text>
-          <text x="60" y="490" fill="#4b535c" font-size="12" letter-spacing="1.6">YMPÄRISTÖ -- järjestelmän reunaehto</text>
-          <path d="M40 500h1020" stroke="#ded8ce" stroke-width="1"/>
-        </g>
-      </svg>
-      <figcaption class="figcap">Kuvio 2 — Riippuvuudet järjestelmän osien välillä</figcaption>
+
+    <figure class="welfare-figure reveal">
+      <div class="welfare-map">
+        <svg viewBox="0 0 1200 690" role="img"
+          aria-label="Hyvinvointivaltion järjestelmä: yhteiset voimavarat, riskien jakaminen, palvelut ja turva, kyvykkyydet, osallisuus ja luottamus muodostavat toisiaan vahvistavan kehän">
+
+          <defs>
+            <radialGradient id="welfareCore" cx="50%" cy="42%" r="68%">
+              <stop offset="0%" stop-color="#2f6b62"/>
+              <stop offset="100%" stop-color="#0d2a2c"/>
+            </radialGradient>
+
+            <linearGradient id="welfareBand" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#20514c" stop-opacity=".08"/>
+              <stop offset="50%" stop-color="#b4632c" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#20514c" stop-opacity=".08"/>
+            </linearGradient>
+
+            <filter id="welfareShadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#0d2a2c" flood-opacity=".12"/>
+            </filter>
+
+            <marker id="arrowForest" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto">
+              <path d="M0,0 L7,3.5 L0,7 z" fill="#20514c"/>
+            </marker>
+
+            <marker id="arrowCopper" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto">
+              <path d="M0,0 L7,3.5 L0,7 z" fill="#b4632c"/>
+            </marker>
+          </defs>
+
+          <!-- editorial header -->
+          <text x="62" y="58" class="small">HYVINVOINTIVALTION KESKEINEN LOGIIKKA</text>
+          <text x="62" y="94" class="claim">Turva → kyvykkyys → osallisuus → luottamus → takaisin yhteisiin voimavaroihin.</text>
+          <line x1="62" y1="118" x2="1138" y2="118" class="legend-line"/>
+
+          <!-- subtle system field -->
+          <ellipse cx="600" cy="376" rx="430" ry="220" class="ring"/>
+          <ellipse cx="600" cy="376" rx="330" ry="166" class="ring accent"/>
+          <ellipse cx="600" cy="376" rx="230" ry="116" class="ring"/>
+
+          <!-- circulating flows -->
+          <path class="flow slow" d="M188 238 C315 148 462 142 600 205 C740 268 900 242 1014 315"
+                stroke="#20514c" stroke-width="2.2" opacity=".42" marker-end="url(#arrowForest)"/>
+          <path class="flow fast" d="M1014 315 C1050 410 948 505 812 528 C650 555 500 555 368 510 C245 468 168 384 188 238"
+                stroke="#b4632c" stroke-width="2.1" opacity=".42" marker-end="url(#arrowCopper)"/>
+
+          <!-- six system dimensions -->
+          <g class="node">
+            <circle cx="184" cy="230" r="62" fill="#fffdf8" stroke="#20514c" stroke-width="2" filter="url(#welfareShadow)"/>
+            <circle cx="184" cy="230" r="7" fill="#20514c"/>
+            <text x="184" y="218" text-anchor="middle" class="label">YHTEISET</text>
+            <text x="184" y="240" text-anchor="middle" class="label">VOIMAVARAT</text>
+            <text x="184" y="260" text-anchor="middle" class="small">työ · verotus · tuotanto</text>
+          </g>
+
+          <g class="node">
+            <circle cx="392" cy="151" r="58" fill="#fffdf8" stroke="#c9962a" stroke-width="2" filter="url(#welfareShadow)"/>
+            <circle cx="392" cy="151" r="7" fill="#c9962a"/>
+            <text x="392" y="144" text-anchor="middle" class="label">RISKIEN</text>
+            <text x="392" y="166" text-anchor="middle" class="label">JAKAMINEN</text>
+            <text x="392" y="185" text-anchor="middle" class="small">elämänvaiheet · kriisit</text>
+          </g>
+
+          <g class="node">
+            <circle cx="816" cy="151" r="58" fill="#fffdf8" stroke="#2f6b62" stroke-width="2" filter="url(#welfareShadow)"/>
+            <circle cx="816" cy="151" r="7" fill="#2f6b62"/>
+            <text x="816" y="144" text-anchor="middle" class="label">PALVELUT</text>
+            <text x="816" y="166" text-anchor="middle" class="label">JA TURVA</text>
+            <text x="816" y="185" text-anchor="middle" class="small">sosiaaliturva · terveys · koulutus</text>
+          </g>
+
+          <g class="node">
+            <circle cx="1016" cy="314" r="62" fill="#fffdf8" stroke="#b4632c" stroke-width="2" filter="url(#welfareShadow)"/>
+            <circle cx="1016" cy="314" r="7" fill="#b4632c"/>
+            <text x="1016" y="302" text-anchor="middle" class="label">TOIMINTA-</text>
+            <text x="1016" y="324" text-anchor="middle" class="label">KYKY</text>
+            <text x="1016" y="344" text-anchor="middle" class="small">terveys · osaaminen · arki</text>
+          </g>
+
+          <g class="node">
+            <circle cx="808" cy="520" r="60" fill="#fffdf8" stroke="#20514c" stroke-width="2" filter="url(#welfareShadow)"/>
+            <circle cx="808" cy="520" r="7" fill="#20514c"/>
+            <text x="808" y="508" text-anchor="middle" class="label">OSALLISUUS</text>
+            <text x="808" y="530" text-anchor="middle" class="label">JA MAHDOLLISUUDET</text>
+            <text x="808" y="550" text-anchor="middle" class="small">työ · perhe · yhteisö · kansalaisuus</text>
+          </g>
+
+          <g class="node">
+            <circle cx="390" cy="514" r="60" fill="#fffdf8" stroke="#6c7f92" stroke-width="2" filter="url(#welfareShadow)"/>
+            <circle cx="390" cy="514" r="7" fill="#6c7f92"/>
+            <text x="390" y="507" text-anchor="middle" class="label">LUOTTAMUS</text>
+            <text x="390" y="529" text-anchor="middle" class="label">JA JATKUVUUS</text>
+            <text x="390" y="549" text-anchor="middle" class="small">ennakoitavuus · legitimiteetti</text>
+          </g>
+
+          <!-- center -->
+          <g filter="url(#welfareShadow)">
+            <circle cx="600" cy="365" r="112" fill="url(#welfareCore)"/>
+            <circle cx="600" cy="365" r="126" fill="none" stroke="#20514c" stroke-width="1.2" opacity=".22"/>
+          </g>
+
+          <text x="600" y="350" text-anchor="middle" class="center-small">YHTEINEN</text>
+          <text x="600" y="390" text-anchor="middle" class="center-title">HYVINVOINTI</text>
+          <text x="600" y="414" text-anchor="middle" class="center-small">EI LOPPUTULOS VAAN KIERTOKULKU</text>
+
+          <!-- internal causal arrows -->
+          <path d="M525 307 C486 276 456 250 430 218" fill="none" stroke="#20514c" stroke-width="1.6" opacity=".42" marker-end="url(#arrowForest)"/>
+          <path d="M676 306 C718 273 746 250 778 218" fill="none" stroke="#20514c" stroke-width="1.6" opacity=".42" marker-end="url(#arrowForest)"/>
+          <path d="M706 405 C754 436 776 456 786 470" fill="none" stroke="#b4632c" stroke-width="1.6" opacity=".42" marker-end="url(#arrowCopper)"/>
+          <path d="M524 425 C480 454 454 469 438 481" fill="none" stroke="#6c7f92" stroke-width="1.6" opacity=".42" marker-end="url(#arrowForest)"/>
+
+          <!-- bottom synthesis -->
+          <rect x="62" y="610" width="1076" height="42" rx="21" fill="url(#welfareBand)" stroke="#ded8ce"/>
+          <text x="600" y="637" text-anchor="middle" class="small">
+            MITÄ YKSI MUUTOS TEKEE MUILLE?  ·  RAHOITUS  ·  PALVELUT  ·  TOIMINTAKYKY  ·  LUOTTAMUS
+          </text>
+        </svg>
+      </div>
+      <figcaption class="figcap">Kuvio 2 — Hyvinvointivaltio riskien jakamisen, kyvykkyyden ja luottamuksen kiertona</figcaption>
     </figure>
   </div>
 </section>
