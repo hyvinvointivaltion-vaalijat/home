@@ -27,34 +27,49 @@ button{font:inherit;color:inherit}
 .brand .mark{width:26px;height:26px;flex:none;border-radius:50%;background:conic-gradient(from 210deg,var(--forest),#c9962a,var(--copper),var(--forest))}
 .brand h1{margin:0;font:600 19px/1.1 var(--serif);white-space:nowrap}
 .brand .sub{font:500 10px/1 var(--mono);letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
-.module-picker{
-  position:relative;display:flex;align-items:center;gap:2px;margin-left:auto;padding:3px;
-  background:var(--sunk);border:1px solid var(--line-soft);border-radius:999px
+.topnav-combined{
+  display:flex;align-items:center;gap:22px;margin-left:auto
+}
+.association-tab{
+  position:relative;padding:7px 0;border:0;background:transparent;color:var(--muted);
+  font-size:13px;font-weight:600;cursor:pointer
+}
+.association-tab::after{
+  content:"";position:absolute;left:0;right:100%;bottom:1px;height:1px;background:var(--copper);
+  transition:right .2s ease
+}
+.association-tab[aria-selected="true"]{color:var(--ink)}
+.association-tab[aria-selected="true"]::after{right:0}
+
+.module-browser{
+  position:relative;display:flex;align-items:center;gap:10px
 }
 .module-arrow{
-  display:grid;place-items:center;width:32px;height:30px;border:0;border-radius:999px;
-  background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer
+  display:grid;place-items:center;width:24px;height:28px;border:0;background:transparent;
+  color:var(--muted);font-size:21px;line-height:1;cursor:pointer;padding:0
 }
-.module-arrow:hover{background:var(--surface);color:var(--ink)}
+.module-arrow:hover{color:var(--ink)}
 .module-current{
-  display:flex;align-items:center;justify-content:center;gap:8px;min-width:132px;height:30px;
-  padding:0 13px;border:0;border-radius:999px;background:var(--surface);color:var(--ink);
-  box-shadow:0 2px 8px rgba(13,42,44,.08);font-size:13px;font-weight:600;cursor:pointer
+  position:relative;display:flex;align-items:center;justify-content:center;min-width:118px;height:30px;
+  padding:0 2px;border:0;background:transparent;color:var(--ink);
+  font-size:13px;font-weight:600;cursor:pointer
 }
-.module-current .dot{width:7px;height:7px;border-radius:50%;background:var(--copper)}
+.module-current::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line)
+}
+.module-current:hover::after{background:var(--copper)}
 .module-menu{
-  position:absolute;top:calc(100% + 8px);left:50%;z-index:300;min-width:220px;padding:6px;
-  transform:translateX(-50%);background:rgba(247,244,238,.98);border:1px solid var(--line);
-  border-radius:12px;box-shadow:0 20px 55px -28px rgba(13,42,44,.55);backdrop-filter:blur(14px)
+  position:absolute;top:calc(100% + 10px);left:50%;z-index:300;min-width:220px;padding:6px 0;
+  transform:translateX(-50%);background:rgba(247,244,238,.985);border:1px solid var(--line);
+  border-radius:8px;box-shadow:0 20px 55px -30px rgba(13,42,44,.5);backdrop-filter:blur(14px)
 }
 .module-menu[hidden]{display:none}
 .module-option{
-  width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;border:0;border-radius:8px;
-  background:transparent;color:var(--muted);text-align:left;font-size:13px;font-weight:500;cursor:pointer
+  width:100%;display:block;padding:8px 12px;border:0;background:transparent;color:var(--muted);
+  text-align:left;font-size:13px;font-weight:500;cursor:pointer
 }
-.module-option::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.4}
-.module-option:hover,.module-option[aria-selected="true"]{background:var(--surface);color:var(--ink)}
-.module-option[aria-selected="true"]::before{background:var(--copper);opacity:1}
+.module-option:hover,.module-option[aria-selected="true"]{background:rgba(255,253,248,.8);color:var(--ink)}
+.module-option[aria-selected="true"]{font-weight:600}
 .tools{display:flex;gap:8px}
 .icon-btn{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
 .icon-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
@@ -64,11 +79,11 @@ button{font:inherit;color:inherit}
 .murros-crop .view-frame{position:absolute;left:0;top:calc(-1 * var(--murros-inner-nav,64px));width:100%;height:calc(100% + var(--murros-inner-nav,64px));}
 .loader{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .loader[hidden]{display:none}
-@media(max-width:1050px){.brand .sub{display:none}.module-current{min-width:118px}}
+@media(max-width:1050px){.brand .sub{display:none}.module-current{min-width:108px}}
 @media(max-width:760px){
   .topbar{flex-wrap:wrap;gap:8px;padding:8px 12px}
   .brand{flex:1}
-  .module-picker{order:3;margin-left:auto}
+  .topnav-combined{order:3;width:100%;margin-left:0;justify-content:space-between}
   #viewRoot{min-height:0}
 }
 </style>
@@ -81,14 +96,17 @@ button{font:inherit;color:inherit}
     <span class="sub">Atlas</span>
   </div>
 
-  <nav class="module-picker" aria-label="Moduuli">
-    <button class="module-arrow" id="modulePrev" type="button" aria-label="Edellinen moduuli">‹</button>
-    <button class="module-current" id="moduleCurrent" type="button" aria-haspopup="listbox" aria-expanded="false">
-      <span class="dot" aria-hidden="true"></span>
-      <span id="moduleLabel">Yhdistys</span>
-    </button>
-    <button class="module-arrow" id="moduleNext" type="button" aria-label="Seuraava moduuli">›</button>
-    <div class="module-menu" id="moduleMenu" role="listbox" aria-label="Valitse moduuli" hidden></div>
+  <nav class="topnav-combined" aria-label="Päänavigaatio">
+    <button class="association-tab" id="associationTab" type="button" aria-selected="true">Yhdistys</button>
+
+    <div class="module-browser" aria-label="Visualisointimoduuli">
+      <button class="module-arrow" id="modulePrev" type="button" aria-label="Edellinen visualisointimoduuli">‹</button>
+      <button class="module-current" id="moduleCurrent" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span id="moduleLabel">Murroskartta</span>
+      </button>
+      <button class="module-arrow" id="moduleNext" type="button" aria-label="Seuraava visualisointimoduuli">›</button>
+      <div class="module-menu" id="moduleMenu" role="listbox" aria-label="Valitse visualisointimoduuli" hidden></div>
+    </div>
   </nav>
 
   <div class="tools">
@@ -106,6 +124,7 @@ button{font:inherit;color:inherit}
 (() => {
   const root = document.getElementById('viewRoot');
   const loader = document.getElementById('loader');
+  const associationTab = document.getElementById('associationTab');
   const modulePrev = document.getElementById('modulePrev');
   const moduleNext = document.getElementById('moduleNext');
   const moduleCurrent = document.getElementById('moduleCurrent');
@@ -151,7 +170,7 @@ button{font:inherit;color:inherit}
     }
   };
 
-  const MODULE_ORDER = ['yhdistys','murroskartta','rengas','verkko','matriisi','paattely','maisema','tulkinta'];
+  const MODULE_ORDER = ['murroskartta','rengas','verkko','matriisi','paattely','maisema','tulkinta'];
 
   moduleMenu.innerHTML = MODULE_ORDER.map(name =>
     `<button class="module-option" type="button" role="option" data-module="${name}">${VIEWS[name].title}</button>`
@@ -166,14 +185,21 @@ button{font:inherit;color:inherit}
   }
 
   function setActiveModule(name) {
-    moduleLabel.textContent = VIEWS[name]?.title || name;
+    if (name === 'yhdistys') {
+      associationTab.setAttribute('aria-selected','true');
+    } else {
+      associationTab.setAttribute('aria-selected','false');
+      moduleLabel.textContent = VIEWS[name]?.title || name;
+    }
     moduleMenu.querySelectorAll('[data-module]').forEach(option =>
       option.setAttribute('aria-selected', String(option.dataset.module === name))
     );
   }
 
   function stepModule(delta) {
-    const current = active && MODULE_ORDER.includes(active) ? active : selectedView();
+    const current = active && MODULE_ORDER.includes(active)
+      ? active
+      : (MODULE_ORDER.includes(selectedView()) ? selectedView() : MODULE_ORDER[0]);
     const index = MODULE_ORDER.indexOf(current);
     const next = MODULE_ORDER[(index + delta + MODULE_ORDER.length) % MODULE_ORDER.length];
     location.hash = next;
@@ -253,6 +279,11 @@ button{font:inherit;color:inherit}
     }
     document.title = `${view.title} · Hyvinvointivaltion Vaalijat ry`;
   }
+
+  associationTab.addEventListener('click', () => {
+    closeModuleMenu();
+    location.hash = 'yhdistys';
+  });
 
   modulePrev.addEventListener('click', () => stepModule(-1));
   moduleNext.addEventListener('click', () => stepModule(1));
