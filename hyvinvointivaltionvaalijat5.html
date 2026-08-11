@@ -3,123 +3,126 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hyvinvointivaltion Vaalijat ry — Atlas v5 kokeilu</title>
-<meta name="description" content="Kokeellinen Hyvinvointivaltion Vaalijat ry:n Atlas-näkymä: yhteinen teema, näkymä ja valittu murros.">
-<meta name="theme-color" content="#0d2a2c">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://harrikayhko.fi" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script type="module" src="https://harrikayhko.fi/atlas/components/atlas-ui.js"></script>
+<title>Hyvinvointivaltion Vaalijat ry — v5</title>
+<meta name="robots" content="noindex">
 <style>
-:root{
-  --paper:#f7f4ee;--card:#fffdf8;--ink:#111a1c;--soft:#59635f;--line:#ddd6c9;
-  --line-soft:#e9e3d8;--deep:#0d2a2c;--forest:#20514c;--copper:#b4632c;--max:1280px;
-}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.55}
-button,select{font:inherit;color:inherit}button{cursor:pointer}.wrap{width:min(var(--max),calc(100% - 42px));margin:auto}
-.top{position:sticky;top:0;z-index:50;background:rgba(247,244,238,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft)}
-.top-in{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{font-family:Fraunces,Georgia,serif;font-size:1.05rem;text-decoration:none}.top a.back{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);text-decoration:none}
-.hero{padding:56px 0 34px}.kicker{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--copper)}
-h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;letter-spacing:-.02em}h1{margin:10px 0 14px;font-size:clamp(2.4rem,5vw,4.8rem);line-height:1}.lead{max-width:72ch;color:var(--soft);font-size:1.08rem}.note{margin-top:18px;padding-left:13px;border-left:2px solid var(--copper);color:var(--soft);font-size:.88rem}
-.atlas-shell{margin:14px auto 70px}.shellbar{display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:22px;align-items:end;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.theme-label{display:block;margin-bottom:5px;font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
-.theme-select{width:100%;padding:7px 28px 7px 0;border:0;border-bottom:1px solid var(--forest);border-radius:0;background:transparent;font:500 clamp(1.15rem,2vw,1.55rem) Fraunces,Georgia,serif;outline:none}
-.views{display:flex;gap:20px;align-items:center}.view{position:relative;padding:8px 0;border:0;background:transparent;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#747e79}.view.active{color:var(--deep)}.view.active:after{content:"";position:absolute;left:0;right:0;bottom:1px;height:2px;background:var(--copper)}
-.context{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:52px;padding:10px 0;color:var(--soft);font-size:.82rem}.context strong{color:var(--deep);font-family:Fraunces,Georgia,serif;font-size:1rem}.clear-item{border:0;background:transparent;color:var(--copper);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em}
-.stage{min-height:520px;padding:12px 0 22px}.stage>atlas-timeline,.stage>atlas-network,.stage>atlas-matrix{display:block;width:100%}
-.content-shell{display:none;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}.content-shell.open{display:block}.content-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:4px}.content-kicker{font-size:.66rem;text-transform:uppercase;letter-spacing:.16em;color:var(--copper)}.content-title{margin:4px 0 0;font-size:clamp(1.35rem,2.4vw,2rem)}
-.state-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:40px;background:var(--line);border:1px solid var(--line)}.state-legend div{padding:18px;background:var(--card)}.state-legend b{display:block;font-family:Fraunces,Georgia,serif;color:var(--forest);font-size:1.05rem}.state-legend span{font-size:.82rem;color:var(--soft)}
-footer{padding:28px 0 48px;border-top:1px solid var(--line-soft);color:var(--soft);font-size:.82rem}
-@media(max-width:760px){.wrap{width:min(100% - 26px,var(--max))}.shellbar{grid-template-columns:1fr}.views{overflow:auto;gap:16px}.context{align-items:flex-start;flex-direction:column}.state-legend{grid-template-columns:1fr}.stage{min-height:420px}}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f7f4ee}
+#mainPage{display:block;width:100%;height:100%;border:0;background:#f7f4ee}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap top-in"><a class="brand" href="./hyvinvointivaltionvaalijat4.html">Hyvinvointivaltion Vaalijat ry</a><a class="back" href="./hyvinvointivaltionvaalijat4.html">← v4</a></div></header>
-<main>
-<section class="hero"><div class="wrap"><div class="kicker">V5 · modulaarinen Atlas-kokeilu</div><h1>Yksi teema.<br>Useita näkymiä.</h1><p class="lead">Tässä kokeilussa teema, visualisointinäkymä ja valittu murros ovat eri asioita. Aikajana, verkko ja matriisi lukevat samaa Atlas-aineistoa ja jakavat saman valintatilan.</p><p class="note">V4 säilyy rinnalla koskemattomana. Tämä sivu testaa Murrosatlaksen <code>shell → state → view → sisältö</code> -mallia Atlas UI Kitin Web Componenteilla.</p></div></section>
-<section class="wrap atlas-shell atlas-lab" id="atlas-v5">
-  <div class="shellbar">
-    <label><span class="theme-label">Teema</span><select class="theme-select" id="v5-theme"></select></label>
-    <nav class="views" aria-label="Atlas-näkymä">
-      <button class="view active" data-view="timeline">Aikajana</button>
-      <button class="view" data-view="network">Verkko</button>
-      <button class="view" data-view="matrix">Matriisi</button>
-    </nav>
-  </div>
-  <div class="context"><div><span id="v5-state-prefix">Ei valittua murrosta</span> <strong id="v5-selected"></strong></div><button class="clear-item" id="v5-clear" hidden>Poista valinta</button></div>
-  <div class="stage atlas-stage" id="v5-stage" aria-live="polite"></div>
-  <section class="content-shell" id="v5-content-shell">
-    <div class="content-head"><div><div class="content-kicker">Valitun murroksen sisältö</div><h2 class="content-title" id="v5-content-title"></h2></div></div>
-    <atlas-content-browser id="v5-content"></atlas-content-browser>
-  </section>
-  <div class="state-legend">
-    <div><b>1 · Teema</b><span>Määrittää tarkasteltavan yhteiskunnallisen alueen.</span></div>
-    <div><b>2 · Näkymä</b><span>Aikajana, verkko ja matriisi ovat saman teeman vaihtoehtoisia linssejä.</span></div>
-    <div><b>3 · Kohde</b><span>Valittu murros säilyy tilassa ja avaa kortit, artikkelit ja infografiikat.</span></div>
-  </div>
-</section>
-</main>
-<footer><div class="wrap">Hyvinvointivaltion Vaalijat ry · Atlas UI Kit v5 -kokeilu</div></footer>
-<script type="module">
-const THEMES = [
-  {id:"hyvinvointi",label:"Hyvinvoinnin murrokset",domain:"hyvinvointi",domains:"hyvinvointi,terveys,koulutus,talous,työ,väestö",focus:"hyvinvointivaltion-rakentuminen-1880"},
-  {id:"terveys",label:"Terveydenhuolto",domain:"terveys",domains:"terveys,hyvinvointi,talous",focus:"hyvinvointialueet-2023"},
-  {id:"koulutus",label:"Koulutus",domain:"koulutus",domains:"koulutus,hyvinvointi,talous",focus:"hyvinvointivaltion-rakentuminen-1880"},
-  {id:"talous",label:"Julkinen talous",domain:"talous",domains:"talous,työ,hyvinvointi",focus:"hyvinvointialueiden-talouskriisi-2023"},
-  {id:"tyo",label:"Työ ja toimeentulo",domain:"työ",domains:"työ,talous,hyvinvointi",focus:"hyvinvointivaltion-rakentuminen-1880"},
-  {id:"vaesto",label:"Väestö ja ikääntyminen",domain:"väestö",domains:"väestö,hyvinvointi,terveys",focus:"hyvinvointialueet-2023"}
-];
-const state={theme:THEMES[0],view:"timeline",selectedItem:null};
-const themeSelect=document.getElementById("v5-theme");
-const stage=document.getElementById("v5-stage");
-const selected=document.getElementById("v5-selected");
-const prefix=document.getElementById("v5-state-prefix");
-const clear=document.getElementById("v5-clear");
-const contentShell=document.getElementById("v5-content-shell");
-const contentTitle=document.getElementById("v5-content-title");
-const content=document.getElementById("v5-content");
+<iframe id="mainPage" src="./hyvinvointivaltionvaalijat4.html" title="Hyvinvointivaltion Vaalijat ry"></iframe>
+<script>
+(() => {
+  const frame = document.getElementById('mainPage');
+  frame.addEventListener('load', () => {
+    const doc = frame.contentDocument;
+    if (!doc || doc.getElementById('murros-original-module-bridge')) return;
 
-THEMES.forEach(t=>{const o=document.createElement("option");o.value=t.id;o.textContent=t.label;themeSelect.append(o)});
+    const style = doc.createElement('style');
+    style.id = 'murros-original-module-bridge-css';
+    style.textContent = `
+      .atlas-lab .atlas-toolbar,
+      .atlas-lab .atlas-foot,
+      .atlas-lab .atlas-status { display:none !important; }
+      .atlas-lab .atlas-shell { border:0 !important; box-shadow:none !important; background:transparent !important; overflow:visible !important; }
+      .atlas-lab .atlas-stage { padding:0 !important; min-height:680px !important; background:transparent !important; overflow:visible !important; }
+      .murros-original-nav{display:flex;align-items:center;gap:2px;position:sticky;top:var(--nav-h,74px);z-index:35;margin:0 0 18px;padding:8px 0;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line,#ddd6c9)}
+      .murros-original-nav .label{margin-right:auto;font:600 10px/1.2 "Source Sans 3",sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--slate,#7a837f)}
+      .murros-original-nav button,.murros-original-nav a{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:0;border-radius:999px;background:transparent;color:var(--ink-soft,#525d60);font:600 12px/1.2 "Source Sans 3",sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap}
+      .murros-original-nav button::before,.murros-original-nav a::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.45}
+      .murros-original-nav button[aria-selected="true"]{background:var(--card,#fffdf8);color:var(--ink,#111a1c);box-shadow:0 1px 8px rgba(13,42,44,.08)}
+      .murros-original-nav button[aria-selected="true"]::before{opacity:1;background:var(--copper,#b4632c)}
+      .murros-original-root{position:relative;width:100%;min-height:680px;overflow:hidden;background:transparent}
+      .murros-original-root>.modular-view{width:100%;min-height:680px}
+      .murros-original-root>.modular-view>#app{width:100%!important;min-height:680px!important}
+      .murros-original-loader{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:rgba(247,244,238,.92);font:600 10px/1.2 "Source Sans 3",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--slate,#7a837f)}
+      .murros-original-loader[hidden]{display:none}
+      @media(max-width:900px){.murros-original-nav{overflow-x:auto}.murros-original-nav .label{display:none}.murros-original-nav button,.murros-original-nav a{padding:7px 9px}}
+    `;
+    doc.head.appendChild(style);
 
-function componentForView(){
-  const t=state.theme;
-  if(state.view==="timeline") return {tag:"atlas-timeline",attrs:{domain:t.domain,limit:"24"}};
-  if(state.view==="network") return {tag:"atlas-network",attrs:{focus:state.selectedItem?.id||t.focus,depth:"2"}};
-  return {tag:"atlas-matrix",attrs:{domains:t.domains,depth:"2"}};
-}
+    const script = doc.createElement('script');
+    script.type = 'module';
+    script.id = 'murros-original-module-bridge';
+    script.textContent = `
+      const BASE = 'https://harrikayhko.fi/atlas/murros/';
+      const VIEWS = {
+        rengas: () => import(BASE + 'views/rengas.js'),
+        verkko: () => import(BASE + 'views/verkko.js'),
+        matriisi: () => import(BASE + 'views/matriisi.js'),
+        paattely: () => import(BASE + 'views/paattely.js'),
+        maisema: () => import(BASE + 'views/maisema.js')
+      };
 
-async function renderView(){
-  const spec=componentForView();
-  const el=document.createElement(spec.tag);
-  el.setAttribute("appearance","frameless");
-  Object.entries(spec.attrs).forEach(([k,v])=>v&&el.setAttribute(k,v));
-  stage.replaceChildren(el);
-  document.querySelectorAll(".view").forEach(b=>b.classList.toggle("active",b.dataset.view===state.view));
-  try{history.replaceState(null,"",`#atlas-v5/${state.theme.id}/${state.view}`)}catch{}
-}
+      const oldStage = document.getElementById('atlas-stage');
+      const lab = oldStage?.closest('.atlas-lab');
+      if (!oldStage || !lab) throw new Error('Atlas-teemaselaimen mount-pistettä ei löytynyt.');
 
-function renderSelection(){
-  const item=state.selectedItem;
-  if(!item){prefix.textContent="Ei valittua murrosta";selected.textContent="";clear.hidden=true;contentShell.classList.remove("open");return}
-  prefix.textContent="Valittu murros:";selected.textContent=item.title||item.id;clear.hidden=false;
-  contentTitle.textContent=item.title||item.id;contentShell.classList.add("open");
-  if(typeof content.load==="function") content.load(item); else customElements.whenDefined("atlas-content-browser").then(()=>content.load(item));
-}
+      const nav = document.createElement('nav');
+      nav.className = 'murros-original-nav';
+      nav.setAttribute('aria-label','Rakennemuutosten Atlas');
+      nav.innerHTML = '<span class="label">Rakennemuutosten Atlas</span>' +
+        '<button data-view="rengas" aria-selected="true">Rengas</button>' +
+        '<button data-view="verkko" aria-selected="false">Verkko</button>' +
+        '<button data-view="matriisi" aria-selected="false">Matriisi</button>' +
+        '<button data-view="paattely" aria-selected="false">Päättely</button>' +
+        '<button data-view="maisema" aria-selected="false">Maisema 3D</button>' +
+        '<a href="https://harrikayhko.fi/atlas/tulkinta.html">Tulkinta</a>';
 
-document.querySelectorAll(".view").forEach(button=>button.addEventListener("click",()=>{state.view=button.dataset.view;renderView()}));
-themeSelect.addEventListener("change",()=>{state.theme=THEMES.find(t=>t.id===themeSelect.value)||THEMES[0];state.selectedItem=null;renderSelection();renderView()});
-clear.addEventListener("click",()=>{state.selectedItem=null;renderSelection();renderView()});
+      const root = document.createElement('div');
+      root.className = 'murros-original-root';
+      root.id = 'murros-original-root';
+      const loader = document.createElement('div');
+      loader.className = 'murros-original-loader';
+      loader.textContent = 'Ladataan näkymää…';
+      root.appendChild(loader);
 
-document.addEventListener("atlas-open-item",event=>{
-  if(!event.detail?.item)return;
-  state.selectedItem=event.detail.item;
-  renderSelection();
-  if(state.view==="network") renderView();
-});
+      oldStage.replaceChildren();
+      oldStage.before(nav);
+      oldStage.replaceWith(root);
 
-customElements.whenDefined("atlas-timeline").then(renderView);
-renderSelection();
+      let activeName = null;
+      let activeModule = null;
+      let switching = false;
+
+      function theme(){ return document.documentElement.dataset.theme || 'light'; }
+      function setTabs(name){ nav.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === name))); }
+
+      async function showView(name){
+        if (switching || activeName === name || !VIEWS[name]) return;
+        switching = true;
+        loader.hidden = false;
+        try {
+          if (activeModule?.unmount) await activeModule.unmount(root);
+          const module = await VIEWS[name]();
+          await module.mount(root, { theme: theme(), isAdmin:false, adminApi:window.__murrosAdminApi || null });
+          activeModule = module;
+          activeName = name;
+          setTabs(name);
+        } catch (error) {
+          console.error('V5 Murrosatlas:', error);
+          root.innerHTML = '<div style="padding:28px;color:#9b392c">Näkymän lataus epäonnistui.<br><small>' + String(error?.message || error) + '</small></div>';
+        } finally {
+          loader.hidden = true;
+          switching = false;
+        }
+      }
+
+      nav.addEventListener('click', event => {
+        const button = event.target.closest('button[data-view]');
+        if (button) showView(button.dataset.view);
+      });
+      window.addEventListener('keydown', event => {
+        if (event.metaKey || event.ctrlKey || event.altKey) return;
+        const map = {'1':'rengas','2':'verkko','3':'matriisi','4':'paattely','5':'maisema'};
+        if (map[event.key] && lab.getBoundingClientRect().bottom > 0) showView(map[event.key]);
+      });
+      showView('rengas');
+    `;
+    doc.body.appendChild(script);
+  });
+})();
 </script>
 </body>
 </html>
