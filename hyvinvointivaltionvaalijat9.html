@@ -1349,6 +1349,61 @@ button{font:inherit;color:inherit}
         });
       }
 
+
+      // Poista etusivun numerolaatikkorivi ("10 rakennetta", "4 Atlas-näkymää", jne.).
+      // Etsitään koko laatikkoryhmä tekstisisällön perusteella, jotta muutos ei riipu
+      // yhdistyssivun yksittäisestä CSS-luokan nimestä.
+      const removeHeroStatBoxes = () => {
+        const normalize = value => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        const elements = [...doc.body.querySelectorAll('section,div,aside,ul')];
+        const group = elements
+          .filter(el => {
+            const text = normalize(el.textContent);
+            return /10\s+rakennetta/.test(text) &&
+                   /4\s+(?:atlas[\s-]*)?näkym/.test(text);
+          })
+          .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
+
+        if (group) {
+          group.style.setProperty('display','none','important');
+          group.setAttribute('aria-hidden','true');
+        }
+      };
+      removeHeroStatBoxes();
+      setTimeout(removeHeroStatBoxes, 250);
+      setTimeout(removeHeroStatBoxes, 900);
+
+
+      // Poista kokonaan lohko 05 · AJATTELUTAPA.
+      const removeThinkingSection = () => {
+        const normalize = value => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+        const candidates = [...doc.body.querySelectorAll('section,article,div')].filter(el => {
+          const text = normalize(el.textContent);
+          return text.includes('ajattelutapa') && /(^|\s)05(\s|·|\.|$)/.test(text);
+        });
+
+        // Valitaan pienin kokonainen sisältölohko, mieluiten <section>.
+        let target = candidates
+          .filter(el => el.tagName === 'SECTION')
+          .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
+
+        if (!target) {
+          target = candidates
+            .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
+          target = target?.closest('section,article') || target;
+        }
+
+        if (target) {
+          target.style.setProperty('display','none','important');
+          target.setAttribute('aria-hidden','true');
+        }
+      };
+
+      removeThinkingSection();
+      setTimeout(removeThinkingSection, 250);
+      setTimeout(removeThinkingSection, 900);
+
       // "Avaa Atlas" ei vie pois hyvinvointivaltio-osoitteesta:
       // se vaihtaa v5-kuoren rengasnäkymään.
       doc.querySelectorAll('a[href="#atlas"], a[href*="#atlas"]').forEach(link => {
