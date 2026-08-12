@@ -919,7 +919,7 @@ button{font:inherit;color:inherit}
 
         /* Navigointipallon oikean alakulman sisältönosto alemmas */
         .sphere-readout{
-          bottom:-3%!important;
+          bottom:-5%!important;
         }
 
         @media(max-width:760px){
@@ -1115,7 +1115,7 @@ button{font:inherit;color:inherit}
         });
 
         /* HTML-varareitti */
-        [...doc.querySelectorAll('button,a,[role="button"],[data-axis],.sphere-label,.welfare-label')].forEach(el => {
+        [...doc.querySelectorAll('[data-axis],.sphere-label,.welfare-label,[data-sphere-label],[data-welfare-label]')].forEach(el => {
           if (el.dataset?.v5SphereTeaser === '1') return;
           const rawLabel = String(el.textContent || '').replace(/\s+/g, ' ').trim();
           const teaser = getSphereTeaser(rawLabel);
@@ -1164,82 +1164,12 @@ button{font:inherit;color:inherit}
         .v5-sphere-teaser-html:hover .v5-sphere-teaser-question{
           color:var(--forest,#20514c)!important
         }
-        /* Oikean alakulman vuosikymmen-/teemanosto hieman alemmas */
-        .sphere-callout,.welfare-callout,.concept-callout,.era-callout,
-        [class*="callout"][class*="sphere"],[class*="callout"][class*="welfare"],
-        [data-sphere-callout],[data-era-callout]{
-          transform:translateY(54px)!important
-        }
       `;
       doc.head.appendChild(sphereStyle);
 
-      /* Pallon oikean alakulman nosto on SVG-ryhmä, ei tavallinen HTML-kortti.
-         Siirretään sen koko <g>-ryhmää alaspäin. Tämä säilyttää otsikon,
-         metatiedot ja leipätekstin keskinäisen asemoinnin. */
-      function lowerRightSphereCallout() {
-        const win = doc.defaultView;
-        const vw = win?.innerWidth || 1200;
-        const vh = win?.innerHeight || 800;
-
-        // Etsi ensisijaisesti nostoon kuuluva iso otsikko / leipäteksti.
-        const all = [...doc.querySelectorAll('svg text, svg tspan, div, section, aside, article')];
-        const anchors = all.filter(el => {
-          const text = String(el.textContent || el.innerText || '').replace(/\s+/g,' ').trim();
-          if (!text) return false;
-          return /Kansakoulusta palvelujärjestelmään|Vaikuttavuus ennen volyymiä|Palvelujen arvo syntyy|Koulutus ja terveys alkavat muodostaa/i.test(text);
-        });
-
-        let target = null;
-        for (const anchor of anchors) {
-          // SVG: nouse lähimpään ryhmään, joka näyttää koko oikean alakulman nostolta.
-          if (anchor.namespaceURI === 'http://www.w3.org/2000/svg') {
-            let g = anchor.closest('g');
-            let best = g;
-            while (g && g.parentElement && g.parentElement.tagName?.toLowerCase() === 'g') {
-              const parent = g.parentElement;
-              const txt = String(parent.textContent || '').replace(/\s+/g,' ').trim();
-              let box = null;
-              try { box = parent.getBoundingClientRect(); } catch {}
-              if (box && box.width >= 220 && box.width <= vw * .48 && box.height >= 70 && box.height <= vh * .42 && txt.length <= 700) {
-                best = parent;
-                g = parent;
-              } else break;
-            }
-            target = best || anchor;
-            break;
-          }
-          target = anchor.closest('div,section,aside,article') || anchor;
-          break;
-        }
-
-        // Varareitti: etsi oikean alakulman SVG-ryhmä geometrian perusteella.
-        if (!target) {
-          const groups = [...doc.querySelectorAll('svg g')].filter(g => {
-            if (g.dataset.v5CalloutShifted === '1') return false;
-            const text = String(g.textContent || '').replace(/\s+/g,' ').trim();
-            if (text.length < 25 || text.length > 700) return false;
-            const r = g.getBoundingClientRect();
-            return r.width > 220 && r.width < vw * .48 && r.height > 70 && r.height < vh * .42 &&
-                   r.left > vw * .54 && r.top > vh * .60;
-          });
-          target = groups.sort((a,b) => b.getBoundingClientRect().top - a.getBoundingClientRect().top)[0] || null;
-        }
-        if (!target || target.dataset.v5CalloutShifted === '1') return;
-
-        target.dataset.v5CalloutShifted = '1';
-        const shift = 82;
-        if (target.namespaceURI === 'http://www.w3.org/2000/svg') {
-          const old = target.getAttribute('transform') || '';
-          target.setAttribute('transform', `${old} translate(0 ${shift})`.trim());
-        } else {
-          target.style.setProperty('position', target.style.position || 'relative', 'important');
-          target.style.setProperty('top', `${shift}px`, 'important');
-        }
-      }
 
       const runSphereEnhancement = () => {
         enhanceSphereTeasers();
-        lowerRightSphereCallout();
       };
       runSphereEnhancement();
       setTimeout(runSphereEnhancement, 180);
@@ -1249,7 +1179,6 @@ button{font:inherit;color:inherit}
 
       const sphereObserver = new MutationObserver(() => {
         enhanceSphereTeasers();
-        lowerRightSphereCallout();
       });
       sphereObserver.observe(doc.body, { childList:true, subtree:true, characterData:true });
 
