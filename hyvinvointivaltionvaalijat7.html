@@ -118,6 +118,18 @@ button{font:inherit;color:inherit}
 
 .paytrail-test-banner{position:fixed;right:14px;bottom:14px;z-index:450;padding:8px 11px;border:1px solid var(--copper);border-radius:7px;background:rgba(247,244,238,.96);font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--copper);box-shadow:0 10px 30px -20px rgba(13,42,44,.5)}
 .paytrail-test-banner strong{color:var(--ink)}
+.paytrail-result{
+  position:fixed;left:50%;top:82px;z-index:520;transform:translateX(-50%);
+  width:min(640px,calc(100vw - 28px));padding:14px 18px;border:1px solid var(--line);
+  border-radius:10px;background:rgba(255,253,248,.98);box-shadow:0 18px 55px -28px rgba(13,42,44,.55);
+  font-size:13px;color:var(--ink)
+}
+.paytrail-result[hidden]{display:none}
+.paytrail-result[data-state="ok"]{border-color:var(--forest)}
+.paytrail-result[data-state="error"]{border-color:#9b4434}
+.paytrail-result strong{display:block;margin-bottom:3px;font:600 1rem var(--serif)}
+.paytrail-result small{color:var(--muted)}
+
 </style>
 </head>
 <body>
@@ -155,6 +167,7 @@ button{font:inherit;color:inherit}
   <div class="loader" id="loader">Ladataan näkymää…</div>
 </main>
 <div class="paytrail-test-banner" id="paytrailTestBanner">Paytrail <strong>TESTI</strong></div>
+<div class="paytrail-result" id="paytrailResult" hidden role="status" aria-live="polite"></div>
 
 <div class="account-overlay" id="accountOverlay" aria-hidden="true">
   <aside class="account-sheet" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
@@ -1057,27 +1070,84 @@ button{font:inherit;color:inherit}
     const params = new URLSearchParams(location.search);
     const returned = params.get('paytrail_test');
     if (!returned) return;
-    location.hash = 'liity';
-    const paymentId = sessionStorage.getItem('v5PaytrailTestPaymentId');
-    let message = returned === 'cancel'
-      ? 'Paytrail-testimaksu peruutettiin.'
-      : 'Paluu Paytrail-testistä vastaanotettu. Tarkistetaan callback…';
-    const banner = document.getElementById('paytrailTestBanner');
-    if (banner) banner.innerHTML = `Paytrail <strong>TESTI</strong> · ${message}`;
 
-    if (returned === 'success' && paymentId && supabaseClient) {
-      for (let i=0;i<8;i++) {
-        const { data } = await supabaseClient.from('payments')
-          .select('status,is_test,provider')
-          .eq('id', paymentId).maybeSingle();
-        if (data?.is_test && data?.provider === 'paytrail_test' && data.status === 'paid') {
-          message = 'Testimaksu vahvistettu callbackilla ✓';
-          if (banner) banner.innerHTML = `Paytrail <strong>TESTI</strong> · ${message}`;
-          break;
+    location.hash = 'liity';
+
+    const paymentId = sessionStorage.getItem('v5PaytrailTestPaymentId') || '';
+    const banner = document.getElementById('paytrailTestBanner');
+    const resultBox = document.getElementById('paytrailResult');
+
+    const showResult = (state, title, detail='') => {
+      const isOk = state === 'ok';
+      const text = `${title}${detail ? ` — ${detail}` : ''}`;
+      if (banner) banner.innerHTML = `Paytrail <strong>TESTI</strong> · ${text}`;
+      if (resultBox) {
+        resultBox.hidden = false;
+        resultBox.dataset.state = isOk ? 'ok' : 'error';
+        resultBox.innerHTML = `<strong>${title}</strong><div>${detail || ''}</div><small>Tämä on Paytrailin testimaksu. Oikeaa rahaa ei liiku eikä testimaksu aktivoi jäsenyyttä.</small>`;
+      }
+    };
+
+    if (returned === 'cancel') {
+      showResult('error', 'Testimaksu peruutettiin', 'Paytrail palautti maksun peruutettuna tai epäonnistuneena.');
+    } else {
+      if (banner) banner.innerHTML = 'Paytrail <strong>TESTI</strong> · tarkistetaan maksun tila…';
+      if (resultBox) {
+        resultBox.hidden = false;
+        resultBox.dataset.state = '';
+        resultBox.innerHTML = '<strong>Paluu Paytrailista vastaanotettu</strong><div>Tarkistetaan callbackin vahvistama maksun tila…</div>';
+      }
+
+      if (!paymentId) {
+        showResult('error', 'Maksun tilaa ei voitu tunnistaa', 'Selaimesta puuttuu tämän testimaksun tunniste.');
+      } else {
+        let finalStatus = null;
+        let lastError = '';
+
+        for (let i = 0; i < 12; i++) {
+          try {
+            const session = await getSession();
+            if (!session?.access_token) throw new Error('Kirjautumisistunto puuttuu.');
+
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/payment-status-test`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_PUBLISHABLE_KEY,
+                'Authorization': `Bearer ${session.access_token}`
+              },
+              body: JSON.stringify({ payment_id: paymentId })
+            });
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data?.detail || data?.error || `HTTP ${response.status}`);
+
+            finalStatus = data?.payment?.status || null;
+            if (finalStatus === 'paid' || finalStatus === 'failed') break;
+          } catch (error) {
+            lastError = error?.message || String(error);
+          }
+          await new Promise(r => setTimeout(r, 800));
         }
-        await new Promise(r=>setTimeout(r,750));
+
+        if (finalStatus === 'paid') {
+          showResult('ok', 'Testimaksu onnistui ✓', 'Paytrail callback vahvisti maksun maksetuksi.');
+        } else if (finalStatus === 'failed') {
+          showResult('error', 'Testimaksu epäonnistui', 'Paytrail callback vahvisti maksun epäonnistuneeksi.');
+        } else {
+          showResult('error', 'Maksun vahvistus jäi avoimeksi', lastError || 'Callback ei vahvistanut maksua määräajassa.');
+        }
       }
     }
+
+    // Siivoa query-parametri vasta viiveellä, jotta paluun tulos ehtii näkyä.
+    setTimeout(() => {
+      try {
+        const clean = new URL(location.href);
+        clean.searchParams.delete('paytrail_test');
+        history.replaceState(null, '', clean.pathname + clean.search + clean.hash);
+      } catch {}
+    }, 1500);
   })();
 })();
 </script>
