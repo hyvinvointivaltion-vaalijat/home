@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="fi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hyvinvointivaltion Vaalijat ry · v5</title>
+<meta name="description" content="Hyvinvointivaltion Vaalijat ry ja Rakennemuutosten Atlas samassa näkymäkuoressa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#f7f4ee;--surface:#fffdf8;--sunk:#efeae1;--ink:#17201f;--muted:#74807c;
+  --line:#ddd6c9;--line-soft:#e9e3d8;--forest:#20514c;--copper:#b4632c;
+  --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;
+  --nav-h:64px;
+}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}
+body{display:flex;flex-direction:column;overflow:hidden;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
+button{font:inherit;color:inherit}
+.topbar{
+  position:relative;z-index:100;display:flex;align-items:center;gap:18px;min-height:var(--nav-h);
+  padding:9px 20px;background:rgba(247,244,238,.94);backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid var(--line)
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand .mark{width:26px;height:26px;flex:none;border-radius:50%;background:conic-gradient(from 210deg,var(--forest),#c9962a,var(--copper),var(--forest))}
+.brand h1{margin:0;font:600 19px/1.1 var(--serif);white-space:nowrap}
+.brand .sub{font:500 10px/1 var(--mono);letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
+.topnav-combined{
+  display:flex;align-items:center;gap:22px;margin-left:auto
+}
+.association-tab{
+  position:relative;padding:7px 0;border:0;background:transparent;color:var(--muted);
+  font-size:13px;font-weight:600;cursor:pointer
+}
+.association-tab::after{
+  content:"";position:absolute;left:0;right:100%;bottom:1px;height:1px;background:var(--copper);
+  transition:right .2s ease
+}
+.association-tab[aria-selected="true"]{color:var(--ink)}
+.association-tab[aria-selected="true"]::after{right:0}
+
+.module-browser{
+  position:relative;display:flex;align-items:center;gap:10px
+}
+.module-arrow{
+  display:grid;place-items:center;width:24px;height:28px;border:0;background:transparent;
+  color:var(--muted);font-size:21px;line-height:1;cursor:pointer;padding:0
+}
+.module-arrow:hover{color:var(--ink)}
+.module-current{
+  position:relative;display:flex;align-items:center;justify-content:center;min-width:118px;height:30px;
+  padding:0 2px;border:0;background:transparent;color:var(--ink);
+  font-size:13px;font-weight:600;cursor:pointer
+}
+.module-current::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line)
+}
+.module-current:hover::after{background:var(--copper)}
+.module-menu{
+  position:absolute;top:calc(100% + 10px);left:50%;z-index:300;min-width:220px;padding:6px 0;
+  transform:translateX(-50%);background:rgba(247,244,238,.985);border:1px solid var(--line);
+  border-radius:8px;box-shadow:0 20px 55px -30px rgba(13,42,44,.5);backdrop-filter:blur(14px)
+}
+.module-menu[hidden]{display:none}
+.module-option{
+  width:100%;display:block;padding:8px 12px;border:0;background:transparent;color:var(--muted);
+  text-align:left;font-size:13px;font-weight:500;cursor:pointer
+}
+.module-option:hover,.module-option[aria-selected="true"]{background:rgba(255,253,248,.8);color:var(--ink)}
+.module-option[aria-selected="true"]{font-weight:600}
+.tools{display:flex;gap:8px}
+.icon-btn{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.icon-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
+#viewRoot{position:relative;flex:1;min-width:0;min-height:0;overflow:hidden;background:var(--paper)}
+.view-frame{display:block;width:100%;height:100%;border:0;background:var(--paper)}
+.murros-crop{position:absolute;inset:0;overflow:hidden;background:var(--paper)}
+.murros-crop .view-frame{position:absolute;left:0;top:calc(-1 * var(--murros-inner-nav,64px));width:100%;height:calc(100% + var(--murros-inner-nav,64px));}
+.loader{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.loader[hidden]{display:none}
+@media(max-width:1050px){.brand .sub{display:none}.module-current{min-width:108px}}
+@media(max-width:760px){
+  .topbar{flex-wrap:wrap;gap:8px;padding:8px 12px}
+  .brand{flex:1}
+  .topnav-combined{order:3;width:100%;margin-left:0;justify-content:space-between}
+  #viewRoot{min-height:0}
+}
+
+.account-tab{position:relative;padding:7px 0;border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.account-tab:hover,.account-tab[data-active="true"]{color:var(--ink)}
+.account-tab .pro-mark{margin-left:6px;font:700 9px var(--mono);letter-spacing:.08em;color:var(--copper)}
+.account-overlay{position:fixed;inset:0;z-index:500;display:none;align-items:flex-start;justify-content:flex-end;padding:76px 18px 18px;background:rgba(23,32,31,.18)}
+.account-overlay.open{display:flex}
+.account-sheet{width:min(430px,calc(100vw - 24px));max-height:calc(100vh - 94px);overflow:auto;padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 60px -28px rgba(13,42,44,.55)}
+.account-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.account-head h2{margin:0;font:600 1.3rem var(--serif)}
+.account-close{border:0;background:transparent;font-size:20px;cursor:pointer;color:var(--muted)}
+.account-section{padding:16px 0;border-bottom:1px solid var(--line-soft)}
+.account-section:last-child{border-bottom:0;padding-bottom:0}
+.account-field{display:grid;gap:6px}.account-field label{font:600 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.account-field input{padding:10px 11px;border:1px solid var(--line);border-radius:6px;background:var(--paper);font:inherit}
+.account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.account-btn{padding:9px 12px;border:1px solid var(--line);border-radius:7px;background:transparent;font-weight:600;cursor:pointer}.account-btn.primary{border-color:var(--forest);background:var(--forest);color:#fff}
+.account-meta{font-size:12.5px;color:var(--muted)}
+.account-badge{display:inline-block;margin-top:8px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font:600 10px var(--mono);color:var(--forest)}
+.account-badge.pro{border-color:var(--copper);color:var(--copper)}
+.member-news-item{padding:11px 0;border-bottom:1px solid var(--line-soft)}.member-news-item:last-child{border-bottom:0}.member-news-item h3{margin:0 0 4px;font:600 1rem var(--serif)}.member-news-item p{margin:0;color:var(--muted);font-size:12.5px}.member-news-date{font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:760px){.account-overlay{padding:122px 10px 10px}.account-sheet{width:100%;max-height:calc(100vh - 132px)}}
+
+.account-remember{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:12.5px;color:var(--muted)}
+.account-remember input{margin-top:2px;accent-color:var(--forest)}
+.account-register-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.account-register-grid .wide{grid-column:1/-1}
+@media(max-width:560px){.account-register-grid{grid-template-columns:1fr}.account-register-grid .wide{grid-column:auto}}
+
+.otp-cooldown{display:inline-block;min-width:2.6em;font-variant-numeric:tabular-nums}
+.account-btn:disabled{opacity:.48;cursor:not-allowed}
+
+.paytrail-test-banner{position:fixed;right:14px;bottom:14px;z-index:450;padding:8px 11px;border:1px solid var(--copper);border-radius:7px;background:rgba(247,244,238,.96);font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--copper);box-shadow:0 10px 30px -20px rgba(13,42,44,.5)}
+.paytrail-test-banner strong{color:var(--ink)}
+.paytrail-result{
+  position:fixed;left:50%;top:82px;z-index:520;transform:translateX(-50%);
+  width:min(640px,calc(100vw - 28px));padding:14px 18px;border:1px solid var(--line);
+  border-radius:10px;background:rgba(255,253,248,.98);box-shadow:0 18px 55px -28px rgba(13,42,44,.55);
+  font-size:13px;color:var(--ink)
+}
+.paytrail-result[hidden]{display:none}
+.paytrail-result[data-state="ok"]{border-color:var(--forest)}
+.paytrail-result[data-state="error"]{border-color:#9b4434}
+.paytrail-result strong{display:block;margin-bottom:3px;font:600 1rem var(--serif)}
+.paytrail-result small{color:var(--muted)}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <h1>Hyvinvointivaltion Vaalijat ry</h1>
+    <span class="sub">Atlas</span>
+  </div>
+
+  <nav class="topnav-combined" aria-label="Päänavigaatio">
+    <button class="association-tab" id="associationTab" type="button" aria-selected="true">Yhdistys</button>
+    <button class="association-tab" id="newsTab" type="button" aria-selected="false">Ajankohtaista</button>
+    <button class="association-tab" id="joinTab" type="button" aria-selected="false">Liity</button>
+    <button class="account-tab" id="accountTab" type="button" data-active="false">Tunnistaudu</button>
+
+    <div class="module-browser" aria-label="Visualisointimoduuli">
+      <button class="module-arrow" id="modulePrev" type="button" aria-label="Edellinen visualisointimoduuli">‹</button>
+      <button class="module-current" id="moduleCurrent" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span id="moduleLabel">Murroskartta</span>
+      </button>
+      <button class="module-arrow" id="moduleNext" type="button" aria-label="Seuraava visualisointimoduuli">›</button>
+      <div class="module-menu" id="moduleMenu" role="listbox" aria-label="Valitse visualisointimoduuli" hidden></div>
+    </div>
+  </nav>
+
+  <div class="tools">
+    <button class="icon-btn" id="fsBtn" type="button" aria-label="Koko näyttö">
+      <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="viewRoot">
+  <div class="loader" id="loader">Ladataan näkymää…</div>
+</main>
+<div class="paytrail-test-banner" id="paytrailTestBanner">Paytrail <strong>TESTI</strong></div>
+<div class="paytrail-result" id="paytrailResult" hidden role="status" aria-live="polite"></div>
+
+<div class="account-overlay" id="accountOverlay" aria-hidden="true">
+  <aside class="account-sheet" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+    <div class="account-head"><div><div class="sub">Jäsenpalvelu</div><h2 id="accountTitle">Tunnistaudu</h2></div><button class="account-close" id="accountClose" type="button" aria-label="Sulje">×</button></div>
+    <div id="accountSignedOut">
+      <div class="account-section" id="accountEmailStep">
+        <p class="account-meta">Anna sähköpostiosoitteesi. Lähetämme siihen 6-numeroisen vahvistustunnuksen.</p>
+        <div class="account-field"><label>Sähköpostiosoite</label><input id="accountEmail" type="email" autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+        <label class="account-remember"><input id="accountRemember" type="checkbox"> <span>Pidä minut kirjautuneena tällä laitteella</span></label>
+        <div class="account-actions"><button class="account-btn primary" id="accountContinue" type="button">Lähetä vahvistustunnus</button></div>
+        <div class="account-meta" id="accountLoginStatus" style="margin-top:10px"></div>
+      </div>
+
+      <div class="account-section" id="accountOtpStep" hidden>
+        <p class="account-meta" id="accountOtpIntro">Syötä sähköpostiisi lähetetty 6-numeroinen vahvistustunnus.</p>
+        <div class="account-field"><label>Vahvistustunnus</label><input id="accountOtp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000"></div>
+        <div class="account-actions"><button class="account-btn primary" id="accountVerifyOtp" type="button">Vahvista ja jatka</button><button class="account-btn" id="accountResendOtp" type="button">Lähetä uusi tunnus <span class="otp-cooldown" id="otpCooldown"></span></button><button class="account-btn" id="accountOtpBack" type="button">Vaihda sähköposti</button></div>
+        <div class="account-meta" id="accountOtpStatus" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div id="accountSignedIn" hidden>
+      <div class="account-section">
+        <strong id="accountName">Kirjautunut käyttäjä</strong><div class="account-meta" id="accountEmailShown"></div>
+        <div id="accountBadges"></div>
+        <div class="account-actions"><button class="account-btn" id="accountOpenProfile" type="button">Omat tiedot</button><button class="account-btn" id="accountLogout" type="button">Kirjaudu ulos</button></div>
+      </div>
+      <div class="account-section" id="memberNewsSection">
+        <div class="sub">Jäsentiedotteet</div><div id="memberNewsList" class="account-meta" style="margin-top:8px">Ladataan…</div>
+      </div>
+      <div class="account-section"><div class="sub">Atlas</div><p class="account-meta" id="atlasAccessText">Tarkistetaan käyttöoikeutta…</p></div>
+    </div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  const root = document.getElementById('viewRoot');
+  const loader = document.getElementById('loader');
+  const associationTab = document.getElementById('associationTab');
+  const newsTab = document.getElementById('newsTab');
+  const joinTab = document.getElementById('joinTab');
+  const accountTab = document.getElementById('accountTab');
+  const accountOverlay = document.getElementById('accountOverlay');
+  const modulePrev = document.getElementById('modulePrev');
+  const moduleNext = document.getElementById('moduleNext');
+  const moduleCurrent = document.getElementById('moduleCurrent');
+  const moduleLabel = document.getElementById('moduleLabel');
+  const moduleMenu = document.getElementById('moduleMenu');
+  const fsBtn = document.getElementById('fsBtn');
+
+  const VIEWS = {
+    yhdistys: {
+      title: 'Yhdistys',
+      url: './hyvinvointivaltionvaalijat4.html',
+      sameOrigin: true
+    },
+    ajankohtaista: {
+      title: 'Ajankohtaista',
+      url: './hyvinvointivaltionvaalijat4.html#ajankohtaista',
+      sameOrigin: true
+    },
+    liity: {
+      title: 'Liity',
+      url: './hyvinvointivaltionvaalijat4.html#liity',
+      sameOrigin: true
+    },
+    murroskartta: {
+      title: 'Murroskartta',
+      url: 'https://harrikayhko.fi/atlas/murroskartta.html'
+    },
+    rengas: {
+      title: 'Rengas',
+      url: 'https://harrikayhko.fi/atlas/murros/index.html#rengas',
+      cropMurrosTopbar: true
+    },
+    verkko: {
+      title: 'Verkko',
+      url: 'https://harrikayhko.fi/atlas/murros/index.html#verkko',
+      cropMurrosTopbar: true
+    },
+    matriisi: {
+      title: 'Matriisi',
+      url: 'https://harrikayhko.fi/atlas/murros/matriisi.html'
+    },
+    paattely: {
+      title: 'Päättely',
+      url: 'https://harrikayhko.fi/atlas/index.html'
+    },
+    maisema: {
+      title: 'Maisema 3D',
+      url: 'https://harrikayhko.fi/atlas/maisema.html'
+    },
+    tulkinta: {
+      title: 'Tulkinta',
+      url: 'https://harrikayhko.fi/atlas/tulkinta.html'
+    }
+  };
+
+  const MODULE_ORDER = ['murroskartta','rengas','verkko','matriisi','paattely','maisema','tulkinta'];
+
+  const SUPABASE_URL = 'https://zzbubbrsgiqsvsovkkmf.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_YNqxZI4Oj-DSjVBoTKhQ2Q_4DchUIBb';
+  const REMEMBER_KEY = 'v5RememberLogin';
+  let rememberSession = localStorage.getItem(REMEMBER_KEY) === '1';
+  const authStorage = {
+    getItem(key){ return sessionStorage.getItem(key) ?? localStorage.getItem(key); },
+    setItem(key,value){
+      if(rememberSession){ localStorage.setItem(key,value); sessionStorage.removeItem(key); }
+      else { sessionStorage.setItem(key,value); localStorage.removeItem(key); }
+    },
+    removeItem(key){ sessionStorage.removeItem(key); localStorage.removeItem(key); }
+  };
+  const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, storage:authStorage }
+  });
+  function setRememberPreference(enabled){
+    rememberSession = !!enabled;
+    if(rememberSession) localStorage.setItem(REMEMBER_KEY,'1');
+    else localStorage.removeItem(REMEMBER_KEY);
+  }
+
+  async function startPaytrailPayment(detail) {
+    if (!supabaseClient) throw new Error('Maksupalvelun yhteys ei ole käytettävissä.');
+
+    const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+    if (sessionError || !session?.access_token) {
+      throw new Error('Kirjaudu sisään ennen maksamista.');
+    }
+
+    const body = { product_code: detail.product_code };
+    if (detail.product_code === 'donation') {
+      body.amount_cents = Math.round(Number(detail.amount) * 100);
+    }
+
+    const endpoint = `${SUPABASE_URL}/functions/v1/create-payment-test`;
+    console.info('[Paytrail test] POST', endpoint, body);
+
+    let response;
+    try {
+      response = await fetch(endpoint, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_PUBLISHABLE_KEY,
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify(body)
+      });
+    } catch (networkError) {
+      console.error('[Paytrail test] verkkovirhe / CORS', networkError);
+      throw new Error(`Maksupyynnön lähetys epäonnistui ennen palvelinvastausta: ${networkError?.message || networkError}`);
+    }
+
+    const raw = await response.text();
+    let result = {};
+    try {
+      result = raw ? JSON.parse(raw) : {};
+    } catch {
+      result = { raw_response: raw };
+    }
+
+    console.info('[Paytrail test] vastaus', {
+      status: response.status,
+      ok: response.ok,
+      result
+    });
+
+    if (!response.ok) {
+      const providerDetail =
+        result?.provider_response?.message ||
+        result?.provider_response?.error ||
+        (typeof result?.provider_response === 'string' ? result.provider_response : '') ||
+        result?.detail ||
+        result?.message ||
+        result?.error ||
+        result?.raw_response ||
+        `HTTP ${response.status}`;
+
+      const requestId = result?.request_id ? ` · request-id ${result.request_id}` : '';
+      throw new Error(`Paytrail-testi hylättiin (${response.status}): ${providerDetail}${requestId}`);
+    }
+
+    if (!result.checkout_url) {
+      throw new Error(`Paytrail-testimaksuosoitetta ei saatu. HTTP ${response.status}.`);
+    }
+
+    sessionStorage.setItem('v5PaytrailTestPaymentId', result.payment_id || '');
+    window.location.assign(result.checkout_url);
+  }
+
+  async function getSession() {
+    if (!supabaseClient) throw new Error('Yhteys jäsenrekisteriin ei ole käytettävissä.');
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
+    if (error) throw error;
+    return session;
+  }
+
+  function postToAssociation(message) {
+    try { frame?.contentWindow?.postMessage(message, location.origin); } catch {}
+  }
+
+  async function invokeMemberProfile(action = 'get', payload = {}) {
+    const session = await getSession();
+    if (!session?.access_token) throw new Error('Vahvista ensin sähköpostiosoitteesi.');
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/member-profile`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_PUBLISHABLE_KEY,
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Jäsentietojen käsittely epäonnistui.');
+    return result;
+  }
+
+  async function syncJoinState() {
+    if (!['yhdistys','liity','ajankohtaista'].includes(active || '')) return;
+    try {
+      const session = await getSession();
+      if (!session?.user?.email) {
+        postToAssociation({ type:'v5-join-state', state:'signed-out' });
+        return;
+      }
+      postToAssociation({ type:'v5-join-state', state:'loading', email:session.user.email });
+      const profile = await invokeMemberProfile('get');
+      postToAssociation({ type:'v5-join-state', state:'ready', profile });
+    } catch (error) {
+      postToAssociation({ type:'v5-join-state', state:'error', message:error?.message || 'Tietojen lataus epäonnistui.' });
+    }
+  }
+
+  async function updateVerifiedEmailIfNeeded(newEmail){
+    const session=await getSession();
+    const current=(session?.user?.email||'').trim().toLowerCase();
+    const next=String(newEmail||'').trim().toLowerCase();
+    if(!next || next===current) return {changed:false};
+    if(!/^\S+@\S+\.\S+$/.test(next)) throw new Error('Anna toimiva sähköpostiosoite.');
+    const {error}=await supabaseClient.auth.updateUser({email:next});
+    if(error) throw error;
+    return {changed:true,email:next};
+  }
+
+  function profilePayload(detail = {}) {
+    const p = detail.profile || {};
+    return {
+      full_name: p.full_name || null,
+      phone: p.phone || null,
+      municipality: p.municipality || null,
+      address_line: p.address_line || null,
+      postal_code: p.postal_code || null,
+      city: p.city || null,
+    };
+  }
+
+
+  async function checkAtlasPro() {
+    const session = await getSession();
+    if (!session?.access_token) return { entitled:false };
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/check-entitlement`, {
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':`Bearer ${session.access_token}`},
+      body:JSON.stringify({product_code:'atlas-pro'})
+    });
+    return response.ok ? await response.json() : { entitled:false };
+  }
+
+  async function loadMemberNews() {
+    if (!supabaseClient) return [];
+    const { data, error } = await supabaseClient.from('association_news')
+      .select('id,title,kicker,excerpt,body,published_at')
+      .eq('audience','members').eq('status','julkaistu')
+      .order('published_at',{ascending:false,nullsFirst:false}).limit(12);
+    if (error) throw error;
+    return data || [];
+  }
+
+  function renderMemberNews(rows) {
+    const list = document.getElementById('memberNewsList');
+    if (!rows?.length) { list.textContent = 'Ei uusia jäsentiedotteita.'; return; }
+    list.innerHTML = rows.map(n => `<article class="member-news-item"><div class="member-news-date">${n.published_at ? new Date(n.published_at).toLocaleDateString('fi-FI') : ''}</div><h3>${String(n.title||'')}</h3><p>${String(n.excerpt||n.body||'').slice(0,240)}</p></article>`).join('');
+  }
+
+  async function refreshAccountUI() {
+    const signedOut = document.getElementById('accountSignedOut');
+    const signedIn = document.getElementById('accountSignedIn');
+    const session = await getSession().catch(()=>null);
+    if (!session?.user) {
+      signedOut.hidden = false; signedIn.hidden = true;
+      accountTab.innerHTML = 'Tunnistaudu'; accountTab.dataset.active = 'false';
+      return;
+    }
+    signedOut.hidden = true; signedIn.hidden = false; accountTab.dataset.active = 'true';
+    document.getElementById('accountEmailShown').textContent = session.user.email || '';
+    let profile = null;
+    try { profile = await invokeMemberProfile('get'); } catch {}
+    const isMember = !!profile?.is_member;
+    const name = profile?.contact?.full_name || session.user.user_metadata?.full_name || session.user.email || 'Kirjautunut käyttäjä';
+    document.getElementById('accountName').textContent = name;
+    const pro = await checkAtlasPro().catch(()=>({entitled:false}));
+    accountTab.innerHTML = isMember ? `Jäsen${pro.entitled ? ' <span class="pro-mark">PRO</span>' : ''}` : 'Oma tili';
+    document.getElementById('accountBadges').innerHTML = `${isMember ? '<span class="account-badge">Aktiivinen jäsen</span>' : '<span class="account-badge">Kirjautunut</span>'}${pro.entitled ? ' <span class="account-badge pro">Atlas Pro</span>' : ''}`;
+    document.getElementById('atlasAccessText').textContent = pro.entitled ? 'Atlas Pro -käyttöoikeus on aktiivinen.' : 'Atlas Pro -käyttöoikeutta ei ole aktiivisena.';
+    document.getElementById('memberNewsSection').hidden = !isMember;
+    if (isMember) renderMemberNews(await loadMemberNews().catch(()=>[]));
+    try { frame?.contentWindow?.postMessage({type:'atlas-pro-entitlement',entitled:!!pro.entitled,source:pro.access_source||null}, '*'); } catch {}
+  }
+
+  let pendingAuthEmail = '';
+  const OTP_COOLDOWN_SECONDS = 60;
+  let otpCooldownTimer = null;
+  let otpCooldownUntil = 0;
+
+  function startOtpCooldown(seconds=OTP_COOLDOWN_SECONDS){
+    otpCooldownUntil = Date.now() + seconds * 1000;
+    const button = document.getElementById('accountResendOtp');
+    const label = document.getElementById('otpCooldown');
+    clearInterval(otpCooldownTimer);
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((otpCooldownUntil - Date.now()) / 1000));
+      button.disabled = left > 0;
+      label.textContent = left > 0 ? `(${left} s)` : '';
+      if(left <= 0){
+        clearInterval(otpCooldownTimer);
+        otpCooldownTimer = null;
+      }
+    };
+    tick();
+    otpCooldownTimer = setInterval(tick, 250);
+  }
+
+  function authErrorMessage(error){
+    const msg = String(error?.message || error || '');
+    if(/rate limit|too many requests/i.test(msg)){
+      return 'Vahvistustunnuksia on pyydetty liian nopeasti. Odota hetki ja yritä uudelleen.';
+    }
+    return msg || 'Vahvistustunnuksen lähetys epäonnistui.';
+  }
+
+  function hideAccountSteps(){
+    ['accountEmailStep','accountOtpStep'].forEach(id=>document.getElementById(id).hidden=true);
+  }
+
+  function showEmailStep(prefill=''){
+    hideAccountSteps();
+    document.getElementById('accountSignedOut').hidden=false;
+    document.getElementById('accountSignedIn').hidden=true;
+    document.getElementById('accountEmailStep').hidden=false;
+    document.getElementById('accountEmail').value=prefill;
+    document.getElementById('accountRemember').checked=rememberSession;
+    document.getElementById('accountLoginStatus').textContent='';
+  }
+
+  function showOtpStep(){
+    hideAccountSteps();
+    document.getElementById('accountSignedOut').hidden=false;
+    document.getElementById('accountSignedIn').hidden=true;
+    document.getElementById('accountOtpStep').hidden=false;
+    document.getElementById('accountOtp').value='';
+    document.getElementById('accountOtpStatus').textContent='';
+    document.getElementById('accountOtpIntro').textContent =
+      `Syötä osoitteeseen ${pendingAuthEmail} lähetetty 6-numeroinen vahvistustunnus.`;
+  }
+
+  async function sendEmailOtp(){
+    const normalized=String(document.getElementById('accountEmail').value||pendingAuthEmail).trim().toLowerCase();
+    const status=document.getElementById('accountLoginStatus');
+    if(!/^\S+@\S+\.\S+$/.test(normalized)){status.textContent='Anna toimiva sähköpostiosoite.';return;}
+    pendingAuthEmail=normalized;
+    setRememberPreference(document.getElementById('accountRemember').checked);
+    status.textContent='Lähetetään vahvistustunnusta…';
+
+    // Sama passwordless-polku sekä uudelle että vanhalle käyttäjälle.
+    // Supabase luo Auth-käyttäjän vain, jos sähköposti ei vielä kuulu tilille.
+    const {error}=await supabaseClient.auth.signInWithOtp({
+      email:pendingAuthEmail,
+      options:{shouldCreateUser:true}
+    });
+    if(error){status.textContent=authErrorMessage(error);return;}
+    showOtpStep();
+    startOtpCooldown();
+  }
+
+  async function resendEmailOtp(){
+    const status=document.getElementById('accountOtpStatus');
+    const button=document.getElementById('accountResendOtp');
+    if(button.disabled || Date.now() < otpCooldownUntil) return;
+    button.disabled=true;
+    status.textContent='Lähetetään uusi tunnus…';
+    const {error}=await supabaseClient.auth.signInWithOtp({
+      email:pendingAuthEmail,
+      options:{shouldCreateUser:true}
+    });
+    if(error){
+      status.textContent=authErrorMessage(error);
+      button.disabled=false;
+      return;
+    }
+    status.textContent='Uusi vahvistustunnus lähetetty.';
+    startOtpCooldown();
+  }
+
+  async function verifyEmailOtp(){
+    const token=document.getElementById('accountOtp').value.trim();
+    const status=document.getElementById('accountOtpStatus');
+    if(!/^\d{6}$/.test(token)){status.textContent='Syötä 6-numeroinen vahvistustunnus.';return;}
+    status.textContent='Vahvistetaan tunnusta…';
+
+    const {data,error}=await supabaseClient.auth.verifyOtp({
+      email:pendingAuthEmail,
+      token,
+      type:'email'
+    });
+    if(error || !data?.session){
+      status.textContent='Tunnus on virheellinen tai vanhentunut.';
+      return;
+    }
+
+    clearInterval(otpCooldownTimer); otpCooldownTimer=null; otpCooldownUntil=0;
+    status.textContent='Tunnistautuminen onnistui.';
+    closeAccount();
+    location.hash='liity';
+    await refreshAccountUI();
+    await syncJoinState();
+  }
+
+  async function beginEmailIdentity(email, source='join'){
+    const normalized=String(email||'').trim().toLowerCase();
+    if(!/^\S+@\S+\.\S+$/.test(normalized)) throw new Error('Anna toimiva sähköpostiosoite.');
+    pendingAuthEmail=normalized;
+    accountOverlay.classList.add('open');
+    accountOverlay.setAttribute('aria-hidden','false');
+    showEmailStep(normalized);
+    // Liity-näkymän sähköpostipainike käynnistää saman OTP-polun suoraan.
+    await sendEmailOtp();
+  }
+
+  function openAccount(){
+    accountOverlay.classList.add('open');
+    accountOverlay.setAttribute('aria-hidden','false');
+    getSession().then(session=>{
+      if(session?.user) refreshAccountUI();
+      else showEmailStep();
+    });
+  }
+  function closeAccount(){accountOverlay.classList.remove('open');accountOverlay.setAttribute('aria-hidden','true');}
+
+  accountTab.addEventListener('click',openAccount);
+  document.getElementById('accountClose').addEventListener('click',closeAccount);
+  accountOverlay.addEventListener('click',e=>{if(e.target===accountOverlay)closeAccount();});
+  document.getElementById('accountContinue').addEventListener('click',sendEmailOtp);
+  document.getElementById('accountVerifyOtp').addEventListener('click',verifyEmailOtp);
+  document.getElementById('accountResendOtp').addEventListener('click',resendEmailOtp);
+  document.getElementById('accountOtpBack').addEventListener('click',()=>showEmailStep(pendingAuthEmail));
+  document.getElementById('accountLogout').addEventListener('click',async()=>{
+    await supabaseClient.auth.signOut();
+    closeAccount();
+    await refreshAccountUI();
+  });
+  document.getElementById('accountOpenProfile').addEventListener('click',()=>{closeAccount();location.hash='liity';});
+
+  window.addEventListener('message', async event => {
+    if (event.origin !== location.origin || !event.data?.type) return;
+    const type = event.data.type;
+    const detail = event.data.detail || {};
+
+    try {
+      if (type === 'v5-identity-start') {
+        postToAssociation({ type:'v5-join-state', state:'loading', message:'Tarkistetaan sähköpostiosoitetta…' });
+        await beginEmailIdentity(detail.email,'join');
+        return;
+      }
+
+      if (type === 'v5-profile-save') {
+        postToAssociation({ type:'v5-join-action', state:'loading', message:'Tallennetaan tietoja…' });
+        const emailChange=await updateVerifiedEmailIfNeeded(detail.profile?.email);
+        const result = await invokeMemberProfile('save_profile', profilePayload(detail));
+        postToAssociation({ type:'v5-join-state', state:'ready', profile:result });
+        postToAssociation({ type:'v5-join-action', state:'ok', message: emailChange.changed ? 'Tiedot tallennettu. Uusi sähköpostiosoite tulee voimaan, kun se on vahvistettu.' : 'Tiedot tallennettu.' });
+        return;
+      }
+
+      if (type === 'v5-volunteer-save') {
+        await invokeMemberProfile('save_profile', profilePayload(detail));
+        const result = await invokeMemberProfile('volunteer', {
+          enabled: detail.enabled !== false,
+          interests: detail.interests || [],
+          availability: detail.availability || null,
+          note: detail.note || null,
+        });
+        postToAssociation({ type:'v5-join-state', state:'ready', profile:result });
+        postToAssociation({ type:'v5-join-action', state:'ok', message: detail.enabled === false ? 'Vapaaehtoisuus peruttu.' : 'Ilmoittautuminen vapaaehtoiseksi tallennettu.' });
+        return;
+      }
+
+      if (type === 'v5-member-pay' || type === 'v5-donation-pay') {
+        await invokeMemberProfile('save_profile', profilePayload(detail));
+        postToAssociation({ type:'v5-join-action', state:'loading', message:'Avataan Paytrail-maksua…' });
+        await startPaytrailPayment(detail);
+        return;
+      }
+
+      if (type === 'v5-change-email') {
+        await supabaseClient.auth.signOut();
+        postToAssociation({ type:'v5-join-state', state:'signed-out' });
+        return;
+      }
+    } catch (error) {
+      postToAssociation({ type:'v5-join-action', state:'error', message:error?.message || 'Toiminto epäonnistui.' });
+    }
+  });
+
+  if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if(event === 'SIGNED_IN' && session?.user?.email){
+        setTimeout(syncJoinState,50);
+        setTimeout(refreshAccountUI,80);
+      }
+      if(event === 'SIGNED_OUT'){
+        setTimeout(syncJoinState,50);
+        setTimeout(refreshAccountUI,50);
+      }
+    });
+  }
+
+  moduleMenu.innerHTML = MODULE_ORDER.map(name =>
+    `<button class="module-option" type="button" role="option" data-module="${name}">${VIEWS[name].title}</button>`
+  ).join('');
+
+  let active = null;
+  let frame = null;
+
+  function selectedView() {
+    const key = location.hash.replace(/^#\/?/, '');
+    return VIEWS[key] ? key : 'yhdistys';
+  }
+
+  function setActiveModule(name) {
+    const associationViews = ['yhdistys','ajankohtaista','liity'];
+    associationTab.setAttribute('aria-selected', String(name === 'yhdistys'));
+    newsTab.setAttribute('aria-selected', String(name === 'ajankohtaista'));
+    joinTab.setAttribute('aria-selected', String(name === 'liity'));
+    if (!associationViews.includes(name)) {
+      moduleLabel.textContent = VIEWS[name]?.title || name;
+    }
+    moduleMenu.querySelectorAll('[data-module]').forEach(option =>
+      option.setAttribute('aria-selected', String(option.dataset.module === name))
+    );
+  }
+
+  function stepModule(delta) {
+    const current = active && MODULE_ORDER.includes(active)
+      ? active
+      : (MODULE_ORDER.includes(selectedView()) ? selectedView() : MODULE_ORDER[0]);
+    const index = MODULE_ORDER.indexOf(current);
+    const next = MODULE_ORDER[(index + delta + MODULE_ORDER.length) % MODULE_ORDER.length];
+    location.hash = next;
+  }
+
+  function closeModuleMenu() {
+    moduleMenu.hidden = true;
+    moduleCurrent.setAttribute('aria-expanded', 'false');
+  }
+
+  function cleanAssociationFrame() {
+    if (!frame) return;
+    try {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+
+      // V5-kuori on ainoa ylävalikko: v4:n oma header piilotetaan.
+      const header = doc.querySelector('header.nav');
+      if (header) header.style.display = 'none';
+
+      const style = doc.createElement('style');
+      style.id = 'v5-association-embed';
+      style.textContent = `
+        html{scroll-padding-top:0!important}
+        body{padding-top:0!important}
+        header.nav{display:none!important}
+        .v5-membership-payments{width:min(1040px,calc(100% - 40px));margin:28px auto 54px;padding-top:24px;border-top:1px solid var(--line,#ddd6c9)}
+        .v5-membership-payments *{box-sizing:border-box}
+        .v5-membership-payments .eyebrow{margin-bottom:8px;font:700 11px/1.2 "Source Sans 3",Inter,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#b4632c)}
+        .v5-membership-payments h3{margin:0 0 8px;font:500 clamp(1.55rem,3vw,2.25rem)/1.1 Fraunces,Georgia,serif}
+        .v5-membership-payments .intro{max-width:720px;margin:0 0 22px;color:var(--muted,#74807c)}
+        .v5-identity-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;max-width:650px;margin-top:18px}
+        .v5-field{display:grid;gap:6px}
+        .v5-field label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#74807c)}
+        .v5-field input,.v5-field textarea{width:100%;padding:10px 11px;border:1px solid var(--line,#ddd6c9);border-radius:4px;background:var(--surface,#fffdf8);color:var(--ink,#17201f);font:inherit;outline:none}
+        .v5-field input:focus,.v5-field textarea:focus{border-color:var(--forest,#20514c)}
+        .v5-field input[readonly]{background:var(--paper,#f7f4ee);color:var(--muted,#74807c)}
+        .v5-primary,.v5-secondary{padding:10px 15px;border:1px solid var(--forest,#20514c);background:transparent;color:var(--forest,#20514c);font:700 .78rem/1.2 "Source Sans 3",Inter,sans-serif;letter-spacing:.04em;cursor:pointer}
+        .v5-primary:hover{background:var(--forest,#20514c);color:#fff}.v5-secondary{border-color:var(--line,#ddd6c9);color:var(--ink,#17201f)}
+        .v5-primary:disabled,.v5-secondary:disabled{opacity:.5;cursor:not-allowed}
+        .v5-join-status{margin-top:12px;min-height:22px;color:var(--muted,#74807c);font-size:.86rem}.v5-join-status[data-state="error"]{color:#8a3324}.v5-join-status[data-state="ok"]{color:var(--forest,#20514c)}
+        .v5-profile-shell[hidden],.v5-identity-shell[hidden]{display:none!important}
+        .v5-profile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin:6px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line,#ddd6c9)}
+        .v5-profile-badge{font:600 .75rem/1.2 "Source Sans 3",Inter,sans-serif;color:var(--forest,#20514c)}
+        .v5-profile-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin:16px 0}.v5-profile-form .wide{grid-column:1/-1}
+        .v5-profile-actions{display:flex;gap:10px;align-items:center;margin:8px 0 28px}
+        .v5-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line,#ddd6c9);border:1px solid var(--line,#ddd6c9)}
+        .v5-choice-card{padding:22px;background:var(--surface,#fffdf8)}.v5-choice-card h4{margin:0 0 7px;font:600 1.05rem/1.2 Fraunces,Georgia,serif}
+        .v5-choice-card p{min-height:44px;margin:0 0 16px;color:var(--muted,#74807c);font-size:.86rem}.v5-price{margin:8px 0 7px;font:600 1.8rem/1 Fraunces,Georgia,serif;color:var(--forest,#20514c)}
+        .v5-check{display:flex;align-items:flex-start;gap:9px;margin:10px 0 18px;font-size:.9rem}.v5-check input{margin-top:3px;accent-color:var(--forest,#20514c)}
+        .v5-donation-row{display:flex;align-items:stretch;margin:10px 0 16px;border-bottom:1px solid var(--line,#ddd6c9)}.v5-donation-row input{width:100%;min-width:0;padding:7px 2px;border:0;background:transparent;outline:none;font:600 1.55rem/1 Fraunces,Georgia,serif}.v5-donation-row span{display:grid;place-items:center;padding-left:8px;color:var(--muted,#74807c);font-weight:600}
+        .v5-volunteer-extra{display:grid;gap:9px;margin:10px 0 14px}.v5-volunteer-extra input,.v5-volunteer-extra textarea{width:100%;padding:8px 9px;border:1px solid var(--line,#ddd6c9);background:transparent;font:inherit}
+        @media(max-width:760px){.v5-identity-row{grid-template-columns:1fr}.v5-profile-form{grid-template-columns:1fr}.v5-profile-form .wide{grid-column:auto}.v5-choice-grid{grid-template-columns:1fr}.v5-choice-card p{min-height:0}.v5-profile-top{flex-direction:column}}
+      `;
+      doc.head.appendChild(style);
+
+      const joinSection = doc.querySelector('#liity') || doc.querySelector('[id*="liity"]') ||
+        [...doc.querySelectorAll('section')].find(section => /liity/i.test(section.querySelector('h1,h2,h3')?.textContent || ''));
+      if (joinSection && !doc.getElementById('v5-membership-payments')) {
+        const payments = doc.createElement('div');
+        payments.id='v5-membership-payments'; payments.className='v5-membership-payments';
+        payments.innerHTML=`
+          <div class="v5-identity-shell">
+            <div class="eyebrow">Liity · tue · osallistu</div>
+            <h3>Asioi sähköpostiosoitteellasi</h3>
+            <p class="intro">Sähköpostiosoite toimii tunnisteena. Lähetämme siihen 6-numeroisen vahvistustunnuksen. Vahvistuksen jälkeen voit täyttää tai päivittää yhteystietosi ja valita jäsenyyden, lahjoituksen tai vapaaehtoisuuden. Jäsenyyttä ei tarvita lahjoittamiseen tai vapaaehtoisuuteen.</p>
+            <div class="v5-identity-row">
+              <div class="v5-field"><label>Sähköpostiosoite</label><input type="email" data-email autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+              <button class="v5-primary" type="button" data-action="identity">Jatka</button>
+            </div>
+            <div class="v5-join-status" data-status role="status" aria-live="polite"></div>
+          </div>
+
+          <div class="v5-profile-shell" hidden>
+            <div class="v5-profile-top">
+              <div><div class="eyebrow">Omat tiedot</div><h3 data-profile-title>Tervetuloa</h3><div class="v5-profile-badge" data-member-badge></div></div>
+              <button class="v5-secondary" type="button" data-action="change-email">Vaihda sähköposti</button>
+            </div>
+            <div class="v5-profile-form">
+              <div class="v5-field wide"><label>Sähköpostiosoite</label><input data-field="email" type="email" autocomplete="email"></div>
+              <div class="v5-field"><label>Nimi</label><input data-field="full_name" autocomplete="name"></div>
+              <div class="v5-field"><label>Puhelin</label><input data-field="phone" autocomplete="tel"></div>
+              <div class="v5-field"><label>Kunta</label><input data-field="municipality"></div>
+              <div class="v5-field"><label>Lähiosoite</label><input data-field="address_line" autocomplete="street-address"></div>
+              <div class="v5-field"><label>Postinumero</label><input data-field="postal_code" autocomplete="postal-code"></div>
+              <div class="v5-field"><label>Postitoimipaikka</label><input data-field="city" autocomplete="address-level2"></div>
+            </div>
+            <div class="v5-profile-actions"><button class="v5-secondary" type="button" data-action="save-profile">Päivitä tiedot</button></div>
+
+            <div class="v5-choice-grid">
+              <article class="v5-choice-card" data-member-card>
+                <h4 data-member-title>Liity jäseneksi</h4>
+                <div class="v5-price" data-member-price>30 €</div>
+                <p data-member-note>Liittymismaksu 5 € + jäsenmaksu 25 €.</p>
+                <label class="v5-check" data-new-member-check><input type="checkbox" data-join-member> <span>Liity jäseneksi</span></label>
+                <button class="v5-primary" type="button" data-action="member-pay" disabled>Maksa 30 €</button>
+              </article>
+
+              <article class="v5-choice-card">
+                <h4>Lahjoita</h4>
+                <div class="v5-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" data-donation><span>€</span></div>
+                <p>Voit tukea yhdistyksen toimintaa haluamallasi summalla. Jäsenyyttä ei tarvita.</p>
+                <button class="v5-primary" type="button" data-action="donation-pay">Lahjoita</button>
+              </article>
+
+              <article class="v5-choice-card">
+                <h4>Vapaaehtoiseksi</h4>
+                <label class="v5-check"><input type="checkbox" data-volunteer> <span>Ilmoittaudun vapaaehtoiseksi</span></label>
+                <div class="v5-volunteer-extra"><input data-availability placeholder="Milloin voit osallistua?"><textarea data-volunteer-note rows="3" placeholder="Mistä tehtävistä olet kiinnostunut?"></textarea></div>
+                <p>Vapaaehtoiseksi voi ilmoittautua myös ilman jäsenyyttä.</p>
+                <button class="v5-secondary" type="button" data-action="volunteer-save">Tallenna ilmoittautuminen</button>
+              </article>
+            </div>
+            <div class="v5-join-status" data-action-status role="status" aria-live="polite"></div>
+          </div>`;
+        joinSection.appendChild(payments);
+
+        const identityShell = payments.querySelector('.v5-identity-shell');
+        const profileShell = payments.querySelector('.v5-profile-shell');
+        const status = payments.querySelector('[data-status]');
+        const actionStatus = payments.querySelector('[data-action-status]');
+
+        const collectProfile = () => {
+          const out = {};
+          payments.querySelectorAll('[data-field]').forEach(input => out[input.dataset.field] = input.value.trim());
+          return out;
+        };
+
+        const setStatus = (el, message='', state='') => {
+          if (!el) return;
+          el.textContent = message || '';
+          el.dataset.state = state || '';
+        };
+
+        doc.defaultView.addEventListener('message', event => {
+          if (event.origin !== location.origin) return;
+          const data = event.data || {};
+          if (data.type === 'v5-join-action') {
+            setStatus(actionStatus, data.message || '', data.state || '');
+            return;
+          }
+          if (data.type !== 'v5-join-state') return;
+          if (data.state === 'signed-out') {
+            identityShell.hidden = false; profileShell.hidden = true;
+            setStatus(status, '', '');
+            return;
+          }
+          if (data.state === 'loading') {
+            setStatus(status, data.message || 'Ladataan…', 'loading');
+            return;
+          }
+          if (data.state === 'link-sent') {
+            identityShell.hidden = false; profileShell.hidden = true;
+            payments.querySelector('[data-email]').value = data.email || '';
+            setStatus(status, data.message || 'Tarkista sähköpostisi.', 'ok');
+            return;
+          }
+          if (data.state === 'error') {
+            setStatus(status, data.message || 'Tietojen lataus epäonnistui.', 'error');
+            return;
+          }
+          if (data.state === 'ready' && data.profile) {
+            const p = data.profile;
+            identityShell.hidden = true; profileShell.hidden = false;
+            const contact = p.contact || {};
+            payments.querySelector('[data-field="email"]').value = p.email || contact.email || '';
+            ['full_name','phone','municipality','address_line','postal_code','city'].forEach(name => {
+              const el = payments.querySelector(`[data-field="${name}"]`); if (el) el.value = contact[name] || '';
+            });
+            const member = !!p.is_member;
+            payments.querySelector('[data-profile-title]').textContent = member ? 'Jäsentietosi' : 'Yhteystietosi';
+            payments.querySelector('[data-member-badge]').textContent = member
+              ? `Jäsen${p.member?.member_number ? ' #' + p.member.member_number : ''}`
+              : 'Et ole vielä jäsen — voit silti lahjoittaa tai osallistua vapaaehtoiseksi.';
+            payments.querySelector('[data-member-title]').textContent = member ? 'Jäsenmaksu' : 'Liity jäseneksi';
+            payments.querySelector('[data-member-price]').textContent = member ? '25 €' : '30 €';
+            payments.querySelector('[data-member-note]').textContent = member ? 'Vuosittainen jäsenmaksu.' : 'Liittymismaksu 5 € + jäsenmaksu 25 €.';
+            const checkWrap = payments.querySelector('[data-new-member-check]');
+            const joinCheck = payments.querySelector('[data-join-member]');
+            const payButton = payments.querySelector('[data-action="member-pay"]');
+            checkWrap.hidden = member;
+            joinCheck.checked = member;
+            payButton.disabled = !member && !joinCheck.checked;
+            payButton.textContent = member ? 'Maksa 25 €' : 'Maksa 30 €';
+            payButton.dataset.productCode = member ? 'member-renewal' : 'member-new';
+            payButton.dataset.amount = member ? '25' : '30';
+            const volunteer = p.volunteer;
+            payments.querySelector('[data-volunteer]').checked = !!volunteer && ['interested','active'].includes(volunteer.status);
+            payments.querySelector('[data-availability]').value = volunteer?.availability || '';
+            payments.querySelector('[data-volunteer-note]').value = volunteer?.note || '';
+            setStatus(status, '', ''); setStatus(actionStatus, '', '');
+          }
+        });
+
+        payments.addEventListener('change', event => {
+          if (event.target.matches('[data-join-member]')) {
+            payments.querySelector('[data-action="member-pay"]').disabled = !event.target.checked;
+          }
+        });
+
+        payments.addEventListener('click', event => {
+          const button = event.target.closest('[data-action]'); if (!button) return;
+          const action = button.dataset.action;
+          if (action === 'identity') {
+            parent.postMessage({type:'v5-identity-start',detail:{email:payments.querySelector('[data-email]').value}},location.origin); return;
+          }
+          if (action === 'change-email') { parent.postMessage({type:'v5-change-email'},location.origin); return; }
+          const profile = collectProfile();
+          if (action === 'save-profile') { parent.postMessage({type:'v5-profile-save',detail:{profile}},location.origin); return; }
+          if (action === 'member-pay') {
+            parent.postMessage({type:'v5-member-pay',detail:{profile,product_code:button.dataset.productCode,amount:Number(button.dataset.amount),currency:'EUR'}},location.origin); return;
+          }
+          if (action === 'donation-pay') {
+            const amount = Number(payments.querySelector('[data-donation]').value || 0);
+            if (!Number.isFinite(amount) || amount < 1) { payments.querySelector('[data-donation]').focus(); setStatus(actionStatus,'Anna lahjoitussumma vähintään 1 €.','error'); return; }
+            parent.postMessage({type:'v5-donation-pay',detail:{profile,product_code:'donation',amount,currency:'EUR'}},location.origin); return;
+          }
+          if (action === 'volunteer-save') {
+            parent.postMessage({type:'v5-volunteer-save',detail:{profile,enabled:payments.querySelector('[data-volunteer]').checked,availability:payments.querySelector('[data-availability]').value,note:payments.querySelector('[data-volunteer-note]').value,interests:[]}},location.origin); return;
+          }
+        });
+      }
+
+      // "Avaa Atlas" ei vie pois hyvinvointivaltio-osoitteesta:
+      // se vaihtaa v5-kuoren rengasnäkymään.
+      doc.querySelectorAll('a[href="#atlas"], a[href*="#atlas"]').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          parent.location.hash = 'rengas';
+        });
+      });
+    } catch (error) {
+      console.warn('Yhdistyssivun upotuksen siistiminen epäonnistui:', error);
+    }
+  }
+
+  function showView(name) {
+    if (!VIEWS[name] || active === name) return;
+    const view = VIEWS[name];
+    active = name;
+    setActiveModule(name);
+    loader.hidden = false;
+
+    if (frame) {
+      frame.src = 'about:blank';
+      const crop = frame.closest('.murros-crop');
+      frame.remove();
+      crop?.remove();
+    }
+
+    frame = document.createElement('iframe');
+    frame.className = 'view-frame';
+    frame.title = view.title;
+    frame.allow = 'fullscreen';
+    frame.loading = 'eager';
+
+    frame.addEventListener('load', () => {
+      if (['yhdistys','ajankohtaista','liity'].includes(name)) { cleanAssociationFrame(); setTimeout(syncJoinState, 0); }
+      loader.hidden = true;
+    }, { once:true });
+
+    frame.src = view.url;
+
+    if (view.cropMurrosTopbar) {
+      const crop = document.createElement('div');
+      crop.className = 'murros-crop';
+      crop.appendChild(frame);
+      root.appendChild(crop);
+    } else {
+      root.appendChild(frame);
+    }
+    document.title = `${view.title} · Hyvinvointivaltion Vaalijat ry`;
+  }
+
+  associationTab.addEventListener('click', () => {
+    closeModuleMenu();
+    location.hash = 'yhdistys';
+  });
+  newsTab.addEventListener('click', () => {
+    closeModuleMenu();
+    location.hash = 'ajankohtaista';
+  });
+  joinTab.addEventListener('click', () => {
+    closeModuleMenu();
+    location.hash = 'liity';
+  });
+
+  modulePrev.addEventListener('click', () => stepModule(-1));
+  moduleNext.addEventListener('click', () => stepModule(1));
+
+  moduleCurrent.addEventListener('click', event => {
+    event.stopPropagation();
+    const open = moduleMenu.hidden;
+    moduleMenu.hidden = !open;
+    moduleCurrent.setAttribute('aria-expanded', String(open));
+  });
+
+  moduleMenu.addEventListener('click', event => {
+    const option = event.target.closest('[data-module]');
+    if (!option) return;
+    closeModuleMenu();
+    location.hash = option.dataset.module;
+  });
+
+  document.addEventListener('click', event => {
+    if (!event.target.closest('.module-picker')) closeModuleMenu();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeModuleMenu();
+    if (event.key === 'ArrowLeft' && event.altKey) {
+      event.preventDefault();
+      stepModule(-1);
+    }
+    if (event.key === 'ArrowRight' && event.altKey) {
+      event.preventDefault();
+      stepModule(1);
+    }
+  });
+
+  window.addEventListener('hashchange', () => showView(selectedView()));
+
+  window.addEventListener('keydown', event => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    const map = {
+      '1':'yhdistys','2':'murroskartta','3':'rengas','4':'verkko',
+      '5':'matriisi','6':'paattely','7':'maisema','8':'tulkinta'
+    };
+    if (map[event.key]) location.hash = map[event.key];
+  });
+
+  fsBtn.addEventListener('click', () => {
+    document.fullscreenElement
+      ? document.exitFullscreen()
+      : document.documentElement.requestFullscreen();
+  });
+
+  showView(selectedView());
+  setTimeout(refreshAccountUI, 80);
+
+  (async function showPaytrailTestReturn(){
+    const params = new URLSearchParams(location.search);
+    const returned = params.get('paytrail_test');
+    if (!returned) return;
+
+    location.hash = 'liity';
+
+    const paymentId = sessionStorage.getItem('v5PaytrailTestPaymentId') || '';
+    const banner = document.getElementById('paytrailTestBanner');
+    const resultBox = document.getElementById('paytrailResult');
+
+    const showResult = (state, title, detail='') => {
+      const isOk = state === 'ok';
+      const text = `${title}${detail ? ` — ${detail}` : ''}`;
+      if (banner) banner.innerHTML = `Paytrail <strong>TESTI</strong> · ${text}`;
+      if (resultBox) {
+        resultBox.hidden = false;
+        resultBox.dataset.state = isOk ? 'ok' : 'error';
+        resultBox.innerHTML = `<strong>${title}</strong><div>${detail || ''}</div><small>Tämä on Paytrailin testimaksu. Oikeaa rahaa ei liiku eikä testimaksu aktivoi jäsenyyttä.</small>`;
+      }
+    };
+
+    if (returned === 'cancel') {
+      showResult('error', 'Testimaksu peruutettiin', 'Paytrail palautti maksun peruutettuna tai epäonnistuneena.');
+    } else {
+      if (banner) banner.innerHTML = 'Paytrail <strong>TESTI</strong> · tarkistetaan maksun tila…';
+      if (resultBox) {
+        resultBox.hidden = false;
+        resultBox.dataset.state = '';
+        resultBox.innerHTML = '<strong>Paluu Paytrailista vastaanotettu</strong><div>Tarkistetaan callbackin vahvistama maksun tila…</div>';
+      }
+
+      if (!paymentId) {
+        showResult('error', 'Maksun tilaa ei voitu tunnistaa', 'Selaimesta puuttuu tämän testimaksun tunniste.');
+      } else {
+        let finalStatus = null;
+        let lastError = '';
+
+        for (let i = 0; i < 12; i++) {
+          try {
+            const session = await getSession();
+            if (!session?.access_token) throw new Error('Kirjautumisistunto puuttuu.');
+
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/payment-status-test`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_PUBLISHABLE_KEY,
+                'Authorization': `Bearer ${session.access_token}`
+              },
+              body: JSON.stringify({ payment_id: paymentId })
+            });
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data?.detail || data?.error || `HTTP ${response.status}`);
+
+            finalStatus = data?.payment?.status || null;
+            if (finalStatus === 'paid' || finalStatus === 'failed') break;
+          } catch (error) {
+            lastError = error?.message || String(error);
+          }
+          await new Promise(r => setTimeout(r, 800));
+        }
+
+        if (finalStatus === 'paid') {
+          showResult('ok', 'Testimaksu onnistui ✓', 'Paytrail callback vahvisti maksun maksetuksi.');
+        } else if (finalStatus === 'failed') {
+          showResult('error', 'Testimaksu epäonnistui', 'Paytrail callback vahvisti maksun epäonnistuneeksi.');
+        } else {
+          showResult('error', 'Maksun vahvistus jäi avoimeksi', lastError || 'Callback ei vahvistanut maksua määräajassa.');
+        }
+      }
+    }
+
+    // Siivoa query-parametri vasta viiveellä, jotta paluun tulos ehtii näkyä.
+    setTimeout(() => {
+      try {
+        const clean = new URL(location.href);
+        clean.searchParams.delete('paytrail_test');
+        history.replaceState(null, '', clean.pathname + clean.search + clean.hash);
+      } catch {}
+    }, 1500);
+  })();
+})();
+</script>
+</body>
+</html>
