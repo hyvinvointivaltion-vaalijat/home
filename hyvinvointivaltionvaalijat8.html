@@ -1186,7 +1186,15 @@ button{font:inherit;color:inherit}
           return (br.left + br.top) - (ar.left + ar.top);
         })[0];
         el.dataset.v5CalloutShifted='1';
-        el.style.transform = `${el.style.transform || ''} translateY(54px)`.trim();
+        const cs = doc.defaultView.getComputedStyle(el);
+        const shift = 86;
+        if (cs.position === 'absolute' || cs.position === 'fixed' || cs.position === 'relative') {
+          const top = parseFloat(cs.top);
+          if (Number.isFinite(top)) el.style.setProperty('top', `${top + shift}px`, 'important');
+          else el.style.setProperty('translate', `0 ${shift}px`, 'important');
+        } else {
+          el.style.setProperty('translate', `0 ${shift}px`, 'important');
+        }
       }
 
       const runSphereEnhancement = () => {
