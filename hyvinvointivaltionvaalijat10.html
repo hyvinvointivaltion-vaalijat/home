@@ -1350,57 +1350,72 @@ button{font:inherit;color:inherit}
       }
 
 
-      // Poista etusivun numerolaatikkorivi ("10 rakennetta", "4 Atlas-näkymää", jne.).
-      // Etsitään koko laatikkoryhmä tekstisisällön perusteella, jotta muutos ei riipu
-      // yhdistyssivun yksittäisestä CSS-luokan nimestä.
-      const removeHeroStatBoxes = () => {
-        const normalize = value => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-        const elements = [...doc.body.querySelectorAll('section,div,aside,ul')];
-        const group = elements
-          .filter(el => {
-            const text = normalize(el.textContent);
-            return /10\s+rakennetta/.test(text) &&
-                   /4\s+(?:atlas[\s-]*)?näkym/.test(text);
-          })
-          .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
+      // Poista yhdistyssivulta kokonaan numerolaatikot ja 05 · AJATTELUTAPA.
+      // Sisältö tulee hyvinvointivaltionvaalijat4.html-iframeen, joten kohteet
+      // poistetaan ladatun dokumentin DOM:sta myös mahdollisen jälkirenderöinnin jälkeen.
+      const normalizeEmbeddedText = value =>
+        String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('fi-FI');
 
-        if (group) {
-          group.remove();
-        }
-      };
-      removeHeroStatBoxes();
-      setTimeout(removeHeroStatBoxes, 250);
-      setTimeout(removeHeroStatBoxes, 900);
+      const removeAssociationExtras = () => {
+        if (!doc?.body) return;
 
-
-      // Poista kokonaan lohko 05 · AJATTELUTAPA.
-      const removeThinkingSection = () => {
-        const normalize = value => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
-
-        const candidates = [...doc.body.querySelectorAll('section,article,div')].filter(el => {
-          const text = normalize(el.textContent);
-          return text.includes('ajattelutapa') && /(^|\s)05(\s|·|\.|$)/.test(text);
+        // 1) Neljän tunnuslukulaatikon ryhmä: mm. "10 rakennetta seurannassa".
+        const all = [...doc.body.querySelectorAll('section,article,div,ul,ol')];
+        const statCandidates = all.filter(el => {
+          const text = normalizeEmbeddedText(el.textContent);
+          return text.includes('10') &&
+                 text.includes('rakennetta') &&
+                 (text.includes('seurannassa') || text.includes('atlas'));
         });
 
-        // Valitaan pienin kokonainen sisältölohko, mieluiten <section>.
-        let target = candidates
-          .filter(el => el.tagName === 'SECTION')
+        // Valitaan pienin elementti, joka sisältää tunnuslukuryhmän, jotta hero ei katoa.
+        const statGroup = statCandidates
           .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
 
-        if (!target) {
-          target = candidates
-            .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
-          target = target?.closest('section,article') || target;
-        }
-
-        if (target) {
+        if (statGroup) {
+          // Jos osuma on yksittäinen laatikko, noustaan vanhempaan, jossa on useita sisarlaatikoita.
+          let target = statGroup;
+          for (let i = 0; i < 3 && target.parentElement; i++) {
+            const parent = target.parentElement;
+            const parentText = normalizeEmbeddedText(parent.textContent);
+            const childCount = [...parent.children].filter(ch => normalizeEmbeddedText(ch.textContent)).length;
+            if (childCount >= 3 && childCount <= 6 && parentText.includes('10') && parentText.includes('rakennetta')) {
+              target = parent;
+              break;
+            }
+            if (parent.tagName === 'SECTION' || parent.tagName === 'ARTICLE') break;
+            target = parent;
+          }
           target.remove();
         }
+
+        // 2) Koko lohko "05 · AJATTELUTAPA".
+        const headingLike = [...doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,.eyebrow,.kicker,.section-label,[class*="eyebrow"],[class*="kicker"],[class*="label"]')]
+          .find(el => {
+            const text = normalizeEmbeddedText(el.textContent);
+            return text.includes('ajattelutapa') && /(^|\s)05(?:\s|·|\.|$)/.test(text);
+          });
+
+        let thinkingSection = headingLike?.closest('section,article');
+        if (!thinkingSection) {
+          thinkingSection = [...doc.body.querySelectorAll('section,article')]
+            .filter(el => {
+              const text = normalizeEmbeddedText(el.textContent);
+              return text.includes('ajattelutapa') && /(^|\s)05(?:\s|·|\.|$)/.test(text);
+            })
+            .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
+        }
+        thinkingSection?.remove();
       };
 
-      removeThinkingSection();
-      setTimeout(removeThinkingSection, 250);
-      setTimeout(removeThinkingSection, 900);
+      removeAssociationExtras();
+      requestAnimationFrame(removeAssociationExtras);
+      setTimeout(removeAssociationExtras, 150);
+      setTimeout(removeAssociationExtras, 500);
+      setTimeout(removeAssociationExtras, 1200);
+
+      const associationCleanupObserver = new MutationObserver(() => removeAssociationExtras());
+      associationCleanupObserver.observe(doc.body, { childList:true, subtree:true });
 
       // "Avaa Atlas" ei vie pois hyvinvointivaltio-osoitteesta:
       // se vaihtaa v5-kuoren rengasnäkymään.
