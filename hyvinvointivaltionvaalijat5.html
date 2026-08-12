@@ -98,6 +98,8 @@ button{font:inherit;color:inherit}
 
   <nav class="topnav-combined" aria-label="Päänavigaatio">
     <button class="association-tab" id="associationTab" type="button" aria-selected="true">Yhdistys</button>
+    <button class="association-tab" id="newsTab" type="button" aria-selected="false">Ajankohtaista</button>
+    <button class="association-tab" id="joinTab" type="button" aria-selected="false">Liity</button>
 
     <div class="module-browser" aria-label="Visualisointimoduuli">
       <button class="module-arrow" id="modulePrev" type="button" aria-label="Edellinen visualisointimoduuli">‹</button>
@@ -125,6 +127,8 @@ button{font:inherit;color:inherit}
   const root = document.getElementById('viewRoot');
   const loader = document.getElementById('loader');
   const associationTab = document.getElementById('associationTab');
+  const newsTab = document.getElementById('newsTab');
+  const joinTab = document.getElementById('joinTab');
   const modulePrev = document.getElementById('modulePrev');
   const moduleNext = document.getElementById('moduleNext');
   const moduleCurrent = document.getElementById('moduleCurrent');
@@ -136,6 +140,16 @@ button{font:inherit;color:inherit}
     yhdistys: {
       title: 'Yhdistys',
       url: './hyvinvointivaltionvaalijat4.html',
+      sameOrigin: true
+    },
+    ajankohtaista: {
+      title: 'Ajankohtaista',
+      url: './hyvinvointivaltionvaalijat4.html#ajankohtaista',
+      sameOrigin: true
+    },
+    liity: {
+      title: 'Liity',
+      url: './hyvinvointivaltionvaalijat4.html#liity',
       sameOrigin: true
     },
     murroskartta: {
@@ -185,10 +199,11 @@ button{font:inherit;color:inherit}
   }
 
   function setActiveModule(name) {
-    if (name === 'yhdistys') {
-      associationTab.setAttribute('aria-selected','true');
-    } else {
-      associationTab.setAttribute('aria-selected','false');
+    const associationViews = ['yhdistys','ajankohtaista','liity'];
+    associationTab.setAttribute('aria-selected', String(name === 'yhdistys'));
+    newsTab.setAttribute('aria-selected', String(name === 'ajankohtaista'));
+    joinTab.setAttribute('aria-selected', String(name === 'liity'));
+    if (!associationViews.includes(name)) {
       moduleLabel.textContent = VIEWS[name]?.title || name;
     }
     moduleMenu.querySelectorAll('[data-module]').forEach(option =>
@@ -283,6 +298,14 @@ button{font:inherit;color:inherit}
   associationTab.addEventListener('click', () => {
     closeModuleMenu();
     location.hash = 'yhdistys';
+  });
+  newsTab.addEventListener('click', () => {
+    closeModuleMenu();
+    location.hash = 'ajankohtaista';
+  });
+  joinTab.addEventListener('click', () => {
+    closeModuleMenu();
+    location.hash = 'liity';
   });
 
   modulePrev.addEventListener('click', () => stepModule(-1));
