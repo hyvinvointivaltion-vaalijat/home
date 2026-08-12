@@ -1001,6 +1001,42 @@ button{font:inherit;color:inherit}
       const normaliseSphereLabel = value =>
         String(value || '').replace(/\s+/g, ' ').trim().toLocaleUpperCase('fi-FI');
 
+      const titleCaseFi = value => String(value || '')
+        .toLocaleLowerCase('fi-FI')
+        .replace(/(^|[\s–—/-])([\p{L}])/gu, (_, a, b) => a + b.toLocaleUpperCase('fi-FI'));
+
+      function fallbackSphereTeaser(rawLabel) {
+        const key = normaliseSphereLabel(rawLabel);
+        const title = titleCaseFi(key);
+
+        const rules = [
+          [/KOUL|OPP|SIVIST|YLIOPIST|TUTKIN/, 'Miten osaaminen muuttaa yksilön mahdollisuuksia ja koko yhteiskuntaa?'],
+          [/ASUN|KOTI|LÄHIÖ|KAUPUN|ALUE/, 'Miten paikka, koti ja alue jakavat mahdollisuuksia ja turvaa?'],
+          [/TYÖ|TYÖKY|AMMAT|PALK|TYÖMARK/, 'Miten työn ehdot määrittävät turvaa, osallisuutta ja toimeentuloa?'],
+          [/TERVE|SAIRA|HOIVA|HOITO|LÄÄK|HYVINVOINT/, 'Kenen vastuulla hyvinvointi on, kun avun tarve kasvaa?'],
+          [/PALVEL|INFRA|KUNTA|JULKI|HALLIN/, 'Mitä tapahtuu, kun arki alkaa riippua yhteisestä järjestelmästä?'],
+          [/PERHE|LAPSI|VANHE|SYNTY|TOIMEENTULO/, 'Miten perheen vastuu ja yhteiskunnan vastuu ovat muuttuneet?'],
+          [/ELÄKE|VAKUUT|TURVA|RISKI|SOSIAALI/, 'Kuka kantaa riskin silloin, kun yksilö ei enää pysty kantamaan sitä yksin?'],
+          [/OSALL|KANSAL|YHTEIS|LUOTTAM|KIINNIT/, 'Mikä saa ihmisen kokemaan, että yhteiskunta on myös hänen?'],
+          [/RAHA|VERO|VELKA|OMIST|TALOUS/, 'Kuka maksaa, kuka hyötyy ja miten vastuu jakautuu?'],
+          [/MAATAL|METSÄ|TEOLL|ENERG|TUOTAN/, 'Miten tuotannon muutos rakentaa uusia mahdollisuuksia – ja uusia riippuvuuksia?'],
+          [/DIGI|TIETO|TEKNO|AUTOMA|AI|TEKOÄLY/, 'Mitä muuttuu, kun järjestelmä alkaa toimia teknologian ehdoilla?'],
+          [/MUUTTO|VÄEST|IKÄ|KAUPUNGIST|MAAHAN/, 'Miten väestön muutos siirtää hyvinvoinnin ehtoja paikasta ja sukupolvesta toiseen?']
+        ];
+
+        const matched = rules.find(([rx]) => rx.test(key));
+        return {
+          title,
+          question: matched ? matched[1] : `Miten ${title.toLocaleLowerCase('fi-FI')} muutti hyvinvoinnin ehtoja?`,
+          target: 'paattely'
+        };
+      }
+
+      function getSphereTeaser(rawLabel) {
+        const key = normaliseSphereLabel(rawLabel);
+        return sphereTeasers[key] || fallbackSphereTeaser(rawLabel);
+      }
+
       function enhanceSphereTeasers() {
         let enhanced = 0;
 
@@ -1020,8 +1056,15 @@ button{font:inherit;color:inherit}
             return;
           }
 
-          const key = normaliseSphereLabel(textNode.textContent);
-          const teaser = sphereTeasers[key];
+          const rawLabel = String(textNode.textContent || '').replace(/\s+/g, ' ').trim();
+          if (!rawLabel || rawLabel.length > 42) return;
+
+          // Navigointipallon ulkokehän otsikot ovat lyhyitä, yleensä versaalitekstejä.
+          // Ohitetaan pallon keskitekstit, vuosiluvut ja oikean alakulman selitetekstit.
+          const upperShare = rawLabel.replace(/[^A-ZÅÄÖ]/g,'').length / Math.max(1, rawLabel.replace(/[^A-Za-zÅÄÖåäö]/g,'').length);
+          if (upperShare < .72 || /^\d/.test(rawLabel) || /HYVINVOINTI|ON JÄRJESTELMÄ|EI YKSI PALVELU/i.test(rawLabel)) return;
+
+          const teaser = getSphereTeaser(rawLabel);
           if (!teaser) return;
 
           const x = textNode.getAttribute('x') || '0';
@@ -1069,9 +1112,9 @@ button{font:inherit;color:inherit}
         /* HTML-varareitti */
         [...doc.querySelectorAll('button,a,[role="button"],[data-axis],.sphere-label,.welfare-label')].forEach(el => {
           if (el.dataset?.v5SphereTeaser === '1') return;
-          const key = normaliseSphereLabel(el.textContent);
-          const teaser = sphereTeasers[key];
-          if (!teaser) return;
+          const rawLabel = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+          const teaser = getSphereTeaser(rawLabel);
+          if (!rawLabel || !teaser) return;
 
           el.dataset.v5SphereTeaser = '1';
           el.dataset.v5Target = teaser.target || '';
@@ -1102,8 +1145,12 @@ button{font:inherit;color:inherit}
           letter-spacing:0!important;text-transform:none!important;
           color:var(--ink-soft,#525d60)!important
         }
-        svg text[data-v5-sphere-teaser="1"] tspan:first-child{fill:var(--ink,#111a1c)!important}
-        svg text[data-v5-sphere-teaser="1"] tspan:last-child{fill:var(--ink-soft,#525d60)!important}
+        svg text[data-v5-sphere-teaser="1"] tspan:first-child{
+          fill:var(--ink,#111a1c)!important;font-size:1.18em!important;font-weight:700!important
+        }
+        svg text[data-v5-sphere-teaser="1"] tspan:last-child{
+          fill:var(--ink-soft,#525d60)!important;font-size:.94em!important;font-weight:500!important
+        }
         svg text[data-v5-sphere-teaser="1"]:hover tspan:first-child{fill:var(--copper,#b4632c)!important}
         svg text[data-v5-sphere-teaser="1"]:hover tspan:last-child{fill:var(--forest,#20514c)!important}
         .v5-sphere-teaser-html:hover .v5-sphere-teaser-title{
@@ -1112,19 +1159,47 @@ button{font:inherit;color:inherit}
         .v5-sphere-teaser-html:hover .v5-sphere-teaser-question{
           color:var(--forest,#20514c)!important
         }
+        /* Oikean alakulman vuosikymmen-/teemanosto hieman alemmas */
+        .sphere-callout,.welfare-callout,.concept-callout,.era-callout,
+        [class*="callout"][class*="sphere"],[class*="callout"][class*="welfare"],
+        [data-sphere-callout],[data-era-callout]{
+          transform:translateY(28px)!important
+        }
       `;
       doc.head.appendChild(sphereStyle);
 
       /* Pallon sisältö voi muodostua hieman iframe-loadin jälkeen. */
-      const runSphereEnhancement = () => enhanceSphereTeasers();
+      function lowerRightSphereCallout() {
+        const vw = doc.defaultView?.innerWidth || 1200;
+        const vh = doc.defaultView?.innerHeight || 800;
+        const candidates = [...doc.querySelectorAll('div,section,aside,article')].filter(el => {
+          if (el.dataset.v5CalloutShifted === '1') return false;
+          const text = String(el.innerText || '').replace(/\s+/g,' ').trim();
+          if (text.length < 20 || text.length > 340) return false;
+          const r = el.getBoundingClientRect();
+          return r.width > 180 && r.width < 650 && r.height > 60 && r.height < 300 &&
+                 r.left > vw * .52 && r.top > vh * .58;
+        });
+        if (!candidates.length) return;
+        const el = candidates.sort((a,b) => {
+          const ar=a.getBoundingClientRect(), br=b.getBoundingClientRect();
+          return (br.left + br.top) - (ar.left + ar.top);
+        })[0];
+        el.dataset.v5CalloutShifted='1';
+        el.style.transform = `${el.style.transform || ''} translateY(26px)`.trim();
+      }
+
+      const runSphereEnhancement = () => {
+        enhanceSphereTeasers();
+        lowerRightSphereCallout();
+      };
       runSphereEnhancement();
       setTimeout(runSphereEnhancement, 180);
       setTimeout(runSphereEnhancement, 650);
       setTimeout(runSphereEnhancement, 1400);
 
       const sphereObserver = new MutationObserver(() => {
-        const count = enhanceSphereTeasers();
-        if (count >= Object.keys(sphereTeasers).length) sphereObserver.disconnect();
+        enhanceSphereTeasers();
       });
       sphereObserver.observe(doc.body, { childList:true, subtree:true });
 
