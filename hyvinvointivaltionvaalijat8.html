@@ -933,29 +933,68 @@ button{font:inherit;color:inherit}
          säilytetään alkuperäinen klikattavuus, mutta tehdään jokaisesta
          otsikko + keskeinen kysymys -teaser. */
       const sphereTeasers = {
+        /* Kuvassa näkyvä 1950-luvun palvelukerros */
+        'KANSAKOULU': {
+          title: 'Koulutus',
+          question: 'Miten koulusta tuli koko yhteiskuntaa muuttava infrastruktuuri?',
+          target: 'paattely'
+        },
+        'ASUNTOPOLITIIKKA': {
+          title: 'Asuminen',
+          question: 'Miten koti, alue ja asumisen hinta jakavat mahdollisuuksia?',
+          target: 'matriisi'
+        },
+        'TYÖKYKY': {
+          title: 'Työkyky',
+          question: 'Milloin työkyky on yksilön asia – ja milloin järjestelmän?',
+          target: 'verkko'
+        },
+        'TERVEYDENHUOLTO': {
+          title: 'Terveydenhuolto',
+          question: 'Miten hoivasta ja terveydestä tuli yhteinen järjestelmä?',
+          target: 'rengas'
+        },
+        'PALVELUINFRASTRUKTUURI': {
+          title: 'Palvelut',
+          question: 'Mitä tapahtuu, kun hyvinvointi riippuu yhteisestä palveluverkosta?',
+          target: 'maisema'
+        },
+        'OSALLISUUDEN PERUSTA': {
+          title: 'Osallisuus',
+          question: 'Mikä saa ihmisen kokemaan kuuluvansa yhteiskuntaan?',
+          target: 'tulkinta'
+        },
+
+        /* Myös aiemmassa näkymässä esiintyneet käsitteet */
         'PERUSTURVAN SYNTY': {
-          title: 'Perusturvan synty',
-          question: 'Mistä yhteinen turva sai alkunsa?'
+          title: 'Perusturva',
+          question: 'Mistä yhteinen turva sai alkunsa?',
+          target: 'paattely'
         },
         'SOSIAALINEN VAKUUTUS': {
-          title: 'Sosiaalinen vakuutus',
-          question: 'Kenen vastuulle elämän riskit kuuluvat?'
+          title: 'Sosiaalivakuutus',
+          question: 'Kenen vastuulle elämän riskit kuuluvat?',
+          target: 'rengas'
         },
         'RISKIEN JAKAMINEN': {
           title: 'Riskien jakaminen',
-          question: 'Kuka kantaa riskin, kun elämä muuttuu?'
+          question: 'Kuka kantaa riskin, kun elämä muuttuu?',
+          target: 'verkko'
         },
         'YHTEISKUNTAAN KIINNITTYMINEN': {
-          title: 'Yhteiskuntaan kiinnittyminen',
-          question: 'Mikä saa ihmisen kuulumaan yhteiseen?'
+          title: 'Kiinnittyminen',
+          question: 'Mikä saa ihmisen kuulumaan yhteiseen?',
+          target: 'tulkinta'
         },
         'TYÖN TURVA': {
           title: 'Työn turva',
-          question: 'Miten työstä tuli myös turvaa?'
+          question: 'Miten työstä tuli myös turvaa?',
+          target: 'matriisi'
         },
         'PERHE JA TOIMEENTULO': {
           title: 'Perhe ja toimeentulo',
-          question: 'Kuka kantaa vastuun arjen toimeentulosta?'
+          question: 'Kuka kantaa vastuun arjen toimeentulosta?',
+          target: 'maisema'
         }
       };
 
@@ -965,8 +1004,16 @@ button{font:inherit;color:inherit}
       function enhanceSphereTeasers() {
         let enhanced = 0;
 
-        /* Ensisijaisesti SVG-tekstit: näin alkuperäiset leader-linjat,
-           asemointi ja mahdolliset click-handlerit säilyvät. */
+        const openTopic = (teaser, event) => {
+          event?.preventDefault?.();
+          event?.stopPropagation?.();
+          if (teaser?.target && VIEWS[teaser.target]) {
+            parent.location.hash = teaser.target;
+          }
+        };
+
+        /* SVG-tekstit: vaihdetaan näkyvä sisältö otsikoksi + kysymykseksi
+           ja tehdään koko tekstialueesta visualisointilinkki. */
         doc.querySelectorAll('svg text').forEach(textNode => {
           if (textNode.dataset.v5SphereTeaser === '1') {
             enhanced++;
@@ -978,7 +1025,7 @@ button{font:inherit;color:inherit}
           if (!teaser) return;
 
           const x = textNode.getAttribute('x') || '0';
-          const anchor = textNode.getAttribute('text-anchor') || '';
+          const anchorValue = textNode.getAttribute('text-anchor') || '';
           const originalTransform = textNode.getAttribute('transform');
 
           while (textNode.firstChild) textNode.removeChild(textNode.firstChild);
@@ -988,29 +1035,38 @@ button{font:inherit;color:inherit}
           title.setAttribute('dy', '0');
           title.setAttribute('font-size', '1em');
           title.setAttribute('font-weight', '700');
-          title.setAttribute('letter-spacing', '.12em');
+          title.setAttribute('letter-spacing', '.10em');
           title.textContent = teaser.title.toLocaleUpperCase('fi-FI');
 
           const question = doc.createElementNS('http://www.w3.org/2000/svg', 'tspan');
           question.setAttribute('x', x);
-          question.setAttribute('dy', '1.55em');
-          question.setAttribute('font-size', '.82em');
+          question.setAttribute('dy', '1.5em');
+          question.setAttribute('font-size', '.78em');
           question.setAttribute('font-weight', '500');
           question.setAttribute('letter-spacing', '0');
-          question.setAttribute('opacity', '.76');
+          question.setAttribute('opacity', '.78');
           question.textContent = teaser.question;
 
           textNode.append(title, question);
           textNode.dataset.v5SphereTeaser = '1';
+          textNode.dataset.v5Target = teaser.target || '';
           textNode.style.cursor = 'pointer';
+          textNode.style.pointerEvents = 'all';
           textNode.setAttribute('role', 'link');
-          textNode.setAttribute('aria-label', `${teaser.title}. ${teaser.question}`);
-          if (anchor) textNode.setAttribute('text-anchor', anchor);
+          textNode.setAttribute('tabindex', '0');
+          textNode.setAttribute('aria-label', `${teaser.title}. ${teaser.question}. Avaa visualisointi.`);
+          if (anchorValue) textNode.setAttribute('text-anchor', anchorValue);
           if (originalTransform) textNode.setAttribute('transform', originalTransform);
+
+          textNode.addEventListener('click', event => openTopic(teaser, event));
+          textNode.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') openTopic(teaser, event);
+          });
+
           enhanced++;
         });
 
-        /* Varareitti, jos jokin pallon otsikoista on HTML-elementtinä. */
+        /* HTML-varareitti */
         [...doc.querySelectorAll('button,a,[role="button"],[data-axis],.sphere-label,.welfare-label')].forEach(el => {
           if (el.dataset?.v5SphereTeaser === '1') return;
           const key = normaliseSphereLabel(el.textContent);
@@ -1018,9 +1074,11 @@ button{font:inherit;color:inherit}
           if (!teaser) return;
 
           el.dataset.v5SphereTeaser = '1';
+          el.dataset.v5Target = teaser.target || '';
           el.classList.add('v5-sphere-teaser-html');
           el.innerHTML = `<span class="v5-sphere-teaser-title">${teaser.title}</span><span class="v5-sphere-teaser-question">${teaser.question}</span>`;
-          el.setAttribute('aria-label', `${teaser.title}. ${teaser.question}`);
+          el.setAttribute('aria-label', `${teaser.title}. ${teaser.question}. Avaa visualisointi.`);
+          el.addEventListener('click', event => openTopic(teaser, event));
           enhanced++;
         });
 
@@ -1039,11 +1097,15 @@ button{font:inherit;color:inherit}
           letter-spacing:.13em!important;text-transform:uppercase!important
         }
         .v5-sphere-teaser-question{
-          display:block!important;max-width:210px!important;
-          font:500 .74rem/1.28 "Source Sans 3",Inter,sans-serif!important;
+          display:block!important;max-width:230px!important;
+          font:500 .78rem/1.3 "Source Sans 3",Inter,sans-serif!important;
           letter-spacing:0!important;text-transform:none!important;
           color:var(--ink-soft,#525d60)!important
         }
+        svg text[data-v5-sphere-teaser="1"] tspan:first-child{fill:var(--ink,#111a1c)!important}
+        svg text[data-v5-sphere-teaser="1"] tspan:last-child{fill:var(--ink-soft,#525d60)!important}
+        svg text[data-v5-sphere-teaser="1"]:hover tspan:first-child{fill:var(--copper,#b4632c)!important}
+        svg text[data-v5-sphere-teaser="1"]:hover tspan:last-child{fill:var(--forest,#20514c)!important}
         .v5-sphere-teaser-html:hover .v5-sphere-teaser-title{
           color:var(--copper,#b4632c)!important
         }
