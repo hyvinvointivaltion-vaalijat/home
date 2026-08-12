@@ -241,8 +241,40 @@ button{font:inherit;color:inherit}
         html{scroll-padding-top:0!important}
         body{padding-top:0!important}
         header.nav{display:none!important}
+        .v5-membership-payments{width:min(980px,calc(100% - 40px));margin:28px auto 42px;padding-top:22px;border-top:1px solid var(--line,#ddd6c9)}
+        .v5-membership-payments .eyebrow{margin-bottom:8px;font:700 11px/1.2 "Source Sans 3",Inter,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#b4632c)}
+        .v5-membership-payments h3{margin:0 0 8px;font:500 clamp(1.55rem,3vw,2.25rem)/1.1 Fraunces,Georgia,serif}
+        .v5-membership-payments .intro{margin:0 0 22px;color:var(--muted,#74807c)}
+        .v5-payment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line,#ddd6c9);border:1px solid var(--line,#ddd6c9)}
+        .v5-payment-card{padding:22px;background:var(--surface,#fffdf8)}
+        .v5-payment-card h4{margin:0 0 6px;font:600 1.05rem/1.2 Fraunces,Georgia,serif}
+        .v5-payment-price{margin:10px 0 3px;font:600 2rem/1 Fraunces,Georgia,serif;color:var(--forest,#20514c)}
+        .v5-payment-note{min-height:42px;margin:0 0 18px;color:var(--muted,#74807c);font-size:.86rem}
+        .v5-payment-card button{width:100%;padding:10px 14px;border:1px solid var(--forest,#20514c);background:transparent;color:var(--forest,#20514c);font-weight:700;cursor:pointer}
+        .v5-payment-card button:hover{background:var(--forest,#20514c);color:#fff}
+        .v5-donation-row{display:flex;align-items:stretch;margin:10px 0 18px;border-bottom:1px solid var(--line,#ddd6c9)}
+        .v5-donation-row input{width:100%;min-width:0;padding:7px 2px;border:0;background:transparent;outline:none;font:600 1.55rem/1 Fraunces,Georgia,serif}
+        .v5-donation-row span{display:grid;place-items:center;padding-left:8px;color:var(--muted,#74807c);font-weight:600}
+        @media(max-width:760px){.v5-payment-grid{grid-template-columns:1fr}.v5-payment-note{min-height:0}}
       `;
       doc.head.appendChild(style);
+
+      const joinSection = doc.querySelector('#liity') || doc.querySelector('[id*="liity"]') ||
+        [...doc.querySelectorAll('section')].find(section => /liity/i.test(section.querySelector('h1,h2,h3')?.textContent || ''));
+      if (joinSection && !doc.getElementById('v5-membership-payments')) {
+        const payments = doc.createElement('div');
+        payments.id='v5-membership-payments'; payments.className='v5-membership-payments';
+        payments.innerHTML=`
+          <div class="eyebrow">Liittymismaksu</div><h3>Jäsenyys ja tuki</h3>
+          <p class="intro">Valitse jäsenmaksu tai tue yhdistyksen toimintaa haluamallasi summalla.</p>
+          <div class="v5-payment-grid">
+            <article class="v5-payment-card"><h4>Uusi jäsen</h4><div class="v5-payment-price">30 €</div><p class="v5-payment-note">Liittymismaksu 5 € + jäsenmaksu 25 €.</p><button type="button" data-payment-kind="new-member" data-amount="30">Maksa 30 €</button></article>
+            <article class="v5-payment-card"><h4>Vanha jäsen</h4><div class="v5-payment-price">25 €</div><p class="v5-payment-note">Vuosittainen jäsenmaksu.</p><button type="button" data-payment-kind="existing-member" data-amount="25">Maksa 25 €</button></article>
+            <article class="v5-payment-card"><h4>Lahjoita</h4><div class="v5-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" aria-label="Lahjoitussumma euroina"><span>€</span></div><p class="v5-payment-note">Valitse itse lahjoituksen summa.</p><button type="button" data-payment-kind="donation">Lahjoita</button></article>
+          </div>`;
+        joinSection.appendChild(payments);
+        payments.addEventListener('click',event=>{const b=event.target.closest('[data-payment-kind]');if(!b)return;const kind=b.dataset.paymentKind,input=payments.querySelector('.v5-donation-row input'),amount=kind==='donation'?Number(input?.value||0):Number(b.dataset.amount||0);if(kind==='donation'&&(!Number.isFinite(amount)||amount<1)){input?.focus();return;}doc.defaultView.dispatchEvent(new CustomEvent('v5-payment-request',{detail:{kind,amount,currency:'EUR'}}));});
+      }
 
       // "Avaa Atlas" ei vie pois hyvinvointivaltio-osoitteesta:
       // se vaihtaa v5-kuoren rengasnäkymään.
@@ -278,7 +310,7 @@ button{font:inherit;color:inherit}
     frame.loading = 'eager';
 
     frame.addEventListener('load', () => {
-      if (name === 'yhdistys') cleanAssociationFrame();
+      if (['yhdistys','ajankohtaista','liity'].includes(name)) cleanAssociationFrame();
       loader.hidden = true;
     }, { once:true });
 
