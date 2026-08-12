@@ -112,6 +112,9 @@ button{font:inherit;color:inherit}
 .account-remember input{margin-top:2px;accent-color:var(--forest)}
 .account-register-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.account-register-grid .wide{grid-column:1/-1}
 @media(max-width:560px){.account-register-grid{grid-template-columns:1fr}.account-register-grid .wide{grid-column:auto}}
+
+.otp-cooldown{display:inline-block;min-width:2.6em;font-variant-numeric:tabular-nums}
+.account-btn:disabled{opacity:.48;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -164,7 +167,7 @@ button{font:inherit;color:inherit}
       <div class="account-section" id="accountOtpStep" hidden>
         <p class="account-meta" id="accountOtpIntro">Syötä sähköpostiisi lähetetty 6-numeroinen vahvistustunnus.</p>
         <div class="account-field"><label>Vahvistustunnus</label><input id="accountOtp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000"></div>
-        <div class="account-actions"><button class="account-btn primary" id="accountVerifyOtp" type="button">Vahvista ja jatka</button><button class="account-btn" id="accountResendOtp" type="button">Lähetä uusi tunnus</button><button class="account-btn" id="accountOtpBack" type="button">Vaihda sähköposti</button></div>
+        <div class="account-actions"><button class="account-btn primary" id="accountVerifyOtp" type="button">Vahvista ja jatka</button><button class="account-btn" id="accountResendOtp" type="button">Lähetä uusi tunnus <span class="otp-cooldown" id="otpCooldown"></span></button><button class="account-btn" id="accountOtpBack" type="button">Vaihda sähköposti</button></div>
         <div class="account-meta" id="accountOtpStatus" style="margin-top:10px"></div>
       </div>
     </div>
@@ -413,6 +416,35 @@ button{font:inherit;color:inherit}
   }
 
   let pendingAuthEmail = '';
+  const OTP_COOLDOWN_SECONDS = 60;
+  let otpCooldownTimer = null;
+  let otpCooldownUntil = 0;
+
+  function startOtpCooldown(seconds=OTP_COOLDOWN_SECONDS){
+    otpCooldownUntil = Date.now() + seconds * 1000;
+    const button = document.getElementById('accountResendOtp');
+    const label = document.getElementById('otpCooldown');
+    clearInterval(otpCooldownTimer);
+    const tick = () => {
+      const left = Math.max(0, Math.ceil((otpCooldownUntil - Date.now()) / 1000));
+      button.disabled = left > 0;
+      label.textContent = left > 0 ? `(${left} s)` : '';
+      if(left <= 0){
+        clearInterval(otpCooldownTimer);
+        otpCooldownTimer = null;
+      }
+    };
+    tick();
+    otpCooldownTimer = setInterval(tick, 250);
+  }
+
+  function authErrorMessage(error){
+    const msg = String(error?.message || error || '');
+    if(/rate limit|too many requests/i.test(msg)){
+      return 'Vahvistustunnuksia on pyydetty liian nopeasti. Odota hetki ja yritä uudelleen.';
+    }
+    return msg || 'Vahvistustunnuksen lähetys epäonnistui.';
+  }
 
   function hideAccountSteps(){
     ['accountEmailStep','accountOtpStep'].forEach(id=>document.getElementById(id).hidden=true);
@@ -453,18 +485,28 @@ button{font:inherit;color:inherit}
       email:pendingAuthEmail,
       options:{shouldCreateUser:true}
     });
-    if(error){status.textContent=error.message;return;}
+    if(error){status.textContent=authErrorMessage(error);return;}
     showOtpStep();
+    startOtpCooldown();
   }
 
   async function resendEmailOtp(){
     const status=document.getElementById('accountOtpStatus');
+    const button=document.getElementById('accountResendOtp');
+    if(button.disabled || Date.now() < otpCooldownUntil) return;
+    button.disabled=true;
     status.textContent='Lähetetään uusi tunnus…';
     const {error}=await supabaseClient.auth.signInWithOtp({
       email:pendingAuthEmail,
       options:{shouldCreateUser:true}
     });
-    status.textContent=error?error.message:'Uusi vahvistustunnus lähetetty.';
+    if(error){
+      status.textContent=authErrorMessage(error);
+      button.disabled=false;
+      return;
+    }
+    status.textContent='Uusi vahvistustunnus lähetetty.';
+    startOtpCooldown();
   }
 
   async function verifyEmailOtp(){
@@ -483,6 +525,7 @@ button{font:inherit;color:inherit}
       return;
     }
 
+    clearInterval(otpCooldownTimer); otpCooldownTimer=null; otpCooldownUntil=0;
     status.textContent='Tunnistautuminen onnistui.';
     closeAccount();
     location.hash='liity';
