@@ -42,22 +42,37 @@ button{font:inherit;color:inherit}
 .association-tab[aria-selected="true"]::after{right:0}
 
 .module-browser{
-  position:relative;display:flex;align-items:center;gap:10px
+  position:relative;display:grid;grid-template-columns:28px minmax(230px,310px) 28px;
+  align-items:center;gap:8px;margin-left:2px
 }
 .module-arrow{
-  display:grid;place-items:center;width:24px;height:28px;border:0;background:transparent;
-  color:var(--muted);font-size:21px;line-height:1;cursor:pointer;padding:0
+  display:grid;place-items:center;width:28px;height:42px;border:0;background:transparent;
+  color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:0;transition:color .16s ease,transform .16s ease
 }
-.module-arrow:hover{color:var(--ink)}
+.module-arrow:hover{color:var(--copper);transform:scale(1.08)}
 .module-current{
-  position:relative;display:flex;align-items:center;justify-content:center;min-width:118px;height:30px;
-  padding:0 2px;border:0;background:transparent;color:var(--ink);
-  font-size:13px;font-weight:600;cursor:pointer
+  position:relative;display:grid;align-content:center;justify-items:center;min-width:0;height:48px;
+  padding:5px 16px 6px;border:1px solid rgba(180,99,44,.22);border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,253,248,.9),rgba(239,234,225,.72));
+  color:var(--ink);cursor:pointer;box-shadow:0 10px 24px -22px rgba(13,42,44,.7);
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease
 }
-.module-current::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line)
+.module-current::before{
+  content:"";position:absolute;inset:4px;border:1px solid rgba(32,81,76,.10);border-radius:999px;pointer-events:none
 }
-.module-current:hover::after{background:var(--copper)}
+.module-current:hover{
+  border-color:rgba(180,99,44,.55);background:var(--surface);
+  box-shadow:0 13px 30px -22px rgba(13,42,44,.72);transform:translateY(-1px)
+}
+.module-title{
+  position:relative;z-index:1;font:600 12.5px/1.15 var(--serif);letter-spacing:.01em;color:var(--ink)
+}
+.module-question{
+  position:relative;z-index:1;display:block;max-width:260px;margin-top:2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font:500 9.5px/1.25 var(--sans);color:var(--muted)
+}
+.module-current:hover .module-question{color:var(--forest)}
 .module-menu{
   position:absolute;top:calc(100% + 10px);left:50%;z-index:300;min-width:220px;padding:6px 0;
   transform:translateX(-50%);background:rgba(247,244,238,.985);border:1px solid var(--line);
@@ -65,11 +80,13 @@ button{font:inherit;color:inherit}
 }
 .module-menu[hidden]{display:none}
 .module-option{
-  width:100%;display:block;padding:8px 12px;border:0;background:transparent;color:var(--muted);
-  text-align:left;font-size:13px;font-weight:500;cursor:pointer
+  width:100%;display:grid;gap:2px;padding:9px 12px;border:0;background:transparent;color:var(--muted);
+  text-align:left;cursor:pointer
 }
+.module-option strong{font:600 12.5px/1.2 var(--serif);color:var(--ink)}
+.module-option small{font:500 10px/1.3 var(--sans);color:var(--muted)}
 .module-option:hover,.module-option[aria-selected="true"]{background:rgba(255,253,248,.8);color:var(--ink)}
-.module-option[aria-selected="true"]{font-weight:600}
+.module-option[aria-selected="true"] strong{color:var(--copper)}
 .tools{display:flex;gap:8px}
 .icon-btn{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
 .icon-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
@@ -79,11 +96,12 @@ button{font:inherit;color:inherit}
 .murros-crop .view-frame{position:absolute;left:0;top:calc(-1 * var(--murros-inner-nav,64px));width:100%;height:calc(100% + var(--murros-inner-nav,64px));}
 .loader{position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .loader[hidden]{display:none}
-@media(max-width:1050px){.brand .sub{display:none}.module-current{min-width:108px}}
+@media(max-width:1050px){.brand .sub{display:none}.topnav-combined{gap:15px}.module-browser{grid-template-columns:24px minmax(205px,260px) 24px}.module-current{height:46px;padding-inline:12px}.module-question{max-width:220px}}
 @media(max-width:760px){
   .topbar{flex-wrap:wrap;gap:8px;padding:8px 12px}
   .brand{flex:1}
-  .topnav-combined{order:3;width:100%;margin-left:0;justify-content:space-between}
+  .topnav-combined{order:3;width:100%;margin-left:0;justify-content:space-between;gap:10px;overflow-x:auto;padding-bottom:2px}
+  .module-browser{grid-template-columns:24px minmax(190px,240px) 24px;flex:none}
   #viewRoot{min-height:0}
 }
 
@@ -149,7 +167,7 @@ button{font:inherit;color:inherit}
     <div class="module-browser" aria-label="Visualisointimoduuli">
       <button class="module-arrow" id="modulePrev" type="button" aria-label="Edellinen visualisointimoduuli">‹</button>
       <button class="module-current" id="moduleCurrent" type="button" aria-haspopup="listbox" aria-expanded="false">
-        <span id="moduleLabel">Murroskartta</span>
+        <span class="module-title" id="moduleLabel">Murroskartta</span><span class="module-question" id="moduleQuestion">Mistä Suomen suuret murrokset syntyivät?</span>
       </button>
       <button class="module-arrow" id="moduleNext" type="button" aria-label="Seuraava visualisointimoduuli">›</button>
       <div class="module-menu" id="moduleMenu" role="listbox" aria-label="Valitse visualisointimoduuli" hidden></div>
@@ -216,6 +234,7 @@ button{font:inherit;color:inherit}
   const moduleNext = document.getElementById('moduleNext');
   const moduleCurrent = document.getElementById('moduleCurrent');
   const moduleLabel = document.getElementById('moduleLabel');
+  const moduleQuestion = document.getElementById('moduleQuestion');
   const moduleMenu = document.getElementById('moduleMenu');
   const fsBtn = document.getElementById('fsBtn');
 
@@ -237,32 +256,39 @@ button{font:inherit;color:inherit}
     },
     murroskartta: {
       title: 'Murroskartta',
+      question: 'Mistä Suomen suuret murrokset syntyivät?',
       url: 'https://harrikayhko.fi/atlas/murroskartta.html'
     },
     rengas: {
       title: 'Rengas',
+      question: 'Miten yksi murros kytkeytyy muihin muutoksiin?',
       url: 'https://harrikayhko.fi/atlas/murros/index.html#rengas',
       cropMurrosTopbar: true
     },
     verkko: {
       title: 'Verkko',
+      question: 'Mitkä ilmiöt muodostavat historian vaikutusverkoston?',
       url: 'https://harrikayhko.fi/atlas/murros/index.html#verkko',
       cropMurrosTopbar: true
     },
     matriisi: {
       title: 'Matriisi',
+      question: 'Missä murrokset ja näkökulmat leikkaavat toisensa?',
       url: 'https://harrikayhko.fi/atlas/murros/matriisi.html'
     },
     paattely: {
       title: 'Päättely',
+      question: 'Miten päätöksistä ja rakenteista syntyi nykyhetki?',
       url: 'https://harrikayhko.fi/atlas/index.html'
     },
     maisema: {
       title: 'Maisema 3D',
+      question: 'Miltä Suomen rakennemuutos näyttää kokonaisena maisemana?',
       url: 'https://harrikayhko.fi/atlas/maisema.html'
     },
     tulkinta: {
       title: 'Tulkinta',
+      question: 'Miten sama historia muuttuu, kun näkökulma vaihtuu?',
       url: 'https://harrikayhko.fi/atlas/tulkinta.html'
     }
   };
@@ -698,7 +724,7 @@ button{font:inherit;color:inherit}
   }
 
   moduleMenu.innerHTML = MODULE_ORDER.map(name =>
-    `<button class="module-option" type="button" role="option" data-module="${name}">${VIEWS[name].title}</button>`
+    `<button class="module-option" type="button" role="option" data-module="${name}"><strong>${VIEWS[name].title}</strong><small>${VIEWS[name].question || ''}</small></button>`
   ).join('');
 
   let active = null;
@@ -716,6 +742,9 @@ button{font:inherit;color:inherit}
     joinTab.setAttribute('aria-selected', String(name === 'liity'));
     if (!associationViews.includes(name)) {
       moduleLabel.textContent = VIEWS[name]?.title || name;
+      moduleQuestion.textContent = VIEWS[name]?.question || 'Avaa visualisointi';
+      moduleCurrent.setAttribute('aria-label', `${VIEWS[name]?.title || name}: ${VIEWS[name]?.question || 'Avaa visualisointi'}`);
+      moduleCurrent.title = 'Avaa teema visualisointiin';
     }
     moduleMenu.querySelectorAll('[data-module]').forEach(option =>
       option.setAttribute('aria-selected', String(option.dataset.module === name))
