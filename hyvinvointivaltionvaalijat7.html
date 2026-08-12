@@ -279,27 +279,71 @@ button{font:inherit;color:inherit}
 
   async function startPaytrailPayment(detail) {
     if (!supabaseClient) throw new Error('Maksupalvelun yhteys ei ole käytettävissä.');
+
     const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
     if (sessionError || !session?.access_token) {
       throw new Error('Kirjaudu sisään ennen maksamista.');
     }
-    const body = {
-      product_code: detail.product_code,
-      return_url: `${location.origin}${location.pathname}`
-    };
-    if (detail.product_code === 'donation') body.amount_cents = Math.round(Number(detail.amount) * 100);
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/create-payment-test`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_PUBLISHABLE_KEY,
-        'Authorization': `Bearer ${session.access_token}`
-      },
-      body: JSON.stringify(body)
+
+    const body = { product_code: detail.product_code };
+    if (detail.product_code === 'donation') {
+      body.amount_cents = Math.round(Number(detail.amount) * 100);
+    }
+
+    const endpoint = `${SUPABASE_URL}/functions/v1/create-payment-test`;
+    console.info('[Paytrail test] POST', endpoint, body);
+
+    let response;
+    try {
+      response = await fetch(endpoint, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_PUBLISHABLE_KEY,
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify(body)
+      });
+    } catch (networkError) {
+      console.error('[Paytrail test] verkkovirhe / CORS', networkError);
+      throw new Error(`Maksupyynnön lähetys epäonnistui ennen palvelinvastausta: ${networkError?.message || networkError}`);
+    }
+
+    const raw = await response.text();
+    let result = {};
+    try {
+      result = raw ? JSON.parse(raw) : {};
+    } catch {
+      result = { raw_response: raw };
+    }
+
+    console.info('[Paytrail test] vastaus', {
+      status: response.status,
+      ok: response.ok,
+      result
     });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || 'Maksun luominen epäonnistui.');
-    if (!result.checkout_url) throw new Error('Paytrail-testimaksuosoitetta ei saatu.');
+
+    if (!response.ok) {
+      const providerDetail =
+        result?.provider_response?.message ||
+        result?.provider_response?.error ||
+        (typeof result?.provider_response === 'string' ? result.provider_response : '') ||
+        result?.detail ||
+        result?.message ||
+        result?.error ||
+        result?.raw_response ||
+        `HTTP ${response.status}`;
+
+      const requestId = result?.request_id ? ` · request-id ${result.request_id}` : '';
+      throw new Error(`Paytrail-testi hylättiin (${response.status}): ${providerDetail}${requestId}`);
+    }
+
+    if (!result.checkout_url) {
+      throw new Error(`Paytrail-testimaksuosoitetta ei saatu. HTTP ${response.status}.`);
+    }
+
     sessionStorage.setItem('v5PaytrailTestPaymentId', result.payment_id || '');
     window.location.assign(result.checkout_url);
   }
