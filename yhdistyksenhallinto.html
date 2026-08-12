@@ -922,8 +922,9 @@ async function loadAll(){
     renderRules();
     renderMembers();
   }catch(err){
-    $("connStatus").textContent = "virhe ladattaessa dataa -- katso selaimen konsoli (F12 / Kehittäjätyökalut)";
     const detail = (err && err.message) ? err.message : "Verkkovirhe tai CORS-esto.";
+    const permissionLike = /permission|policy|row-level|RLS|ylläpitäj/i.test(detail);
+    $("connStatus").textContent = permissionLike ? "käyttöoikeusvirhe · kirjaudu uudelleen" : "virhe ladattaessa dataa -- katso selaimen konsoli (F12 / Kehittäjätyökalut)";
     toast("Latausvirhe: " + detail, true);
     console.error("Latausvirhe:", err);
   }
@@ -1655,6 +1656,18 @@ $("previewRules").addEventListener("click", () => {
   setTimeout(() => { try{ win.print(); }catch(e){ /* ei kriittinen */ } }, 250);
 });
 
+
+async function ensureAdminSession(){
+  const { data, error } = await sb.auth.refreshSession();
+  if(error) throw error;
+  const session = data.session;
+  if(!session) throw new Error("Kirjautuminen on vanhentunut. Kirjaudu uudelleen.");
+  state.session = session;
+  const isAdmin = session.user?.app_metadata?.is_admin === true;
+  if(!isAdmin) throw new Error("Tällä käyttäjätilillä ei ole ylläpitäjän oikeuksia.");
+  return session;
+}
+
 /* ==========================================================
    KIRJAUTUMINEN
    ========================================================== */
@@ -1689,6 +1702,7 @@ async function attemptLogin(){
   try{
     const { error } = await sb.auth.signInWithPassword({ email, password });
     if(error) throw error;
+    await ensureAdminSession();
     errEl.textContent = "";
     $("loginPassword").value = "";
     showApp();
@@ -1727,7 +1741,7 @@ async function boot(){
     if(error) throw error;
 
     if(data.session){
-      state.session = data.session;
+      await ensureAdminSession();
       showApp();
       $("connStatus").textContent = "kirjauduttu · ladataan dataa…";
       await loadAll();
