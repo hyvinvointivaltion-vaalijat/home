@@ -122,6 +122,7 @@ button{font:inherit;color:inherit}
   <div class="loader" id="loader">Ladataan näkymää…</div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
   const root = document.getElementById('viewRoot');
@@ -185,6 +186,49 @@ button{font:inherit;color:inherit}
   };
 
   const MODULE_ORDER = ['murroskartta','rengas','verkko','matriisi','paattely','maisema','tulkinta'];
+
+  const SUPABASE_URL = 'https://zzbubbrsgiqsvsovkkmf.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_YNqxZI4Oj-DSjVBoTKhQ2Q_4DchUIBb';
+  const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  async function startPaytrailPayment(detail) {
+    if (!supabaseClient) throw new Error('Maksupalvelun yhteys ei ole käytettävissä.');
+    const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+    if (sessionError || !session?.access_token) {
+      throw new Error('Kirjaudu sisään ennen maksamista.');
+    }
+    const body = { product_code: detail.product_code };
+    if (detail.product_code === 'donation') body.amount_cents = Math.round(Number(detail.amount) * 100);
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/create-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_PUBLISHABLE_KEY,
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify(body)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Maksun luominen epäonnistui.');
+    if (!result.checkout_url) throw new Error('Paytrail-maksuosoitetta ei saatu.');
+    window.location.assign(result.checkout_url);
+  }
+
+  window.addEventListener('message', async event => {
+    if (event.origin !== location.origin || event.data?.type !== 'v5-payment-request') return;
+    const doc = frame?.contentDocument;
+    const payments = doc?.getElementById('v5-membership-payments');
+    const status = payments?.querySelector('.v5-payment-status');
+    const buttons = payments ? [...payments.querySelectorAll('button[data-payment-kind]')] : [];
+    buttons.forEach(button => button.disabled = true);
+    if (status) { status.hidden = false; status.dataset.state = 'loading'; status.textContent = 'Avataan Paytrail-maksua…'; }
+    try {
+      await startPaytrailPayment(event.data.detail || {});
+    } catch (error) {
+      if (status) { status.hidden = false; status.dataset.state = 'error'; status.textContent = error?.message || 'Maksun avaaminen epäonnistui.'; }
+      buttons.forEach(button => button.disabled = false);
+    }
+  });
 
   moduleMenu.innerHTML = MODULE_ORDER.map(name =>
     `<button class="module-option" type="button" role="option" data-module="${name}">${VIEWS[name].title}</button>`
@@ -252,6 +296,9 @@ button{font:inherit;color:inherit}
         .v5-payment-note{min-height:42px;margin:0 0 18px;color:var(--muted,#74807c);font-size:.86rem}
         .v5-payment-card button{width:100%;padding:10px 14px;border:1px solid var(--forest,#20514c);background:transparent;color:var(--forest,#20514c);font-weight:700;cursor:pointer}
         .v5-payment-card button:hover{background:var(--forest,#20514c);color:#fff}
+        .v5-payment-card button:disabled{opacity:.55;cursor:wait}
+        .v5-payment-status{grid-column:1/-1;padding:10px 14px;background:var(--surface,#fffdf8);color:var(--muted,#74807c);font-size:.86rem}
+        .v5-payment-status[data-state="error"]{color:#8a3324}
         .v5-donation-row{display:flex;align-items:stretch;margin:10px 0 18px;border-bottom:1px solid var(--line,#ddd6c9)}
         .v5-donation-row input{width:100%;min-width:0;padding:7px 2px;border:0;background:transparent;outline:none;font:600 1.55rem/1 Fraunces,Georgia,serif}
         .v5-donation-row span{display:grid;place-items:center;padding-left:8px;color:var(--muted,#74807c);font-weight:600}
@@ -268,12 +315,12 @@ button{font:inherit;color:inherit}
           <div class="eyebrow">Liittymismaksu</div><h3>Jäsenyys ja tuki</h3>
           <p class="intro">Valitse jäsenmaksu tai tue yhdistyksen toimintaa haluamallasi summalla.</p>
           <div class="v5-payment-grid">
-            <article class="v5-payment-card"><h4>Uusi jäsen</h4><div class="v5-payment-price">30 €</div><p class="v5-payment-note">Liittymismaksu 5 € + jäsenmaksu 25 €.</p><button type="button" data-payment-kind="new-member" data-amount="30">Maksa 30 €</button></article>
-            <article class="v5-payment-card"><h4>Vanha jäsen</h4><div class="v5-payment-price">25 €</div><p class="v5-payment-note">Vuosittainen jäsenmaksu.</p><button type="button" data-payment-kind="existing-member" data-amount="25">Maksa 25 €</button></article>
-            <article class="v5-payment-card"><h4>Lahjoita</h4><div class="v5-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" aria-label="Lahjoitussumma euroina"><span>€</span></div><p class="v5-payment-note">Valitse itse lahjoituksen summa.</p><button type="button" data-payment-kind="donation">Lahjoita</button></article>
-          </div>`;
+            <article class="v5-payment-card"><h4>Uusi jäsen</h4><div class="v5-payment-price">30 €</div><p class="v5-payment-note">Liittymismaksu 5 € + jäsenmaksu 25 €.</p><button type="button" data-payment-kind="new-member" data-product-code="member-new" data-amount="30">Maksa 30 €</button></article>
+            <article class="v5-payment-card"><h4>Vanha jäsen</h4><div class="v5-payment-price">25 €</div><p class="v5-payment-note">Vuosittainen jäsenmaksu.</p><button type="button" data-payment-kind="existing-member" data-product-code="member-renewal" data-amount="25">Maksa 25 €</button></article>
+            <article class="v5-payment-card"><h4>Lahjoita</h4><div class="v5-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" aria-label="Lahjoitussumma euroina"><span>€</span></div><p class="v5-payment-note">Valitse itse lahjoituksen summa.</p><button type="button" data-payment-kind="donation" data-product-code="donation">Lahjoita</button></article>
+          <div class="v5-payment-status" role="status" aria-live="polite" hidden></div></div>`;
         joinSection.appendChild(payments);
-        payments.addEventListener('click',event=>{const b=event.target.closest('[data-payment-kind]');if(!b)return;const kind=b.dataset.paymentKind,input=payments.querySelector('.v5-donation-row input'),amount=kind==='donation'?Number(input?.value||0):Number(b.dataset.amount||0);if(kind==='donation'&&(!Number.isFinite(amount)||amount<1)){input?.focus();return;}doc.defaultView.dispatchEvent(new CustomEvent('v5-payment-request',{detail:{kind,amount,currency:'EUR'}}));});
+        payments.addEventListener('click',event=>{const b=event.target.closest('[data-payment-kind]');if(!b)return;const kind=b.dataset.paymentKind,input=payments.querySelector('.v5-donation-row input'),amount=kind==='donation'?Number(input?.value||0):Number(b.dataset.amount||0);if(kind==='donation'&&(!Number.isFinite(amount)||amount<1)){input?.focus();return;}parent.postMessage({type:'v5-payment-request',detail:{kind,product_code:b.dataset.productCode,amount,currency:'EUR'}},location.origin);});
       }
 
       // "Avaa Atlas" ei vie pois hyvinvointivaltio-osoitteesta:
