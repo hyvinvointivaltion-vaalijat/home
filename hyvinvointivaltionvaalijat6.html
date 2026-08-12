@@ -169,7 +169,7 @@ button{font:inherit;color:inherit}
       </div>
 
       <div class="account-section" id="accountRegisterStep" hidden>
-        <p class="account-meta"><strong id="accountNewEmail"></strong><br>Sähköpostiosoitteelle ei löytynyt käyttäjätiliä. Täytä perustiedot. Saat sähköpostiin vahvistuslinkin ja asetat salasanan linkin avaamisen jälkeen.</p>
+        <p class="account-meta"><strong id="accountNewEmail"></strong><br>Sähköpostiosoitteelle ei löytynyt käyttäjätiliä. Täytä perustiedot. Lähetämme sähköpostiisi 6-numeroisen vahvistustunnuksen.</p>
         <div class="account-register-grid">
           <div class="account-field wide"><label>Nimi</label><input id="regName" autocomplete="name"></div>
           <div class="account-field"><label>Puhelin</label><input id="regPhone" autocomplete="tel"></div>
@@ -179,8 +179,16 @@ button{font:inherit;color:inherit}
           <div class="account-field"><label>Postitoimipaikka</label><input id="regCity" autocomplete="address-level2"></div>
         </div>
         <label class="account-remember"><input id="regRemember" type="checkbox"> <span>Pidä minut kirjautuneena tällä laitteella</span></label>
-        <div class="account-actions"><button class="account-btn primary" id="accountRegister" type="button">Lähetä vahvistuslinkki</button><button class="account-btn" data-account-back type="button">Takaisin</button></div>
+        <div class="account-actions"><button class="account-btn primary" id="accountRegister" type="button">Lähetä vahvistustunnus</button><button class="account-btn" data-account-back type="button">Takaisin</button></div>
         <div class="account-meta" id="accountRegisterStatus" style="margin-top:10px"></div>
+      </div>
+
+
+      <div class="account-section" id="accountOtpStep" hidden>
+        <p class="account-meta" id="accountOtpIntro">Syötä sähköpostiisi lähetetty 6-numeroinen vahvistustunnus.</p>
+        <div class="account-field"><label>Vahvistustunnus</label><input id="accountOtp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000"></div>
+        <div class="account-actions"><button class="account-btn primary" id="accountVerifyOtp" type="button">Vahvista</button><button class="account-btn" id="accountResendOtp" type="button">Lähetä uusi tunnus</button><button class="account-btn" data-account-back type="button">Takaisin</button></div>
+        <div class="account-meta" id="accountOtpStatus" style="margin-top:10px"></div>
       </div>
 
       <div class="account-section" id="accountSetPasswordStep" hidden>
@@ -448,9 +456,11 @@ button{font:inherit;color:inherit}
   let pendingAuthEmail = '';
   let pendingAuthSource = 'account';
   let passwordFlow = 'recovery';
+  let pendingOtpFlow = 'registration';
+  let pendingRegistrationProfile = null;
 
   function hideAccountSteps(){
-    ['accountEmailStep','accountPasswordStep','accountRegisterStep','accountSetPasswordStep'].forEach(id=>document.getElementById(id).hidden=true);
+    ['accountEmailStep','accountPasswordStep','accountRegisterStep','accountOtpStep','accountSetPasswordStep'].forEach(id=>document.getElementById(id).hidden=true);
   }
   function showAccountRoute(email, exists, source='account'){
     pendingAuthEmail=email; pendingAuthSource=source;
@@ -490,6 +500,47 @@ button{font:inherit;color:inherit}
     accountOverlay.classList.add('open'); accountOverlay.setAttribute('aria-hidden','false');
   }
 
+  function showOtpStep(flow='registration'){
+    pendingOtpFlow=flow; hideAccountSteps();
+    document.getElementById('accountSignedOut').hidden=false;
+    document.getElementById('accountSignedIn').hidden=true;
+    document.getElementById('accountOtpStep').hidden=false;
+    document.getElementById('accountOtp').value='';
+    document.getElementById('accountOtpStatus').textContent='';
+    document.getElementById('accountOtpIntro').textContent = flow === 'recovery'
+      ? `Syötä osoitteeseen ${pendingAuthEmail} lähetetty 6-numeroinen vahvistustunnus.`
+      : `Syötä osoitteeseen ${pendingAuthEmail} lähetetty 6-numeroinen vahvistustunnus.`;
+  }
+
+  async function sendEmailOtp(flow='registration'){
+    const shouldCreate = flow === 'registration';
+    const options = { shouldCreateUser: shouldCreate };
+    if(shouldCreate && pendingRegistrationProfile){
+      options.data={...pendingRegistrationProfile,registration_pending:true};
+    }
+    const {error}=await supabaseClient.auth.signInWithOtp({email:pendingAuthEmail,options});
+    if(error) throw error;
+    showOtpStep(flow);
+  }
+
+  async function verifyEmailOtp(){
+    const token=document.getElementById('accountOtp').value.trim();
+    const status=document.getElementById('accountOtpStatus');
+    if(!/^\d{6}$/.test(token)){status.textContent='Syötä 6-numeroinen vahvistustunnus.';return;}
+    status.textContent='Vahvistetaan tunnusta…';
+    const {data,error}=await supabaseClient.auth.verifyOtp({email:pendingAuthEmail,token,type:'email'});
+    if(error){status.textContent='Tunnus on virheellinen tai vanhentunut.';return;}
+    if(!data?.session){status.textContent='Vahvistus ei muodostanut istuntoa. Pyydä uusi tunnus.';return;}
+    showSetPassword(pendingOtpFlow === 'registration' ? 'registration' : 'recovery');
+  }
+
+  async function resendEmailOtp(){
+    const status=document.getElementById('accountOtpStatus');
+    status.textContent='Lähetetään uusi tunnus…';
+    try{await sendEmailOtp(pendingOtpFlow);status.textContent='Uusi vahvistustunnus lähetetty.';}
+    catch(e){status.textContent=e.message;}
+  }
+
   async function routeTopEmail(){
     const email=document.getElementById('accountEmail').value;
     const status=document.getElementById('accountLoginStatus'); status.textContent='Tarkistetaan sähköpostiosoitetta…';
@@ -512,11 +563,18 @@ button{font:inherit;color:inherit}
   }
 
   async function sendPasswordReset(){
-    const status=document.getElementById('accountPasswordStatus'); status.textContent='Lähetetään salasanan uusimislinkkiä…';
-    sessionStorage.setItem('v5AuthPurpose','recovery');
-    const redirectTo=`${location.origin}${location.pathname}#liity`;
-    const {error}=await supabaseClient.auth.resetPasswordForEmail(pendingAuthEmail,{redirectTo});
-    status.textContent=error?error.message:'Uusimislinkki lähetetty. Tarkista sähköpostisi.';
+    const status=document.getElementById('accountPasswordStatus');
+    status.textContent='Lähetetään vahvistustunnusta…';
+    try{
+      pendingOtpFlow='recovery';
+      // Existing account only; no accidental user creation.
+      const {error}=await supabaseClient.auth.signInWithOtp({
+        email:pendingAuthEmail,
+        options:{shouldCreateUser:false}
+      });
+      if(error) throw error;
+      showOtpStep('recovery');
+    }catch(e){status.textContent=e.message;}
   }
 
   function registrationProfile(){
@@ -534,14 +592,11 @@ button{font:inherit;color:inherit}
     const profile=registrationProfile();
     if(!profile.full_name){status.textContent='Nimi on pakollinen.';return;}
     setRememberPreference(document.getElementById('regRemember').checked);
-    status.textContent='Lähetetään vahvistuslinkkiä…';
-    sessionStorage.setItem('v5AuthPurpose','registration');
-    const redirectTo=`${location.origin}${location.pathname}#liity`;
-    const {error}=await supabaseClient.auth.signInWithOtp({
-      email:pendingAuthEmail,
-      options:{shouldCreateUser:true,emailRedirectTo:redirectTo,data:{...profile,registration_pending:true}}
-    });
-    status.textContent=error?error.message:'Vahvistuslinkki lähetetty. Avaa sähköpostissa oleva linkki; sen jälkeen asetat salasanan.';
+    pendingRegistrationProfile=profile;
+    status.textContent='Lähetetään vahvistustunnusta…';
+    try{
+      await sendEmailOtp('registration');
+    }catch(e){status.textContent=e.message;}
   }
 
   async function saveNewPassword(){
@@ -554,8 +609,9 @@ button{font:inherit;color:inherit}
     const {data,error}=await supabaseClient.auth.updateUser({password:p1,data:{registration_pending:false,password_set_at:new Date().toISOString()}});
     if(error){status.textContent=error.message;return;}
     if(passwordFlow==='registration'){
-      const m=data.user?.user_metadata||{};
+      const m=pendingRegistrationProfile || data.user?.user_metadata || {};
       try{await invokeMemberProfile('save_profile',{full_name:m.full_name||null,phone:m.phone||null,municipality:m.municipality||null,address_line:m.address_line||null,postal_code:m.postal_code||null,city:m.city||null});}catch(e){console.warn('Profiilin ensitallennus epäonnistui',e);}
+      pendingRegistrationProfile=null;
     }
     status.textContent='Salasana tallennettu.';
     setTimeout(async()=>{closeAccount();location.hash='liity';await refreshAccountUI();await syncJoinState();},350);
@@ -571,6 +627,8 @@ button{font:inherit;color:inherit}
   document.getElementById('accountPasswordLogin').addEventListener('click', loginWithPassword);
   document.getElementById('accountForgot').addEventListener('click', sendPasswordReset);
   document.getElementById('accountRegister').addEventListener('click', registerNewAccount);
+  document.getElementById('accountVerifyOtp').addEventListener('click', verifyEmailOtp);
+  document.getElementById('accountResendOtp').addEventListener('click', resendEmailOtp);
   document.getElementById('saveNewPassword').addEventListener('click', saveNewPassword);
   document.querySelectorAll('[data-account-back]').forEach(btn=>btn.addEventListener('click',()=>showEmailStep(pendingAuthEmail)));
   document.getElementById('accountLogout').addEventListener('click', async()=>{ await supabaseClient.auth.signOut(); closeAccount(); await refreshAccountUI(); });
@@ -628,18 +686,9 @@ button{font:inherit;color:inherit}
 
   if (supabaseClient) {
     supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setTimeout(()=>showSetPassword('recovery'),30);
-        return;
-      }
       if (event === 'SIGNED_IN' && session?.user?.email) {
         const purpose = sessionStorage.getItem('v5AuthPurpose');
         sessionStorage.removeItem('v5AuthPurpose');
-        const registrationPending = session.user.user_metadata?.registration_pending === true;
-        if (registrationPending || purpose === 'registration') {
-          setTimeout(()=>showSetPassword('registration'),40);
-          return;
-        }
         if (purpose === 'join' && location.hash !== '#liity') location.hash = 'liity';
         setTimeout(syncJoinState, 50);
         setTimeout(refreshAccountUI, 80);
@@ -742,7 +791,7 @@ button{font:inherit;color:inherit}
           <div class="v5-identity-shell">
             <div class="eyebrow">Liity · tue · osallistu</div>
             <h3>Asioi sähköpostiosoitteellasi</h3>
-            <p class="intro">Sähköpostiosoite toimii tunnisteena. Jos käyttäjätili löytyy, kirjaudut salasanalla. Jos tiliä ei vielä ole, täytät perustiedot, vahvistat sähköpostin ja asetat salasanan. Jäsenyyttä ei tarvita lahjoittamiseen tai vapaaehtoisuuteen.</p>
+            <p class="intro">Sähköpostiosoite toimii tunnisteena. Jos käyttäjätili löytyy, kirjaudut salasanalla. Jos tiliä ei vielä ole, täytät perustiedot, vahvistat sähköpostin 6-numeroisella tunnuksella ja asetat salasanan. Jäsenyyttä ei tarvita lahjoittamiseen tai vapaaehtoisuuteen.</p>
             <div class="v5-identity-row">
               <div class="v5-field"><label>Sähköpostiosoite</label><input type="email" data-email autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
               <button class="v5-primary" type="button" data-action="identity">Jatka</button>
