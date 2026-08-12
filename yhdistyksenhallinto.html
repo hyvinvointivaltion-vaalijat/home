@@ -1,0 +1,1748 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yhdistyksen hallinto</title>
+<style>
+:root{
+  --radius:.65rem;
+  --paper:#fdfcf7;
+  --paper-2:#f7f4ec;
+  --birch:#f4f0e6;
+  --ink:#1c2624;
+  --muted:#6c766f;
+  --line:#e2dcce;
+  --forest:#3a6b64;
+  --forest-deep:#1f4642;
+  --forest-shadow:#12332f;
+  --copper:#b56a34;
+  --ochre:#d69642;
+  --red:#a6402f;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --serif: "Iowan Old Style","Palatino Linotype", Georgia, serif;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font:15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+header.top{
+  position:sticky;
+  top:0;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  padding:16px 24px;
+  background:rgba(253,252,247,.96);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+
+header.top h1{
+  margin:0;
+  font-family:var(--serif);
+  font-size:1.3rem;
+  color:var(--forest-deep);
+}
+
+header.top .sub{
+  color:var(--muted);
+  font:500 11px var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.exports{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 16px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--paper);
+  color:var(--ink);
+  font:600 12.5px var(--mono);
+  letter-spacing:.02em;
+  transition:.15s ease;
+}
+.btn:hover{border-color:var(--copper);color:var(--copper)}
+.btn.primary{background:var(--forest-deep);border-color:var(--forest-deep);color:var(--paper)}
+.btn.primary:hover{background:var(--forest);border-color:var(--forest);color:var(--paper)}
+.btn.danger{color:var(--red)}
+.btn.danger:hover{border-color:var(--red)}
+.btn.small{padding:5px 11px;font-size:11.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+nav.tabs{
+  display:flex;
+  gap:4px;
+  padding:0 24px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
+  overflow-x:auto;
+}
+nav.tabs button{
+  padding:13px 16px;
+  border:0;
+  border-bottom:2px solid transparent;
+  background:none;
+  color:var(--muted);
+  font:600 13px inherit;
+  white-space:nowrap;
+}
+nav.tabs button.active{color:var(--forest-deep);border-bottom-color:var(--copper)}
+nav.tabs button .count{
+  display:inline-block;
+  margin-left:6px;
+  padding:1px 7px;
+  border-radius:999px;
+  background:var(--birch);
+  color:var(--muted);
+  font:600 10.5px var(--mono);
+}
+nav.tabs button.active .count{background:var(--forest-deep);color:var(--paper)}
+
+main{padding:20px 24px 80px;max-width:1100px;margin:0 auto}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.section-title{
+  margin:26px 0 12px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--line);
+  color:var(--forest-deep);
+  font-family:var(--serif);
+  font-size:1.05rem;
+  font-weight:600;
+}
+.section-title:first-child{margin-top:0}
+
+.intro-note{
+  margin:0 0 18px;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:var(--birch);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.toolbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+.toolbar input[type="search"]{
+  flex:1;
+  min-width:180px;
+  padding:9px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--paper);
+  color:var(--ink);
+  font:14px inherit;
+}
+.toolbar input[type="search"]:focus{outline:2px solid var(--forest);outline-offset:1px}
+
+.chip-group{display:flex;gap:4px;flex-wrap:wrap;padding:3px;border:1px solid var(--line);border-radius:999px;background:rgba(253,252,247,.9)}
+.chip{
+  padding:5px 11px;
+  border-radius:999px;
+  border:0;
+  background:none;
+  color:var(--muted);
+  font:500 11.5px var(--mono);
+}
+.chip:hover{background:var(--birch);color:var(--forest-deep)}
+.chip.active{background:var(--forest-deep);color:var(--paper)}
+
+table.data{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+table.data th{
+  padding:9px 14px;
+  border-bottom:1px solid var(--line);
+  background:var(--birch);
+  color:var(--muted);
+  text-align:left;
+  font:600 10.5px var(--mono);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+table.data th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+table.data th.sortable:hover{color:var(--forest-deep)}
+table.data th .sort-arrow{display:inline-block;min-width:9px;margin-left:3px;color:var(--copper);font-size:.75em}
+table.data td{
+  padding:11px 14px;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  font-size:13.5px;
+}
+table.data tr:last-child td{border-bottom:0}
+table.data tr:hover td{background:rgba(244,240,230,.5)}
+td.actions{text-align:right;white-space:nowrap}
+td.mono{font:12.5px var(--mono);color:var(--muted)}
+
+.pill{
+  display:inline-block;
+  padding:2px 9px;
+  border-radius:999px;
+  background:var(--birch);
+  color:var(--forest-deep);
+  font:600 11px var(--mono);
+}
+.pill.status-luonnos{background:var(--birch);color:var(--muted)}
+.pill.status-valmis{background:#e4ecd8;color:var(--forest-deep)}
+.pill.status-allekirjoitettu{background:var(--forest-deep);color:var(--paper)}
+
+
+.news-card{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:var(--paper);
+  padding:16px;
+  margin-top:10px;
+}
+.news-card.pinned{border-color:var(--copper);box-shadow:inset 3px 0 var(--copper)}
+.news-card-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.news-card h3{margin:3px 0 6px;font-family:var(--serif);font-size:1.08rem;color:var(--forest-deep)}
+.news-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;color:var(--muted);font:11px var(--mono)}
+.news-excerpt{margin:8px 0 0;color:var(--ink);font-size:13.5px}
+.news-body-preview{margin:8px 0 0;color:var(--muted);font-size:12.5px;white-space:pre-line}
+.news-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill.status-julkaistu{background:#e4ecd8;color:var(--forest-deep)}
+.pill.status-arkistoitu{background:#eee7dc;color:var(--muted)}
+.pill.pinned{background:#fbf2df;color:#7a5417}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--line);
+  border-radius:var(--radius);
+  margin-top:10px;
+}
+
+.hint{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
+  font:600 11px var(--mono);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.field input[type="text"],
+.field input[type="number"],
+.field input[type="date"],
+.field select,
+.field textarea{
+  width:100%;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--paper);
+  color:var(--ink);
+  font:14px inherit;
+}
+.field textarea{min-height:76px;resize:vertical;font-family:inherit}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--forest);outline-offset:1px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:640px){.row2,.row3{grid-template-columns:1fr}}
+
+.overlay{
+  position:fixed;inset:0;z-index:50;
+  display:none;
+  align-items:flex-start;
+  justify-content:center;
+  padding:40px 16px;
+  background:rgba(18,51,47,.4);
+  overflow-y:auto;
+}
+.overlay.open{display:flex}
+.sheet{
+  width:100%;max-width:640px;
+  background:var(--paper);
+  border-radius:14px;
+  box-shadow:0 24px 60px -20px rgba(6,28,26,.4);
+  overflow:hidden;
+}
+.sheet-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px;
+  border-bottom:1px solid var(--line);
+}
+.sheet-head h2{margin:0;font-family:var(--serif);font-size:1.15rem;color:var(--forest-deep)}
+.close-x{border:0;background:none;font-size:20px;color:var(--muted);line-height:1;padding:4px}
+.close-x:hover{color:var(--red)}
+.sheet-body{padding:20px 22px;max-height:70vh;overflow-y:auto}
+.sheet-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 22px;
+  border-top:1px solid var(--line);
+}
+
+.login-overlay .login-box{
+  width:100%;max-width:360px;margin:auto;
+  background:var(--paper);
+  border-radius:14px;
+  padding:28px;
+  box-shadow:0 24px 60px -20px rgba(6,28,26,.4);
+}
+.login-overlay .login-box h2{margin:0 0 6px;font-family:var(--serif);color:var(--forest-deep)}
+.login-overlay .login-box p{margin:0 0 18px;color:var(--muted);font-size:13px}
+.login-err{margin-top:10px;color:var(--red);font-size:12.5px;min-height:16px}
+
+.warn-banner{
+  margin:16px 24px 0;
+  padding:11px 16px;
+  border:1px solid var(--ochre);
+  border-radius:var(--radius);
+  background:#fbf2df;
+  color:#7a5417;
+  font-size:12.5px;
+  max-width:1100px;
+  margin-left:auto;margin-right:auto;
+}
+
+.status{
+  position:fixed;bottom:18px;right:18px;z-index:60;
+  padding:11px 18px;
+  border-radius:10px;
+  background:var(--forest-deep);
+  color:var(--paper);
+  font-size:13px;
+  box-shadow:0 10px 30px -10px rgba(6,28,26,.5);
+  opacity:0;transform:translateY(8px);
+  transition:.2s ease;
+  pointer-events:none;
+}
+.status.show{opacity:1;transform:translateY(0)}
+.status.error{background:var(--red)}
+
+.agenda-preview{
+  margin-top:6px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--birch);
+  font-size:12.5px;
+  color:var(--muted);
+}
+.agenda-preview ol{margin:4px 0 0;padding-left:18px}
+.agenda-preview li{margin-bottom:2px}
+.agenda-preview li b{color:var(--ink)}
+
+@media print{
+  header.top,nav.tabs,.warn-banner,.status,.overlay:not(.print-only){display:none !important}
+}
+
+/* Jäsenrekisteri */
+.member-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 16px}
+.member-stat{padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.member-stat b{display:block;font:600 1.35rem var(--serif);color:var(--forest-deep)}
+.member-stat span{font:10.5px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.pill.member-active{background:#e4ecd8;color:var(--forest-deep)} .pill.member-other{background:var(--birch);color:var(--muted)}
+.member-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.member-ledger{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.member-ledger h3{margin:0 0 8px;font:600 1rem var(--serif);color:var(--forest-deep)}
+@media(max-width:720px){.member-stats{grid-template-columns:1fr 1fr}.member-detail-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<div class="status" id="statusBox"></div>
+
+<div class="overlay login-overlay open" id="overlayLogin">
+  <div class="login-box">
+    <h2>Kirjaudu sisään</h2>
+    <p>Yhdistyksen hallinto vaatii kirjautumisen. Käytä samaa Supabase-käyttäjätiliä kuin murrosmatriisin editorissa.</p>
+    <div class="field"><label>Sähköposti</label><input type="text" id="loginEmail" autocomplete="username"></div>
+    <div class="field"><label>Salasana</label><input type="password" id="loginPassword" autocomplete="current-password"></div>
+    <button class="btn primary" id="loginSubmit" style="width:100%;justify-content:center">Kirjaudu</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<header class="top">
+  <div>
+    <h1>Yhdistyksen hallinto</h1>
+    <div class="sub" id="connStatus">yhdistetään…</div>
+  </div>
+  <div class="exports">
+    <button class="btn" id="triggerGithubExport" style="display:none">Päivitä verkkosivun JSON</button>
+    <button class="btn" id="logoutBtn" style="display:none">Kirjaudu ulos</button>
+  </div>
+</header>
+
+<div class="warn-banner">
+  Tämä sivu vaatii kirjautumisen eikä ole julkinen. Asiakirjat tallentuvat samaan Supabase-tietokantaan kuin murrosmatriisin editori.
+</div>
+
+<div id="appShell" style="display:none">
+
+<nav class="tabs">
+  <button data-tab="board" class="active">Hallitus &amp; yhteystiedot <span class="count" id="countBoard">–</span></button>
+  <button data-tab="meetings">Kokoukset <span class="count" id="countMeetings">–</span></button>
+  <button data-tab="news">Ajankohtaista <span class="count" id="countNews">–</span></button>
+  <button data-tab="rules">Säännöt</button>
+  <button data-tab="members">Jäsenrekisteri <span class="count" id="countMembers">–</span></button>
+</nav>
+
+<main>
+
+  <!-- ============ HALLITUS ============ -->
+  <section class="panel active" id="panel-board">
+    <div class="intro-note">
+      Hallituksen jäsenten yhteystiedot. Näitä tietoja voidaan käyttää myös kokouskutsujen ja pöytäkirjojen allekirjoittajatietoina.
+    </div>
+    <div class="toolbar">
+      <span></span>
+      <button class="btn primary" id="newBoardMember">+ Uusi hallituksen jäsen</button>
+    </div>
+    <table class="data" id="boardTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-sort="sort_order">#<span class="sort-arrow"></span></th>
+          <th class="sortable" data-sort="name">Nimi<span class="sort-arrow"></span></th>
+          <th class="sortable" data-sort="role">Rooli<span class="sort-arrow"></span></th>
+          <th>Yhteystiedot</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="boardBody"></tbody>
+    </table>
+    <div class="empty" id="boardEmpty" style="display:none">Ei hallituksen jäseniä vielä.</div>
+  </section>
+
+  <!-- ============ KOKOUKSET ============ -->
+  <section class="panel" id="panel-meetings">
+    <div class="intro-note">
+      Hallituksen kokousten ja sääntömääräisten (sekä ylimääräisten) kokousten kutsut ja pöytäkirjat. Täytä tiedot lomakkeelle
+      ja käytä "Esikatselu / Tulosta"-painiketta luodaksesi asiakirjan, jonka voi tulostaa tai tallentaa PDF:ksi selaimesta.
+    </div>
+    <div class="toolbar">
+      <input type="search" id="searchMeetings" placeholder="Hae otsikosta tai kokousnumerosta…" />
+      <div class="chip-group" id="meetingTypeFilter">
+        <button class="chip active" data-filter-type="all">Kaikki</button>
+        <button class="chip" data-filter-type="hallitus">Hallitus</button>
+        <button class="chip" data-filter-type="vuosikokous">Vuosikokous</button>
+        <button class="chip" data-filter-type="ylimaarainen">Ylimääräinen</button>
+      </div>
+      <button class="btn primary" id="newMeeting">+ Uusi asiakirja</button>
+    </div>
+    <table class="data" id="meetingsTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-sort="meeting_date">Pvm<span class="sort-arrow"></span></th>
+          <th class="sortable" data-sort="title">Otsikko<span class="sort-arrow"></span></th>
+          <th class="sortable" data-sort="meeting_type">Tyyppi<span class="sort-arrow"></span></th>
+          <th class="sortable" data-sort="doc_type">Laji<span class="sort-arrow"></span></th>
+          <th class="sortable" data-sort="status">Tila<span class="sort-arrow"></span></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="meetingsBody"></tbody>
+    </table>
+    <div class="empty" id="meetingsEmpty" style="display:none">Ei asiakirjoja vielä.</div>
+  </section>
+
+  <!-- ============ AJANKOHTAISTA ============ -->
+  <section class="panel" id="panel-news">
+    <div class="intro-note">
+      Yhdistyksen julkiset tiedotteet. Kirjoita sisältö täällä, tallenna Supabaseen ja käynnistä
+      tarvittaessa yläreunan GitHub Actions -vienti, joka päivittää julkaistavan JSON-tiedoston.
+    </div>
+    <div class="toolbar">
+      <input type="search" id="searchNews" placeholder="Hae otsikosta, ingressistä tai sisällöstä…" />
+      <div class="chip-group" id="newsStatusFilter">
+        <button class="chip active" data-news-status="all">Kaikki</button>
+        <button class="chip" data-news-status="luonnos">Luonnokset</button>
+        <button class="chip" data-news-status="julkaistu">Julkaistut</button>
+        <button class="chip" data-news-status="arkistoitu">Arkistoidut</button>
+      </div>
+      <button class="btn primary" id="newNews">+ Uusi tiedote</button>
+    </div>
+    <div id="newsList"></div>
+    <div class="empty" id="newsEmpty" style="display:none">Ei tiedotteita.</div>
+  </section>
+
+  <!-- ============ SÄÄNNÖT ============ -->
+  <section class="panel" id="panel-rules">
+    <div class="intro-note">
+      Yhdistyksen voimassa olevat säännöt. Muutokset tulee aina hyväksyä sääntömääräisessä kokouksessa ja tarvittaessa
+      ilmoittaa Patentti- ja rekisterihallitukselle ennen kuin ne merkitään täällä voimassa oleviksi.
+    </div>
+    <div class="row3">
+      <div class="field"><label>Versio / merkintä</label><input type="text" id="rules_version_label" placeholder="esim. Vuosikokouksen 2024 hyväksymä versio"></div>
+      <div class="field"><label>Hyväksytty (vuosikokous)</label><input type="date" id="rules_approved_date"></div>
+      <div class="field"><label>Rekisteröity (PRH)</label><input type="date" id="rules_registered_date"></div>
+    </div>
+    <div class="field"><label>Johdanto (valinnainen)</label><textarea id="rules_intro" placeholder="Vapaamuotoinen johdantoteksti ennen pykäliä"></textarea></div>
+    <div class="field">
+      <label>Pykälät</label>
+      <textarea id="rules_paragraphs" style="min-height:280px" placeholder="Otsikko | Pykälän teksti -- yksi rivi per pykälä"></textarea>
+      <span class="hint">Muoto: Otsikko | Pykälän teksti -- yksi rivi per pykälä. Pykälät numeroituvat automaattisesti rivijärjestyksen mukaan.</span>
+    </div>
+    <div class="sheet-foot" style="border:none;padding:0;margin-top:6px">
+      <button class="btn" id="previewRules">Esikatselu / Tulosta</button>
+      <button class="btn primary" id="saveRules">Tallenna säännöt</button>
+    </div>
+  </section>
+
+  <!-- ============ JÄSENREKISTERI ============ -->
+  <section class="panel" id="panel-members">
+    <div class="intro-note">Jäsenrekisteri kokoaa jäsenet, muut yhteyshenkilöt, vapaaehtoiset, jäsenmaksut ja lahjoitukset. Henkilötiedot näkyvät vain kirjautuneelle ylläpitäjälle.</div>
+    <div class="member-stats">
+      <div class="member-stat"><b id="statMembers">–</b><span>Jäseniä</span></div>
+      <div class="member-stat"><b id="statContacts">–</b><span>Henkilöitä yhteensä</span></div>
+      <div class="member-stat"><b id="statVolunteers">–</b><span>Vapaaehtoisia</span></div>
+      <div class="member-stat"><b id="statDonations">–</b><span>Lahjoituksia €</span></div>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="searchMembers" placeholder="Hae nimellä, sähköpostilla, numerolla tai kunnalla…">
+      <div class="chip-group" id="memberFilter">
+        <button class="chip active" data-member-filter="all">Kaikki</button>
+        <button class="chip" data-member-filter="member">Jäsenet</button>
+        <button class="chip" data-member-filter="volunteer">Vapaaehtoiset</button>
+        <button class="chip" data-member-filter="nonmember">Ei-jäsenet</button>
+      </div>
+    </div>
+    <table class="data" id="membersTable"><thead><tr>
+      <th class="sortable" data-sort="member_number">Jäsennro<span class="sort-arrow"></span></th>
+      <th class="sortable" data-sort="full_name">Nimi<span class="sort-arrow"></span></th>
+      <th class="sortable" data-sort="email">Sähköposti<span class="sort-arrow"></span></th>
+      <th class="sortable" data-sort="municipality">Kunta<span class="sort-arrow"></span></th>
+      <th>Tila</th><th>Maksut / osallistuminen</th><th></th>
+    </tr></thead><tbody id="membersBody"></tbody></table>
+    <div class="empty" id="membersEmpty" style="display:none">Jäsenrekisterissä ei ole vielä henkilöitä.</div>
+  </section>
+
+</main>
+
+</div><!-- /appShell -->
+
+<!-- ============ MUOKKAUSPANEELI: HALLITUKSEN JÄSEN ============ -->
+<div class="overlay" id="overlayBoardMember">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2 id="boardFormTitle">Uusi hallituksen jäsen</h2>
+      <button class="close-x" data-close="overlayBoardMember">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field"><label>Nimi</label><input type="text" id="bm_name"></div>
+      <div class="field"><label>Rooli</label><input type="text" id="bm_role" placeholder="esim. Puheenjohtaja"></div>
+      <div class="row2">
+        <div class="field"><label>Sähköposti</label><input type="text" id="bm_email"></div>
+        <div class="field"><label>Puhelin</label><input type="text" id="bm_phone"></div>
+      </div>
+      <div class="field"><label>Esittely-URL (valinnainen)</label><input type="text" id="bm_profile_url"></div>
+      <div class="field"><label>Huomautus</label><textarea id="bm_note"></textarea></div>
+      <div class="field"><label>Järjestysnumero</label><input type="number" id="bm_sort_order" min="1" value="1"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn danger" id="deleteBoardMember" style="display:none">Poista</button>
+      <button class="btn primary" id="saveBoardMember">Tallenna</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MUOKKAUSPANEELI: AJANKOHTAISTA ============ -->
+<div class="overlay" id="overlayNews">
+  <div class="sheet" style="max-width:760px">
+    <div class="sheet-head">
+      <h2 id="newsFormTitle">Uusi tiedote</h2>
+      <button class="close-x" data-close="overlayNews">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="row2">
+        <div class="field"><label>Yläotsikko / tunniste</label><input type="text" id="news_kicker" placeholder="esim. Yhdistys · Elokuu 2026"></div>
+        <div class="field"><label>Järjestysnumero</label><input type="number" id="news_sort_order" min="1" value="1"></div>
+      </div>
+      <div class="field"><label>Otsikko</label><input type="text" id="news_title"></div>
+      <div class="field"><label>Ingressi</label><textarea id="news_excerpt" placeholder="Lyhyt teksti, joka näkyy kortissa."></textarea></div>
+      <div class="field"><label>Varsinainen sisältö</label><textarea id="news_body" style="min-height:220px" placeholder="Tiedotteen varsinainen teksti."></textarea></div>
+      <div class="row2">
+        <div class="field"><label>Tila</label>
+          <select id="news_status">
+            <option value="luonnos">Luonnos</option>
+            <option value="julkaistu">Julkaistu</option>
+            <option value="arkistoitu">Arkistoitu</option>
+          </select>
+        </div>
+        <div class="field"><label>Julkaistu</label><input type="datetime-local" id="news_published_at"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Kohderyhmä</label><select id="news_audience"><option value="public">Julkinen</option><option value="members">Vain jäsenille</option></select><span class="hint">Jäsenille tarkoitettu tiedote näkyy vain kirjautuneille aktiivisille jäsenille.</span></div>
+        <div class="field"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Kuvan URL (valinnainen)</label><input type="text" id="news_image_url" placeholder="https://…"></div>
+        <div class="field"><label>Linkin URL (valinnainen)</label><input type="text" id="news_link_url" placeholder="https://…"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Linkin teksti</label><input type="text" id="news_link_label" placeholder="Lue lisää"></div>
+        <div class="field">
+          <label>Nosta etusivulle</label>
+          <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font:14px inherit;color:var(--ink)">
+            <input type="checkbox" id="news_pinned"> Kiinnitetty tiedote
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn danger" id="deleteNews" style="display:none">Poista</button>
+      <span style="display:flex;gap:10px">
+        <button class="btn primary" id="saveNews">Tallenna tiedote</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MUOKKAUSPANEELI: KOKOUSASIAKIRJA ============ -->
+<div class="overlay" id="overlayMeeting">
+  <div class="sheet" style="max-width:720px">
+    <div class="sheet-head">
+      <h2 id="meetingFormTitle">Uusi asiakirja</h2>
+      <button class="close-x" data-close="overlayMeeting">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="row2">
+        <div class="field">
+          <label>Kokoustyyppi</label>
+          <select id="mt_meeting_type">
+            <option value="hallitus">Hallituksen kokous</option>
+            <option value="vuosikokous">Sääntömääräinen vuosikokous</option>
+            <option value="ylimaarainen">Ylimääräinen kokous</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Asiakirjan laji</label>
+          <select id="mt_doc_type">
+            <option value="kutsu">Kokouskutsu</option>
+            <option value="poytakirja">Pöytäkirja</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Otsikko</label><input type="text" id="mt_title" placeholder="esim. Hallituksen kokous 3/2026"></div>
+      <div class="row3">
+        <div class="field"><label>Kokousnumero</label><input type="text" id="mt_meeting_number" placeholder="esim. 3/2026"></div>
+        <div class="field"><label>Päivämäärä</label><input type="date" id="mt_meeting_date"></div>
+        <div class="field"><label>Kellonaika</label><input type="text" id="mt_meeting_time" placeholder="esim. 18:00"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Paikka</label><input type="text" id="mt_location" placeholder="esim. Yhdistyksen toimisto / etäyhteys"></div>
+        <div class="field"><label>Kutsun lähetyspäivä (kutsulle)</label><input type="date" id="mt_invite_sent_date"></div>
+      </div>
+
+      <div class="field"><label>Muuta ennen esityslistaa (esim. ajo-ohjeet, käytännön tiedot)</label><textarea id="mt_pre_agenda_note" placeholder="Vapaamuotoinen teksti, esim. ajo-ohjeet tai etäyhteyden tiedot"></textarea></div>
+
+      <div class="section-title" style="margin-top:8px">Esityslista / käsitellyt asiat</div>
+      <div class="field">
+        <div class="toolbar" style="margin-bottom:8px">
+          <span class="hint" style="margin:0">Kutsussa riittää otsikko, pöytäkirjassa myös käsittely/päätös.</span>
+          <button type="button" class="btn small" id="fillAgendaTemplate">Täytä sääntömääräinen pohja</button>
+        </div>
+        <textarea id="mt_agenda" style="min-height:170px" placeholder="Otsikko | Sisältö/päätös -- yksi rivi per asiakohta"></textarea>
+        <span class="hint">Muoto: Otsikko | Sisältö/päätös -- yksi rivi per asiakohta. Numeroituu automaattisesti.</span>
+      </div>
+
+      <div class="field"><label>Muuta käsiteltyjen asioiden jälkeen (esim. jatkokeskustelun aiheet)</label><textarea id="mt_post_agenda_note" placeholder="Vapaamuotoinen teksti, esim. epäviralliset jatkokeskustelun aiheet kokouksen jälkeen"></textarea></div>
+
+      <div class="section-title">Läsnäolo (pöytäkirjalle)</div>
+      <div class="row2">
+        <div class="field"><label>Läsnäolijat</label><textarea id="mt_attendees" placeholder="Yksi nimi per rivi"></textarea></div>
+        <div class="field"><label>Poissaolijat (valinnainen)</label><textarea id="mt_absentees" placeholder="Yksi nimi per rivi"></textarea></div>
+      </div>
+
+      <div class="section-title">Allekirjoittajat</div>
+      <div class="row3">
+        <div class="field"><label>Puheenjohtaja</label><input type="text" id="mt_chair"></div>
+        <div class="field"><label>Sihteeri</label><input type="text" id="mt_secretary"></div>
+        <div class="field"><label>Pöytäkirjantarkastajat</label><input type="text" id="mt_reviewers" placeholder="Nimi, Nimi"></div>
+      </div>
+
+      <div class="section-title">Lisätekstit (valinnaiset)</div>
+      <div class="row2">
+        <div class="field"><label>Lisäteksti avaukseen</label><textarea id="mt_opening_note"></textarea></div>
+        <div class="field"><label>Lisäteksti päättämiseen</label><textarea id="mt_closing_note"></textarea></div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Tila</label>
+          <select id="mt_status">
+            <option value="luonnos">Luonnos</option>
+            <option value="valmis">Valmis</option>
+            <option value="allekirjoitettu">Allekirjoitettu</option>
+          </select>
+        </div>
+        <div class="field"><label>Sisäinen muistiinpano (ei tulostu)</label><input type="text" id="mt_notes"></div>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn danger" id="deleteMeeting" style="display:none">Poista</button>
+      <span style="display:flex;gap:10px">
+        <button class="btn" id="previewMeeting">Esikatselu / Tulosta</button>
+        <button class="btn primary" id="saveMeeting">Tallenna</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayMember">
+ <div class="sheet" style="max-width:760px">
+  <div class="sheet-head"><h2 id="memberFormTitle">Henkilön tiedot</h2><button class="close-x" data-close="overlayMember">×</button></div>
+  <div class="sheet-body">
+   <div class="member-detail-grid">
+    <div class="field"><label>Jäsennumero</label><input type="text" id="mem_number" readonly></div>
+    <div class="field"><label>Jäsenyyden tila</label><select id="mem_status"><option value="active">Aktiivinen</option><option value="pending">Odottaa</option><option value="resigned">Eronnut</option><option value="inactive">Ei aktiivinen</option></select></div>
+    <div class="field"><label>Nimi</label><input type="text" id="mem_name"></div><div class="field"><label>Sähköposti</label><input type="text" id="mem_email"></div>
+    <div class="field"><label>Puhelin</label><input type="text" id="mem_phone"></div><div class="field"><label>Kunta</label><input type="text" id="mem_municipality"></div>
+    <div class="field"><label>Lähiosoite</label><input type="text" id="mem_address"></div><div class="field"><label>Postinumero</label><input type="text" id="mem_postal"></div>
+    <div class="field"><label>Postitoimipaikka</label><input type="text" id="mem_city"></div><div class="field"><label>Liittynyt</label><input type="text" id="mem_joined" readonly></div>
+   </div>
+   <div class="field"><label>Sisäinen huomautus</label><textarea id="mem_notes"></textarea></div>
+   <div class="member-ledger"><h3>Jäsenmaksut</h3><div id="mem_memberships" class="hint"></div></div>
+   <div class="member-ledger"><h3>Lahjoitukset</h3><div id="mem_donations" class="hint"></div></div>
+   <div class="member-ledger"><h3>Vapaaehtoisuus</h3><div id="mem_volunteer" class="hint"></div></div>
+  </div>
+  <div class="sheet-foot"><span class="hint">Maksutietoja ei muokata käsin tässä näkymässä.</span><button class="btn primary" id="saveMember">Tallenna tiedot</button></div>
+ </div>
+</div>
+
+<script type="module">
+"use strict";
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+/* ==========================================================
+   ASETUKSET -- Supabase-yhteys (sama projekti kuin murrosmatriisin editorissa)
+   ========================================================== */
+const SUPABASE_URL = "https://zzbubbrsgiqsvsovkkmf.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6YnViYnJzZ2lxc3Zzb3Zra21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4MTg3OTQsImV4cCI6MjEwMDM5NDc5NH0.alzzcbSj2yY-pcGwMqCInV3PUaUCn6HHv0143V7P-u4";
+
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true }
+});
+
+/* ==========================================================
+   TILA
+   ========================================================== */
+const state = {
+  session: null,
+  association: null,
+  boardMembers: [],
+  meetings: [],
+  rules: null,
+  news: [],
+  memberRegistry: { contacts:[], members:[], volunteers:[], memberships:[], donations:[], payments:[] },
+  memberFilter: "all",
+  editingMemberKey: null,
+  editingBoardMemberId: null,
+  editingNewsId: null,
+  editingMeetingId: null,
+  meetingTypeFilter: "all",
+  sort: {
+    board: { key: "sort_order", dir: "asc" },
+    meetings: { key: "meeting_date", dir: "desc" },
+    news: { key: "published_at", dir: "desc" },
+    members: { key: "full_name", dir: "asc" }
+  }
+};
+
+const fiCollator = new Intl.Collator("fi", { sensitivity: "base" });
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? "");
+
+function linesToArr(str){ return str.split("\n").map(s => s.trim()).filter(Boolean); }
+
+function parsePipeLine(line){
+  const idx = line.indexOf("|");
+  if(idx === -1) return { title: line.trim(), body: "" };
+  return { title: line.slice(0, idx).trim(), body: line.slice(idx + 1).trim() };
+}
+
+function fmtDate(iso){
+  if(!iso) return "";
+  const [y, m, d] = iso.split("-");
+  if(!y || !m || !d) return iso;
+  return `${Number(d)}.${Number(m)}.${y}`;
+}
+
+const MEETING_TYPE_LABELS = {
+  hallitus: "Hallituksen kokous",
+  vuosikokous: "Sääntömääräinen vuosikokous",
+  ylimaarainen: "Ylimääräinen kokous"
+};
+const DOC_TYPE_LABELS = { kutsu: "Kokouskutsu", poytakirja: "Pöytäkirja" };
+const STATUS_LABELS = { luonnos: "Luonnos", valmis: "Valmis", allekirjoitettu: "Allekirjoitettu" };
+
+/* ==========================================================
+   YLEISET APUFUNKTIOT (toast, sheet, järjestely)
+   ========================================================== */
+function toast(msg, isError){
+  const box = $("statusBox");
+  box.textContent = msg;
+  box.className = "status show" + (isError ? " error" : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { box.className = "status"; }, 3200);
+}
+
+function openSheet(id){ $(id).classList.add("open"); }
+function closeSheet(id){ $(id).classList.remove("open"); }
+
+document.querySelectorAll("[data-close]").forEach(btn => {
+  btn.addEventListener("click", () => closeSheet(btn.dataset.close));
+});
+document.querySelectorAll(".overlay").forEach(ov => {
+  if(ov.id === "overlayLogin") return;
+  ov.addEventListener("click", e => { if(e.target === ov) ov.classList.remove("open"); });
+});
+
+document.querySelectorAll("nav.tabs button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("nav.tabs button").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    $("panel-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+function compareForSort(a, b, dir){
+  let result;
+  if(typeof a === "number" && typeof b === "number"){
+    result = a - b;
+  }else{
+    result = fiCollator.compare(String(a ?? ""), String(b ?? ""));
+  }
+  return dir === "asc" ? result : -result;
+}
+
+function applySort(rows, tableKey, getters){
+  const st = state.sort[tableKey];
+  if(!st.key || !getters[st.key]) return rows;
+  const getter = getters[st.key];
+  const sorted = rows.slice();
+  sorted.sort((a, b) => compareForSort(getter(a), getter(b), st.dir));
+  return sorted;
+}
+
+function updateSortArrows(tableId, tableKey){
+  const st = state.sort[tableKey];
+  document.querySelectorAll(`#${tableId} th.sortable`).forEach(th => {
+    const arrow = th.querySelector(".sort-arrow");
+    if(!arrow) return;
+    arrow.textContent = th.dataset.sort === st.key ? (st.dir === "asc" ? "↑" : "↓") : "";
+  });
+}
+
+function bindSortableHeaders(tableId, tableKey, renderFn){
+  document.querySelectorAll(`#${tableId} th.sortable`).forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      const st = state.sort[tableKey];
+      if(st.key === key){ st.dir = st.dir === "asc" ? "desc" : "asc"; }
+      else{ st.key = key; st.dir = "asc"; }
+      renderFn();
+    });
+  });
+}
+
+/* ==========================================================
+   DATAN LATAUS
+   ========================================================== */
+async function loadAll(){
+  $("connStatus").textContent = "ladataan dataa…";
+  try{
+    const assocRes = await sb.from("association").select("*").eq("id", "main").maybeSingle();
+    if(assocRes.error) throw assocRes.error;
+
+    const boardRes = await sb.from("association_board_members").select("*").order("sort_order", { ascending: true });
+    if(boardRes.error) throw boardRes.error;
+
+    const meetingsRes = await sb.from("association_meetings").select("*").order("meeting_date", { ascending: false });
+    if(meetingsRes.error) throw meetingsRes.error;
+
+    const rulesRes = await sb.from("association_rules").select("*").eq("id", "main").maybeSingle();
+    if(rulesRes.error) throw rulesRes.error;
+
+    const newsRes = await sb.from("association_news").select("*")
+      .order("pinned", { ascending: false })
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("sort_order", { ascending: true });
+    if(newsRes.error) throw newsRes.error;
+
+    state.association = assocRes.data;
+    state.boardMembers = boardRes.data;
+    state.meetings = meetingsRes.data;
+    state.rules = rulesRes.data;
+    state.news = newsRes.data;
+
+    await loadMemberRegistry();
+
+    $("connStatus").textContent =
+      `yhdistetty · ${state.boardMembers.length} hallituksen jäsentä · ${state.meetings.length} kokousasiakirjaa · ${state.news.length} tiedotetta`;
+
+    renderBoardMembers();
+    renderMeetings();
+    renderNews();
+    renderRules();
+    renderMembers();
+  }catch(err){
+    $("connStatus").textContent = "virhe ladattaessa dataa -- katso selaimen konsoli (F12 / Kehittäjätyökalut)";
+    const detail = (err && err.message) ? err.message : "Verkkovirhe tai CORS-esto.";
+    toast("Latausvirhe: " + detail, true);
+    console.error("Latausvirhe:", err);
+  }
+}
+
+/* ==========================================================
+   HALLITUKSEN JÄSENET
+   ========================================================== */
+function renderBoardMembers(){
+  const rows = applySort(state.boardMembers, "board", {
+    sort_order: m => m.sort_order || 0,
+    name: m => m.name || "",
+    role: m => m.role || ""
+  });
+
+  $("countBoard").textContent = state.boardMembers.length;
+  $("boardEmpty").style.display = rows.length ? "none" : "block";
+
+  $("boardBody").innerHTML = rows.map(m => `
+    <tr>
+      <td class="mono">${esc(m.sort_order)}</td>
+      <td><strong>${esc(m.name)}</strong></td>
+      <td>${esc(m.role)}</td>
+      <td class="mono" style="font-size:12px">${esc(m.email || "")}${m.phone ? " · " + esc(m.phone) : ""}</td>
+      <td class="actions"><button class="btn small" data-edit-board="${m.id}">Muokkaa</button></td>
+    </tr>
+  `).join("");
+
+  document.querySelectorAll("[data-edit-board]").forEach(btn => {
+    btn.addEventListener("click", () => openBoardMemberForm(Number(btn.dataset.editBoard)));
+  });
+
+  updateSortArrows("boardTable", "board");
+}
+bindSortableHeaders("boardTable", "board", renderBoardMembers);
+
+function openBoardMemberForm(id){
+  state.editingBoardMemberId = id || null;
+  const m = id ? state.boardMembers.find(x => x.id === id) : null;
+
+  $("boardFormTitle").textContent = m ? "Muokkaa hallituksen jäsentä" : "Uusi hallituksen jäsen";
+  $("bm_name").value = m ? m.name : "";
+  $("bm_role").value = m ? m.role : "";
+  $("bm_email").value = m ? (m.email || "") : "";
+  $("bm_phone").value = m ? (m.phone || "") : "";
+  $("bm_profile_url").value = m ? (m.profile_url || "") : "";
+  $("bm_note").value = m ? (m.note || "") : "";
+  $("bm_sort_order").value = m ? m.sort_order : (state.boardMembers.length + 1);
+
+  $("deleteBoardMember").style.display = m ? "inline-flex" : "none";
+  openSheet("overlayBoardMember");
+}
+
+$("newBoardMember").addEventListener("click", () => openBoardMemberForm(null));
+
+$("saveBoardMember").addEventListener("click", async () => {
+  const name = $("bm_name").value.trim();
+  const role = $("bm_role").value.trim();
+  if(!name || !role){ toast("Nimi ja rooli ovat pakollisia", true); return; }
+
+  const payload = {
+    name, role,
+    email: $("bm_email").value.trim() || null,
+    phone: $("bm_phone").value.trim() || null,
+    profile_url: $("bm_profile_url").value.trim() || null,
+    note: $("bm_note").value.trim() || null,
+    sort_order: Number($("bm_sort_order").value) || 1
+  };
+
+  try{
+    if(state.editingBoardMemberId){
+      const { error } = await sb.from("association_board_members").update(payload).eq("id", state.editingBoardMemberId);
+      if(error) throw error;
+    }else{
+      const { error } = await sb.from("association_board_members").insert(payload);
+      if(error) throw error;
+    }
+    toast("Hallituksen jäsen tallennettu. Käynnistetään JSON-päivitys…");
+    closeSheet("overlayBoardMember");
+    await loadAll();
+    try{ await triggerJsonExport(); toast("Hallituksen tiedot tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
+  }catch(err){
+    toast("Tallennus epäonnistui: " + err.message, true);
+  }
+});
+
+$("deleteBoardMember").addEventListener("click", async () => {
+  if(!state.editingBoardMemberId) return;
+  if(!confirm("Poistetaanko tämä hallituksen jäsen?")) return;
+  try{
+    const { error } = await sb.from("association_board_members").delete().eq("id", state.editingBoardMemberId);
+    if(error) throw error;
+    toast("Hallituksen jäsen poistettu. Käynnistetään JSON-päivitys…");
+    closeSheet("overlayBoardMember");
+    await loadAll();
+    try{ await triggerJsonExport(); toast("Poisto tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Poisto tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
+  }catch(err){
+    toast("Poisto epäonnistui: " + err.message, true);
+  }
+});
+
+/* ==========================================================
+   KOKOUSASIAKIRJAT (kutsut ja pöytäkirjat)
+   ========================================================== */
+const AGENDA_TEMPLATES = {
+  hallitus: [
+    "Kokouksen avaus | ",
+    "Kokouksen laillisuuden ja päätösvaltaisuuden toteaminen | ",
+    "Edellisen kokouksen pöytäkirjan hyväksyminen | ",
+    "Esityslistan hyväksyminen | ",
+    "Kokouksen päättäminen | "
+  ],
+  vuosikokous: [
+    "Kokouksen avaus | ",
+    "Kokouksen laillisuuden ja päätösvaltaisuuden toteaminen | ",
+    "Kokouksen puheenjohtajan, sihteerin, kahden pöytäkirjantarkastajan ja tarvittaessa kahden ääntenlaskijan valinta | ",
+    "Työjärjestyksen hyväksyminen | ",
+    "Tilinpäätöksen, vuosikertomuksen ja toiminnantarkastajan/tilintarkastajan lausunnon esittäminen | ",
+    "Tilinpäätöksen vahvistaminen ja vastuuvapauden myöntäminen hallitukselle ja muille vastuuvelvollisille | ",
+    "Toimintasuunnitelman sekä tulo- ja menoarvion vahvistaminen | ",
+    "Liittymis- ja jäsenmaksujen suuruudesta päättäminen | ",
+    "Hallituksen puheenjohtajan ja muiden jäsenten valinta | ",
+    "Tilintarkastajan/toiminnantarkastajan ja varahenkilön valinta | ",
+    "Muiden kokouskutsussa mainittujen asioiden käsittely | ",
+    "Kokouksen päättäminen | "
+  ],
+  ylimaarainen: [
+    "Kokouksen avaus | ",
+    "Kokouksen laillisuuden ja päätösvaltaisuuden toteaminen | ",
+    "Kokouksen puheenjohtajan, sihteerin ja kahden pöytäkirjantarkastajan valinta | ",
+    "Kokouskutsussa mainitun asian/mainittujen asioiden käsittely | ",
+    "Kokouksen päättäminen | "
+  ]
+};
+
+function renderMeetings(){
+  const q = $("searchMeetings").value.trim().toLowerCase();
+  const typeFilter = state.meetingTypeFilter;
+
+  let rows = state.meetings.filter(m =>
+    (typeFilter === "all" || m.meeting_type === typeFilter) &&
+    (!q ||
+      (m.title || "").toLowerCase().includes(q) ||
+      (m.meeting_number || "").toLowerCase().includes(q))
+  );
+  rows = applySort(rows, "meetings", {
+    meeting_date: m => m.meeting_date || "",
+    title: m => m.title || "",
+    meeting_type: m => MEETING_TYPE_LABELS[m.meeting_type] || "",
+    doc_type: m => DOC_TYPE_LABELS[m.doc_type] || "",
+    status: m => STATUS_LABELS[m.status] || ""
+  });
+
+  $("countMeetings").textContent = state.meetings.length;
+  $("meetingsEmpty").style.display = rows.length ? "none" : "block";
+
+  $("meetingsBody").innerHTML = rows.map(m => `
+    <tr>
+      <td class="mono">${esc(fmtDate(m.meeting_date))}</td>
+      <td><strong>${esc(m.title)}</strong>${m.meeting_number ? `<br><span class="mono" style="color:var(--muted);font-size:11.5px">${esc(m.meeting_number)}</span>` : ""}</td>
+      <td>${esc(MEETING_TYPE_LABELS[m.meeting_type] || m.meeting_type)}</td>
+      <td>${esc(DOC_TYPE_LABELS[m.doc_type] || m.doc_type)}</td>
+      <td><span class="pill status-${esc(m.status)}">${esc(STATUS_LABELS[m.status] || m.status)}</span></td>
+      <td class="actions">
+        <button class="btn small" data-preview-meeting="${m.id}">Esikatselu</button>
+        <button class="btn small" data-edit-meeting="${m.id}">Muokkaa</button>
+      </td>
+    </tr>
+  `).join("");
+
+  document.querySelectorAll("[data-edit-meeting]").forEach(btn => {
+    btn.addEventListener("click", () => openMeetingForm(Number(btn.dataset.editMeeting)));
+  });
+  document.querySelectorAll("[data-preview-meeting]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const m = state.meetings.find(x => x.id === Number(btn.dataset.previewMeeting));
+      if(m) printMeeting(m);
+    });
+  });
+
+  updateSortArrows("meetingsTable", "meetings");
+}
+bindSortableHeaders("meetingsTable", "meetings", renderMeetings);
+$("searchMeetings").addEventListener("input", renderMeetings);
+
+document.querySelectorAll("#meetingTypeFilter .chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll("#meetingTypeFilter .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    state.meetingTypeFilter = chip.dataset.filterType;
+    renderMeetings();
+  });
+});
+
+function openMeetingForm(id){
+  state.editingMeetingId = id || null;
+  const m = id ? state.meetings.find(x => x.id === id) : null;
+
+  $("meetingFormTitle").textContent = m ? "Muokkaa asiakirjaa" : "Uusi asiakirja";
+  $("mt_meeting_type").value = m ? m.meeting_type : "hallitus";
+  $("mt_doc_type").value = m ? m.doc_type : "kutsu";
+  $("mt_title").value = m ? m.title : "";
+  $("mt_meeting_number").value = m ? (m.meeting_number || "") : "";
+  $("mt_meeting_date").value = m ? (m.meeting_date || "") : "";
+  $("mt_meeting_time").value = m ? (m.meeting_time || "") : "";
+  $("mt_location").value = m ? (m.location || "") : "";
+  $("mt_invite_sent_date").value = m ? (m.invite_sent_date || "") : "";
+  $("mt_pre_agenda_note").value = m ? (m.pre_agenda_note || "") : "";
+  $("mt_agenda").value = m ? (m.agenda_lines || []).join("\n") : "";
+  $("mt_post_agenda_note").value = m ? (m.post_agenda_note || "") : "";
+  $("mt_attendees").value = m ? (m.attendees || "") : "";
+  $("mt_absentees").value = m ? (m.absentees || "") : "";
+  $("mt_chair").value = m ? (m.chair || "") : (state.boardMembers.find(b => /puheenjohtaja/i.test(b.role || ""))?.name || "");
+  $("mt_secretary").value = m ? (m.secretary || "") : (state.boardMembers.find(b => /sihteeri/i.test(b.role || ""))?.name || "");
+  $("mt_reviewers").value = m ? (m.reviewers || "") : "";
+  $("mt_opening_note").value = m ? (m.opening_note || "") : "";
+  $("mt_closing_note").value = m ? (m.closing_note || "") : "";
+  $("mt_status").value = m ? m.status : "luonnos";
+  $("mt_notes").value = m ? (m.notes || "") : "";
+
+  $("deleteMeeting").style.display = m ? "inline-flex" : "none";
+  openSheet("overlayMeeting");
+}
+
+$("newMeeting").addEventListener("click", () => openMeetingForm(null));
+
+$("fillAgendaTemplate").addEventListener("click", () => {
+  const type = $("mt_meeting_type").value;
+  const template = (AGENDA_TEMPLATES[type] || []).join("\n");
+  if($("mt_agenda").value.trim() && !confirm("Esityslistalla on jo sisältöä. Korvataanko se pohjalla?")) return;
+  $("mt_agenda").value = template;
+});
+
+$("saveMeeting").addEventListener("click", async () => {
+  const title = $("mt_title").value.trim();
+  if(!title){ toast("Otsikko on pakollinen", true); return; }
+
+  const payload = {
+    meeting_type: $("mt_meeting_type").value,
+    doc_type: $("mt_doc_type").value,
+    title,
+    meeting_number: $("mt_meeting_number").value.trim() || null,
+    meeting_date: $("mt_meeting_date").value || null,
+    meeting_time: $("mt_meeting_time").value.trim() || null,
+    location: $("mt_location").value.trim() || null,
+    invite_sent_date: $("mt_invite_sent_date").value || null,
+    pre_agenda_note: $("mt_pre_agenda_note").value.trim() || null,
+    agenda_lines: linesToArr($("mt_agenda").value),
+    post_agenda_note: $("mt_post_agenda_note").value.trim() || null,
+    attendees: $("mt_attendees").value.trim() || null,
+    absentees: $("mt_absentees").value.trim() || null,
+    chair: $("mt_chair").value.trim() || null,
+    secretary: $("mt_secretary").value.trim() || null,
+    reviewers: $("mt_reviewers").value.trim() || null,
+    opening_note: $("mt_opening_note").value.trim() || null,
+    closing_note: $("mt_closing_note").value.trim() || null,
+    status: $("mt_status").value,
+    notes: $("mt_notes").value.trim() || null,
+    updated_at: new Date().toISOString()
+  };
+
+  try{
+    if(state.editingMeetingId){
+      const { error } = await sb.from("association_meetings").update(payload).eq("id", state.editingMeetingId);
+      if(error) throw error;
+    }else{
+      const { error } = await sb.from("association_meetings").insert(payload);
+      if(error) throw error;
+    }
+    toast("Asiakirja tallennettu. Käynnistetään JSON-päivitys…");
+    closeSheet("overlayMeeting");
+    await loadAll();
+    try{ await triggerJsonExport(); toast("Asiakirja tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
+  }catch(err){
+    toast("Tallennus epäonnistui: " + err.message, true);
+  }
+});
+
+$("deleteMeeting").addEventListener("click", async () => {
+  if(!state.editingMeetingId) return;
+  if(!confirm("Poistetaanko tämä asiakirja?")) return;
+  try{
+    const { error } = await sb.from("association_meetings").delete().eq("id", state.editingMeetingId);
+    if(error) throw error;
+    toast("Asiakirja poistettu. Käynnistetään JSON-päivitys…");
+    closeSheet("overlayMeeting");
+    await loadAll();
+    try{ await triggerJsonExport(); toast("Poisto tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Poisto tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
+  }catch(err){
+    toast("Poisto epäonnistui: " + err.message, true);
+  }
+});
+
+function collectMeetingFromForm(){
+  return {
+    meeting_type: $("mt_meeting_type").value,
+    doc_type: $("mt_doc_type").value,
+    title: $("mt_title").value.trim() || "(Nimetön asiakirja)",
+    meeting_number: $("mt_meeting_number").value.trim(),
+    meeting_date: $("mt_meeting_date").value,
+    meeting_time: $("mt_meeting_time").value.trim(),
+    location: $("mt_location").value.trim(),
+    invite_sent_date: $("mt_invite_sent_date").value,
+    pre_agenda_note: $("mt_pre_agenda_note").value.trim(),
+    agenda_lines: linesToArr($("mt_agenda").value),
+    post_agenda_note: $("mt_post_agenda_note").value.trim(),
+    attendees: $("mt_attendees").value.trim(),
+    absentees: $("mt_absentees").value.trim(),
+    chair: $("mt_chair").value.trim(),
+    secretary: $("mt_secretary").value.trim(),
+    reviewers: $("mt_reviewers").value.trim(),
+    opening_note: $("mt_opening_note").value.trim(),
+    closing_note: $("mt_closing_note").value.trim()
+  };
+}
+
+$("previewMeeting").addEventListener("click", () => printMeeting(collectMeetingFromForm()));
+
+/* ==========================================================
+   TULOSTETTAVAN ASIAKIRJAN KOKOAMINEN
+   ========================================================== */
+function printBaseCss(){
+  return `
+    body{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;color:#1c2624;
+      max-width:720px;margin:40px auto;padding:0 24px;line-height:1.55}
+    h1{font-size:1.5rem;letter-spacing:.04em;text-transform:uppercase;color:#1f4642;margin:0 0 4px}
+    .assoc-name{font-weight:700;font-size:1.05rem;margin:0 0 18px}
+    .meta p{margin:2px 0}
+    hr{border:none;border-top:1px solid #d8d0bd;margin:20px 0}
+    ol.agenda{padding-left:22px}
+    ol.agenda li{margin-bottom:10px}
+    ol.agenda .item-body{color:#3a3f3c;margin-top:2px;font-size:.95em}
+    .signatures{display:flex;gap:40px;margin-top:34px;flex-wrap:wrap}
+    .signatures div{min-width:200px}
+    .sig-line{border-top:1px solid #1c2624;margin-top:44px;padding-top:4px;font-size:.85em;color:#555}
+    .note{margin-top:18px;font-size:.92em;color:#3a3f3c}
+    @media print{ body{margin:0 auto} }
+  `;
+}
+
+function buildMeetingDocumentHtml(m){
+  const assocName = state.association ? (state.association.name || "") : "";
+  const typeLabel = MEETING_TYPE_LABELS[m.meeting_type] || m.meeting_type;
+  const agenda = (m.agenda_lines || []).map(parsePipeLine);
+
+  const metaLines = [
+    m.meeting_number ? `${typeLabel} ${m.meeting_number}` : typeLabel,
+    (m.meeting_date || m.meeting_time) ? `Aika: ${fmtDate(m.meeting_date)}${m.meeting_time ? " klo " + m.meeting_time : ""}` : "",
+    m.location ? `Paikka: ${m.location}` : ""
+  ].filter(Boolean).map(l => `<p>${esc(l)}</p>`).join("");
+
+  if(m.doc_type === "kutsu"){
+    const agendaHtml = agenda.map(a => `<li><b>${esc(a.title)}</b>${a.body ? `<div class="item-body">${esc(a.body)}</div>` : ""}</li>`).join("");
+    return `
+      <h1>Kokouskutsu</h1>
+      <p class="assoc-name">${esc(assocName)}</p>
+      <div class="meta">${metaLines}</div>
+      <p>Kutsutaan koolle ${esc(typeLabel.toLowerCase())} käsittelemään seuraavia asioita:</p>
+      ${m.pre_agenda_note ? `<p class="note">${esc(m.pre_agenda_note)}</p>` : ""}
+      <ol class="agenda">${agendaHtml}</ol>
+      ${m.post_agenda_note ? `<p class="note">${esc(m.post_agenda_note)}</p>` : ""}
+      ${m.opening_note ? `<p class="note">${esc(m.opening_note)}</p>` : ""}
+      <hr>
+      <p>${m.invite_sent_date ? esc(fmtDate(m.invite_sent_date)) + ", " : ""}${esc(assocName)}</p>
+      <div class="signatures">
+        <div>${esc(m.chair || "")}<div class="sig-line">puheenjohtaja</div></div>
+      </div>
+    `;
+  }
+
+  const agendaHtml = agenda.map((a, i) => `<li><b>§${i + 1} ${esc(a.title)}</b>${a.body ? `<div class="item-body">${esc(a.body)}</div>` : ""}</li>`).join("");
+  const reviewerNames = (m.reviewers || "").split(",").map(s => s.trim()).filter(Boolean);
+  const reviewerSigs = reviewerNames.length
+    ? reviewerNames.map(n => `<div>${esc(n)}<div class="sig-line">pöytäkirjantarkastaja</div></div>`).join("")
+    : `<div>&nbsp;<div class="sig-line">pöytäkirjantarkastaja</div></div><div>&nbsp;<div class="sig-line">pöytäkirjantarkastaja</div></div>`;
+
+  return `
+    <h1>Pöytäkirja</h1>
+    <p class="assoc-name">${esc(assocName)}</p>
+    <div class="meta">${metaLines}</div>
+    ${m.attendees ? `<p>Läsnä: ${esc(m.attendees).replace(/\n/g, ", ")}</p>` : ""}
+    ${m.absentees ? `<p>Poissa: ${esc(m.absentees).replace(/\n/g, ", ")}</p>` : ""}
+    ${m.opening_note ? `<p class="note">${esc(m.opening_note)}</p>` : ""}
+    ${m.pre_agenda_note ? `<p class="note">${esc(m.pre_agenda_note)}</p>` : ""}
+    <hr>
+    <ol class="agenda">${agendaHtml}</ol>
+    <hr>
+    ${m.post_agenda_note ? `<p class="note"><b>Jatkokeskustelu / muuta kokouksen jälkeen:</b> ${esc(m.post_agenda_note)}</p>` : ""}
+    ${m.closing_note ? `<p class="note">${esc(m.closing_note)}</p>` : ""}
+    <p>Vakuudeksi:</p>
+    <div class="signatures">
+      <div>${esc(m.chair || "")}<div class="sig-line">puheenjohtaja</div></div>
+      <div>${esc(m.secretary || "")}<div class="sig-line">sihteeri</div></div>
+    </div>
+    <p style="margin-top:26px">Pöytäkirjan tarkastaneet:</p>
+    <div class="signatures">${reviewerSigs}</div>
+  `;
+}
+
+function printMeeting(m){
+  const win = window.open("", "_blank");
+  if(!win){ toast("Selain esti ponnahdusikkunan -- salli se esikatselua varten.", true); return; }
+  const doc = win.document;
+  doc.open();
+  doc.write(`<!doctype html><html lang="fi"><head><meta charset="utf-8"><title>${esc(m.title)}</title><style>${printBaseCss()}</style></head><body>${buildMeetingDocumentHtml(m)}</body></html>`);
+  doc.close();
+  win.focus();
+  setTimeout(() => { try{ win.print(); }catch(e){ /* ei kriittinen */ } }, 250);
+}
+
+/* ==========================================================
+   AJANKOHTAISTA
+   ========================================================== */
+const NEWS_STATUS_LABELS = {
+  luonnos: "Luonnos",
+  julkaistu: "Julkaistu",
+  arkistoitu: "Arkistoitu"
+};
+
+state.newsStatusFilter = "all";
+
+function fmtDateTime(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("fi-FI", { dateStyle:"medium", timeStyle:"short" });
+}
+
+function toDateTimeLocal(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(Number.isNaN(d.getTime())) return "";
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function renderNews(){
+  const q = $("searchNews").value.trim().toLocaleLowerCase("fi-FI");
+  const filter = state.newsStatusFilter;
+
+  const rows = state.news.filter(n => {
+    const text = [n.title,n.kicker,n.excerpt,n.body].filter(Boolean).join(" ").toLocaleLowerCase("fi-FI");
+    return (filter === "all" || n.status === filter) && (!q || text.includes(q));
+  });
+
+  $("countNews").textContent = state.news.length;
+  $("newsEmpty").style.display = rows.length ? "none" : "block";
+
+  $("newsList").innerHTML = rows.map(n => `
+    <article class="news-card ${n.pinned ? "pinned" : ""}">
+      <div class="news-card-head">
+        <div>
+          <div class="news-meta">
+            ${n.kicker ? `<span>${esc(n.kicker)}</span>` : ""}
+            <span class="pill status-${esc(n.status)}">${esc(NEWS_STATUS_LABELS[n.status] || n.status)}</span>
+            ${n.pinned ? `<span class="pill pinned">Nostettu</span>` : ""}
+            ${n.published_at ? `<span>${esc(fmtDateTime(n.published_at))}</span>` : ""}
+          </div>
+          <h3>${esc(n.title)}</h3>
+          ${n.excerpt ? `<div class="news-excerpt">${esc(n.excerpt)}</div>` : ""}
+          ${n.body ? `<div class="news-body-preview">${esc(n.body.slice(0,320))}${n.body.length > 320 ? "…" : ""}</div>` : ""}
+        </div>
+        <div class="news-actions">
+          <button class="btn small" data-edit-news="${n.id}">Muokkaa</button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  document.querySelectorAll("[data-edit-news]").forEach(btn => {
+    btn.addEventListener("click", () => openNewsForm(Number(btn.dataset.editNews)));
+  });
+}
+
+function openNewsForm(id){
+  state.editingNewsId = id || null;
+  const n = id ? state.news.find(x => x.id === id) : null;
+
+  $("newsFormTitle").textContent = n ? "Muokkaa tiedotetta" : "Uusi tiedote";
+  $("news_kicker").value = n ? (n.kicker || "") : "";
+  $("news_title").value = n ? (n.title || "") : "";
+  $("news_excerpt").value = n ? (n.excerpt || "") : "";
+  $("news_body").value = n ? (n.body || "") : "";
+  $("news_status").value = n ? (n.status || "luonnos") : "luonnos";
+  $("news_audience").value = n ? (n.audience || "public") : "public";
+  $("news_published_at").value = n ? toDateTimeLocal(n.published_at) : "";
+  $("news_image_url").value = n ? (n.image_url || "") : "";
+  $("news_link_url").value = n ? (n.link_url || "") : "";
+  $("news_link_label").value = n ? (n.link_label || "") : "";
+  $("news_pinned").checked = n ? Boolean(n.pinned) : false;
+  $("news_sort_order").value = n ? (n.sort_order || 1) : (state.news.length + 1);
+  $("deleteNews").style.display = n ? "inline-flex" : "none";
+  openSheet("overlayNews");
+}
+
+$("newNews").addEventListener("click", () => openNewsForm(null));
+$("searchNews").addEventListener("input", renderNews);
+
+document.querySelectorAll("#newsStatusFilter .chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll("#newsStatusFilter .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    state.newsStatusFilter = chip.dataset.newsStatus;
+    renderNews();
+  });
+});
+
+async function triggerJsonExport(){
+  if(!state.session){
+    throw new Error("Kirjautunut Supabase-istunto puuttuu.");
+  }
+
+  const { data, error } = await sb.functions.invoke("trigger-github-export", {
+    body: { workflow: "export-json.yml", ref: "main" }
+  });
+
+  if(error) throw error;
+  if(!data?.ok){
+    throw new Error(data?.error || "GitHub Actions -käynnistys epäonnistui");
+  }
+
+  return data;
+}
+
+$("triggerGithubExport").addEventListener("click", async () => {
+  const button = $("triggerGithubExport");
+  if(!state.session){
+    toast("Kirjaudu ensin sisään.", true);
+    return;
+  }
+
+  button.disabled = true;
+  const originalText = button.textContent;
+  button.textContent = "Käynnistetään…";
+
+  try{
+    await triggerJsonExport();
+    toast("yhdistys.json-päivitys käynnistetty GitHubissa.");
+    button.textContent = "✓ Päivitys käynnistetty";
+    setTimeout(() => { button.textContent = originalText; }, 2500);
+  }catch(err){
+    console.error("JSON-exportin käynnistys epäonnistui:", err);
+    toast("JSON-export epäonnistui: " + (err?.message || "tuntematon virhe"), true);
+    button.textContent = originalText;
+  }finally{
+    button.disabled = false;
+  }
+});
+
+$("saveNews").addEventListener("click", async () => {
+  const title = $("news_title").value.trim();
+  if(!title){
+    toast("Otsikko on pakollinen", true);
+    return;
+  }
+
+  const status = $("news_status").value;
+  let publishedAt = $("news_published_at").value;
+  if(status === "julkaistu" && !publishedAt) publishedAt = new Date().toISOString();
+
+  const payload = {
+    title,
+    kicker: $("news_kicker").value.trim() || null,
+    excerpt: $("news_excerpt").value.trim() || null,
+    body: $("news_body").value.trim() || null,
+    status,
+    audience: $("news_audience").value,
+    published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
+    image_url: $("news_image_url").value.trim() || null,
+    link_url: $("news_link_url").value.trim() || null,
+    link_label: $("news_link_label").value.trim() || null,
+    pinned: $("news_pinned").checked,
+    sort_order: Number($("news_sort_order").value) || 1,
+    updated_at: new Date().toISOString()
+  };
+
+  try{
+    if(state.editingNewsId){
+      const { error } = await sb.from("association_news").update(payload).eq("id", state.editingNewsId);
+      if(error) throw error;
+    }else{
+      const { error } = await sb.from("association_news").insert(payload);
+      if(error) throw error;
+    }
+
+    toast("Tiedote tallennettu Supabaseen. Käynnistetään JSON-päivitys…");
+    closeSheet("overlayNews");
+    await loadAll();
+
+    try{
+      await triggerJsonExport();
+      toast("Tiedote tallennettu ja yhdistys.json-päivitys käynnistetty.");
+    }catch(exportErr){
+      console.error("JSON-exportin käynnistys epäonnistui:", exportErr);
+      toast("Tiedote tallennettu, mutta JSON-päivityksen käynnistys epäonnistui: " + exportErr.message, true);
+    }
+  }catch(err){
+    toast("Tiedotteen tallennus epäonnistui: " + err.message, true);
+  }
+});
+
+$("deleteNews").addEventListener("click", async () => {
+  if(!state.editingNewsId) return;
+  if(!confirm("Poistetaanko tämä tiedote pysyvästi?")) return;
+
+  try{
+    const { error } = await sb.from("association_news").delete().eq("id", state.editingNewsId);
+    if(error) throw error;
+    toast("Tiedote poistettu. Käynnistetään JSON-päivitys…");
+    closeSheet("overlayNews");
+    await loadAll();
+    try{ await triggerJsonExport(); toast("Poisto tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Poisto tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
+  }catch(err){
+    toast("Poisto epäonnistui: " + err.message, true);
+  }
+});
+
+/* ==========================================================
+   JÄSENREKISTERI
+   ========================================================== */
+async function adminMembers(action="list", extra={}){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session) throw new Error("Kirjautuminen vaaditaan.");
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/admin-members`,{
+    method:"POST", headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":`Bearer ${session.access_token}`},
+    body:JSON.stringify({action,...extra})
+  });
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.error||"Jäsenrekisterin käsittely epäonnistui."); return data;
+}
+async function loadMemberRegistry(){ state.memberRegistry = await adminMembers("list"); }
+function registryRows(){
+  const r=state.memberRegistry, byContact=new Map(r.contacts.map(c=>[c.id,c])), memberContacts=new Set(r.members.map(m=>m.contact_id).filter(Boolean));
+  const rows=r.members.map(m=>({key:`m:${m.id}`,kind:"member",...byContact.get(m.contact_id),...m,isMember:true}));
+  r.contacts.filter(c=>!memberContacts.has(c.id)).forEach(c=>rows.push({key:`c:${c.id}`,kind:"contact",...c,isMember:false}));
+  return rows;
+}
+function renderMembers(){
+  const r=state.memberRegistry, q=$("searchMembers").value.trim().toLowerCase(), vf=new Set(r.volunteers.filter(v=>["interested","active"].includes(v.status)).map(v=>v.contact_id));
+  let rows=registryRows().filter(x=>{const volunteer=vf.has(x.contact_id||x.id); const f=state.memberFilter; if(f==="member"&&!x.isMember)return false;if(f==="nonmember"&&x.isMember)return false;if(f==="volunteer"&&!volunteer)return false; return !q||[x.full_name,x.email,x.municipality,x.member_number].some(v=>String(v||"").toLowerCase().includes(q));});
+  rows=applySort(rows,"members",{member_number:x=>Number(x.member_number||999999999),full_name:x=>x.full_name||"",email:x=>x.email||"",municipality:x=>x.municipality||""});
+  const active=r.members.filter(m=>m.member_status==="active").length, volunteers=r.volunteers.filter(v=>["interested","active"].includes(v.status)).length, donationCents=r.donations.reduce((a,d)=>a+Number(d.amount_cents||0),0);
+  $("countMembers").textContent=r.members.length; $("statMembers").textContent=active; $("statContacts").textContent=r.contacts.length; $("statVolunteers").textContent=volunteers; $("statDonations").textContent=(donationCents/100).toLocaleString("fi-FI",{minimumFractionDigits:0,maximumFractionDigits:2});
+  $("membersEmpty").style.display=rows.length?"none":"block";
+  $("membersBody").innerHTML=rows.map(x=>{const contactId=x.contact_id||x.id, vol=vf.has(contactId), memberships=r.memberships.filter(y=>y.user_id&&y.user_id===x.user_id&&y.status==="active"), dons=r.donations.filter(y=>y.user_id&&y.user_id===x.user_id); return `<tr><td class="mono">${x.member_number||"—"}</td><td><strong>${esc(x.full_name||"—")}</strong></td><td class="mono">${esc(x.email||"")}</td><td>${esc(x.municipality||"")}</td><td><span class="pill ${x.isMember&&x.member_status==="active"?"member-active":"member-other"}">${x.isMember?esc(x.member_status||"jäsen"):"ei jäsen"}</span></td><td>${memberships.length?`${memberships.length} jäsenmaksu(a)`:""}${vol?`${memberships.length?" · ":""}vapaaehtoinen`:""}${dons.length?`${memberships.length||vol?" · ":""}${dons.length} lahjoitus(ta)`:""}</td><td class="actions"><button class="btn small" data-edit-member="${esc(x.key)}">Avaa</button></td></tr>`}).join("");
+  document.querySelectorAll("[data-edit-member]").forEach(b=>b.onclick=()=>openMember(b.dataset.editMember)); updateSortArrows("membersTable","members");
+}
+bindSortableHeaders("membersTable","members",renderMembers); $("searchMembers").addEventListener("input",renderMembers);
+document.querySelectorAll("#memberFilter .chip").forEach(c=>c.addEventListener("click",()=>{document.querySelectorAll("#memberFilter .chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");state.memberFilter=c.dataset.memberFilter;renderMembers()}));
+function openMember(key){
+  state.editingMemberKey=key; const x=registryRows().find(y=>y.key===key); if(!x)return; const r=state.memberRegistry, contactId=x.contact_id||x.id;
+  $("memberFormTitle").textContent=x.isMember?`Jäsen ${x.member_number?"#"+x.member_number:""}`:"Yhteyshenkilö"; $("mem_number").value=x.member_number||"—"; $("mem_status").value=x.isMember?(x.member_status||"active"):"inactive"; $("mem_status").disabled=!x.isMember;
+  $("mem_name").value=x.full_name||"";$("mem_email").value=x.email||"";$("mem_phone").value=x.phone||"";$("mem_municipality").value=x.municipality||"";$("mem_address").value=x.address_line||"";$("mem_postal").value=x.postal_code||"";$("mem_city").value=x.city||"";$("mem_joined").value=x.joined_at?new Date(x.joined_at).toLocaleDateString("fi-FI"):"—";$("mem_notes").value=x.notes||"";$("mem_notes").disabled=!x.isMember;
+  const ms=r.memberships.filter(y=>y.user_id&&y.user_id===x.user_id), ds=r.donations.filter(y=>y.user_id&&y.user_id===x.user_id), v=r.volunteers.find(y=>y.contact_id===contactId);
+  $("mem_memberships").innerHTML=ms.length?ms.sort((a,b)=>b.membership_year-a.membership_year).map(y=>`${esc(y.membership_year)} · ${esc(y.membership_type||"")} · ${esc(y.status||"")}${y.paid_at?" · maksettu "+new Date(y.paid_at).toLocaleDateString("fi-FI"):""}`).join("<br>"):"Ei jäsenmaksutietoja.";
+  $("mem_donations").innerHTML=ds.length?ds.map(y=>`${(Number(y.amount_cents||0)/100).toLocaleString("fi-FI",{style:"currency",currency:y.currency||"EUR"})} · ${new Date(y.donated_at||y.created_at).toLocaleDateString("fi-FI")}`).join("<br>"):"Ei lahjoituksia.";
+  $("mem_volunteer").textContent=v?`${v.status||""}${v.availability?" · "+v.availability:""}${v.note?" · "+v.note:""}`:"Ei vapaaehtoisilmoittautumista."; openSheet("overlayMember");
+}
+$("saveMember").addEventListener("click",async()=>{const x=registryRows().find(y=>y.key===state.editingMemberKey);if(!x)return;const patch={full_name:$("mem_name").value.trim(),email:$("mem_email").value.trim(),phone:$("mem_phone").value.trim(),municipality:$("mem_municipality").value.trim(),address_line:$("mem_address").value.trim(),postal_code:$("mem_postal").value.trim(),city:$("mem_city").value.trim()};if(x.isMember){patch.member_status=$("mem_status").value;patch.notes=$("mem_notes").value.trim();}try{await adminMembers(x.isMember?"update_member":"update_contact",{id:x.id,patch});toast("Jäsentiedot tallennettu.");closeSheet("overlayMember");await loadMemberRegistry();renderMembers()}catch(e){toast("Tallennus epäonnistui: "+e.message,true)}});
+
+/* ==========================================================
+   SÄÄNNÖT
+   ========================================================== */
+function renderRules(){
+  const r = state.rules;
+  $("rules_version_label").value = r ? (r.version_label || "") : "";
+  $("rules_approved_date").value = r ? (r.approved_date || "") : "";
+  $("rules_registered_date").value = r ? (r.registered_date || "") : "";
+  $("rules_intro").value = r ? (r.intro || "") : "";
+  $("rules_paragraphs").value = r ? (r.paragraph_lines || []).join("\n") : "";
+}
+
+$("saveRules").addEventListener("click", async () => {
+  const payload = {
+    version_label: $("rules_version_label").value.trim() || null,
+    approved_date: $("rules_approved_date").value || null,
+    registered_date: $("rules_registered_date").value || null,
+    intro: $("rules_intro").value.trim() || null,
+    paragraph_lines: linesToArr($("rules_paragraphs").value),
+    updated_at: new Date().toISOString()
+  };
+  try{
+    const { error } = await sb.from("association_rules").update(payload).eq("id", "main");
+    if(error) throw error;
+    toast("Säännöt tallennettu. Käynnistetään JSON-päivitys…");
+    await loadAll();
+    try{ await triggerJsonExport(); toast("Säännöt tallennettu ja JSON-päivitys käynnistetty."); }
+    catch(exportErr){ toast("Tallennettu, mutta JSON-päivitys epäonnistui: " + exportErr.message, true); }
+  }catch(err){
+    toast("Tallennus epäonnistui: " + err.message, true);
+  }
+});
+
+$("previewRules").addEventListener("click", () => {
+  const assocName = state.association ? (state.association.name || "") : "";
+  const intro = $("rules_intro").value.trim();
+  const versionLabel = $("rules_version_label").value.trim();
+  const approved = $("rules_approved_date").value;
+  const registered = $("rules_registered_date").value;
+  const paragraphs = linesToArr($("rules_paragraphs").value).map(parsePipeLine);
+
+  const metaBits = [
+    versionLabel ? esc(versionLabel) : "",
+    approved ? `Vuosikokouksen hyväksymä ${esc(fmtDate(approved))}` : "",
+    registered ? `Rekisteröity ${esc(fmtDate(registered))}` : ""
+  ].filter(Boolean).join(" · ");
+
+  const body = `
+    <h1>Säännöt</h1>
+    <p class="assoc-name">${esc(assocName)}</p>
+    ${metaBits ? `<p class="note">${metaBits}</p>` : ""}
+    ${intro ? `<p>${esc(intro)}</p><hr>` : ""}
+    <ol class="agenda">
+      ${paragraphs.map((p, i) => `<li><b>${i + 1} § ${esc(p.title)}</b><div class="item-body">${esc(p.body)}</div></li>`).join("")}
+    </ol>
+  `;
+
+  const win = window.open("", "_blank");
+  if(!win){ toast("Selain esti ponnahdusikkunan -- salli se esikatselua varten.", true); return; }
+  const doc = win.document;
+  doc.open();
+  doc.write(`<!doctype html><html lang="fi"><head><meta charset="utf-8"><title>Säännöt</title><style>${printBaseCss()}</style></head><body>${body}</body></html>`);
+  doc.close();
+  win.focus();
+  setTimeout(() => { try{ win.print(); }catch(e){ /* ei kriittinen */ } }, 250);
+});
+
+/* ==========================================================
+   KIRJAUTUMINEN
+   ========================================================== */
+function showLogin(){
+  $("overlayLogin").classList.add("open");
+  $("appShell").style.display = "none";
+  $("logoutBtn").style.display = "none";
+  $("triggerGithubExport").style.display = "none";
+  setTimeout(() => $("loginEmail").focus(), 30);
+}
+
+function showApp(){
+  $("overlayLogin").classList.remove("open");
+  $("appShell").style.display = "block";
+  $("logoutBtn").style.display = "inline-flex";
+  $("triggerGithubExport").style.display = "inline-flex";
+}
+
+async function attemptLogin(){
+  const email = $("loginEmail").value.trim();
+  const password = $("loginPassword").value;
+  const errEl = $("loginErr");
+  errEl.textContent = "";
+
+  if(!email || !password){
+    errEl.textContent = "Sähköposti ja salasana ovat pakollisia.";
+    return;
+  }
+
+  $("loginSubmit").disabled = true;
+  errEl.textContent = "Kirjaudutaan…";
+  try{
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if(error) throw error;
+    errEl.textContent = "";
+    $("loginPassword").value = "";
+    showApp();
+    $("connStatus").textContent = "kirjauduttu · ladataan dataa…";
+    await loadAll();
+  }catch(err){
+    errEl.textContent = "Kirjautuminen epäonnistui: " + err.message;
+  }finally{
+    $("loginSubmit").disabled = false;
+  }
+}
+
+$("loginSubmit").addEventListener("click", attemptLogin);
+$("loginPassword").addEventListener("keydown", e => { if(e.key === "Enter") attemptLogin(); });
+$("loginEmail").addEventListener("keydown", e => { if(e.key === "Enter") attemptLogin(); });
+
+$("logoutBtn").addEventListener("click", async () => {
+  try{ await sb.auth.signOut(); }catch(err){ /* ei kriittinen */ }
+  state.boardMembers = []; state.meetings = []; state.news = []; state.rules = null; state.memberRegistry = {contacts:[],members:[],volunteers:[],memberships:[],donations:[],payments:[]};
+  showLogin();
+  toast("Kirjauduttu ulos.");
+});
+
+sb.auth.onAuthStateChange((event, session) => {
+  state.session = session;
+  if(event === "SIGNED_OUT"){ showLogin(); }
+});
+
+/* ==========================================================
+   KÄYNNISTYS
+   ========================================================== */
+async function boot(){
+  $("connStatus").textContent = "tarkistetaan kirjautumista…";
+  try{
+    const { data, error } = await sb.auth.getSession();
+    if(error) throw error;
+
+    if(data.session){
+      state.session = data.session;
+      showApp();
+      $("connStatus").textContent = "kirjauduttu · ladataan dataa…";
+      await loadAll();
+    }else{
+      showLogin();
+      $("connStatus").textContent = "kirjaudu sisään jatkaaksesi";
+    }
+  }catch(err){
+    showLogin();
+    $("connStatus").textContent = "kirjaudu sisään jatkaaksesi";
+    console.error("Istunnon tarkistus epäonnistui:", err);
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
