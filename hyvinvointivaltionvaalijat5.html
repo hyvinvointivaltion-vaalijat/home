@@ -214,21 +214,145 @@ button{font:inherit;color:inherit}
     window.location.assign(result.checkout_url);
   }
 
-  window.addEventListener('message', async event => {
-    if (event.origin !== location.origin || event.data?.type !== 'v5-payment-request') return;
-    const doc = frame?.contentDocument;
-    const payments = doc?.getElementById('v5-membership-payments');
-    const status = payments?.querySelector('.v5-payment-status');
-    const buttons = payments ? [...payments.querySelectorAll('button[data-payment-kind]')] : [];
-    buttons.forEach(button => button.disabled = true);
-    if (status) { status.hidden = false; status.dataset.state = 'loading'; status.textContent = 'Avataan Paytrail-maksua…'; }
+  async function getSession() {
+    if (!supabaseClient) throw new Error('Yhteys jäsenrekisteriin ei ole käytettävissä.');
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
+    if (error) throw error;
+    return session;
+  }
+
+  function postToAssociation(message) {
+    try { frame?.contentWindow?.postMessage(message, location.origin); } catch {}
+  }
+
+  async function invokeMemberProfile(action = 'get', payload = {}) {
+    const session = await getSession();
+    if (!session?.access_token) throw new Error('Vahvista ensin sähköpostiosoitteesi.');
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/member-profile`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_PUBLISHABLE_KEY,
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Jäsentietojen käsittely epäonnistui.');
+    return result;
+  }
+
+  async function syncJoinState() {
+    if (!['yhdistys','liity','ajankohtaista'].includes(active || '')) return;
     try {
-      await startPaytrailPayment(event.data.detail || {});
+      const session = await getSession();
+      if (!session?.user?.email) {
+        postToAssociation({ type:'v5-join-state', state:'signed-out' });
+        return;
+      }
+      postToAssociation({ type:'v5-join-state', state:'loading', email:session.user.email });
+      const profile = await invokeMemberProfile('get');
+      postToAssociation({ type:'v5-join-state', state:'ready', profile });
     } catch (error) {
-      if (status) { status.hidden = false; status.dataset.state = 'error'; status.textContent = error?.message || 'Maksun avaaminen epäonnistui.'; }
-      buttons.forEach(button => button.disabled = false);
+      postToAssociation({ type:'v5-join-state', state:'error', message:error?.message || 'Tietojen lataus epäonnistui.' });
+    }
+  }
+
+  async function beginEmailIdentity(email) {
+    if (!supabaseClient) throw new Error('Yhteys jäsenrekisteriin ei ole käytettävissä.');
+    const normalized = String(email || '').trim().toLowerCase();
+    if (!/^\S+@\S+\.\S+$/.test(normalized)) throw new Error('Anna toimiva sähköpostiosoite.');
+
+    const current = await getSession();
+    if (current?.user?.email?.toLowerCase() === normalized) {
+      await syncJoinState();
+      return;
+    }
+    if (current) await supabaseClient.auth.signOut();
+
+    const redirectTo = `${location.origin}${location.pathname}#liity`;
+    const { error } = await supabaseClient.auth.signInWithOtp({
+      email: normalized,
+      options: { emailRedirectTo: redirectTo, shouldCreateUser: true }
+    });
+    if (error) throw error;
+    postToAssociation({
+      type:'v5-join-state', state:'link-sent', email:normalized,
+      message:'Lähetimme vahvistuslinkin sähköpostiisi. Avaa linkki jatkaaksesi.'
+    });
+  }
+
+  function profilePayload(detail = {}) {
+    const p = detail.profile || {};
+    return {
+      full_name: p.full_name || null,
+      phone: p.phone || null,
+      municipality: p.municipality || null,
+      address_line: p.address_line || null,
+      postal_code: p.postal_code || null,
+      city: p.city || null,
+    };
+  }
+
+  window.addEventListener('message', async event => {
+    if (event.origin !== location.origin || !event.data?.type) return;
+    const type = event.data.type;
+    const detail = event.data.detail || {};
+
+    try {
+      if (type === 'v5-identity-start') {
+        postToAssociation({ type:'v5-join-state', state:'loading', message:'Tarkistetaan sähköpostiosoitetta…' });
+        await beginEmailIdentity(detail.email);
+        return;
+      }
+
+      if (type === 'v5-profile-save') {
+        postToAssociation({ type:'v5-join-action', state:'loading', message:'Tallennetaan tietoja…' });
+        const result = await invokeMemberProfile('save_profile', profilePayload(detail));
+        postToAssociation({ type:'v5-join-state', state:'ready', profile:result });
+        postToAssociation({ type:'v5-join-action', state:'ok', message:'Tiedot tallennettu.' });
+        return;
+      }
+
+      if (type === 'v5-volunteer-save') {
+        await invokeMemberProfile('save_profile', profilePayload(detail));
+        const result = await invokeMemberProfile('volunteer', {
+          enabled: detail.enabled !== false,
+          interests: detail.interests || [],
+          availability: detail.availability || null,
+          note: detail.note || null,
+        });
+        postToAssociation({ type:'v5-join-state', state:'ready', profile:result });
+        postToAssociation({ type:'v5-join-action', state:'ok', message: detail.enabled === false ? 'Vapaaehtoisuus peruttu.' : 'Ilmoittautuminen vapaaehtoiseksi tallennettu.' });
+        return;
+      }
+
+      if (type === 'v5-member-pay' || type === 'v5-donation-pay') {
+        await invokeMemberProfile('save_profile', profilePayload(detail));
+        postToAssociation({ type:'v5-join-action', state:'loading', message:'Avataan Paytrail-maksua…' });
+        await startPaytrailPayment(detail);
+        return;
+      }
+
+      if (type === 'v5-change-email') {
+        await supabaseClient.auth.signOut();
+        postToAssociation({ type:'v5-join-state', state:'signed-out' });
+        return;
+      }
+    } catch (error) {
+      postToAssociation({ type:'v5-join-action', state:'error', message:error?.message || 'Toiminto epäonnistui.' });
     }
   });
+
+  if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user?.email) {
+        if (location.hash !== '#liity') location.hash = 'liity';
+        setTimeout(syncJoinState, 50);
+      }
+      if (event === 'SIGNED_OUT') setTimeout(syncJoinState, 50);
+    });
+  }
 
   moduleMenu.innerHTML = MODULE_ORDER.map(name =>
     `<button class="module-option" type="button" role="option" data-module="${name}">${VIEWS[name].title}</button>`
@@ -285,24 +409,33 @@ button{font:inherit;color:inherit}
         html{scroll-padding-top:0!important}
         body{padding-top:0!important}
         header.nav{display:none!important}
-        .v5-membership-payments{width:min(980px,calc(100% - 40px));margin:28px auto 42px;padding-top:22px;border-top:1px solid var(--line,#ddd6c9)}
+        .v5-membership-payments{width:min(1040px,calc(100% - 40px));margin:28px auto 54px;padding-top:24px;border-top:1px solid var(--line,#ddd6c9)}
+        .v5-membership-payments *{box-sizing:border-box}
         .v5-membership-payments .eyebrow{margin-bottom:8px;font:700 11px/1.2 "Source Sans 3",Inter,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#b4632c)}
         .v5-membership-payments h3{margin:0 0 8px;font:500 clamp(1.55rem,3vw,2.25rem)/1.1 Fraunces,Georgia,serif}
-        .v5-membership-payments .intro{margin:0 0 22px;color:var(--muted,#74807c)}
-        .v5-payment-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line,#ddd6c9);border:1px solid var(--line,#ddd6c9)}
-        .v5-payment-card{padding:22px;background:var(--surface,#fffdf8)}
-        .v5-payment-card h4{margin:0 0 6px;font:600 1.05rem/1.2 Fraunces,Georgia,serif}
-        .v5-payment-price{margin:10px 0 3px;font:600 2rem/1 Fraunces,Georgia,serif;color:var(--forest,#20514c)}
-        .v5-payment-note{min-height:42px;margin:0 0 18px;color:var(--muted,#74807c);font-size:.86rem}
-        .v5-payment-card button{width:100%;padding:10px 14px;border:1px solid var(--forest,#20514c);background:transparent;color:var(--forest,#20514c);font-weight:700;cursor:pointer}
-        .v5-payment-card button:hover{background:var(--forest,#20514c);color:#fff}
-        .v5-payment-card button:disabled{opacity:.55;cursor:wait}
-        .v5-payment-status{grid-column:1/-1;padding:10px 14px;background:var(--surface,#fffdf8);color:var(--muted,#74807c);font-size:.86rem}
-        .v5-payment-status[data-state="error"]{color:#8a3324}
-        .v5-donation-row{display:flex;align-items:stretch;margin:10px 0 18px;border-bottom:1px solid var(--line,#ddd6c9)}
-        .v5-donation-row input{width:100%;min-width:0;padding:7px 2px;border:0;background:transparent;outline:none;font:600 1.55rem/1 Fraunces,Georgia,serif}
-        .v5-donation-row span{display:grid;place-items:center;padding-left:8px;color:var(--muted,#74807c);font-weight:600}
-        @media(max-width:760px){.v5-payment-grid{grid-template-columns:1fr}.v5-payment-note{min-height:0}}
+        .v5-membership-payments .intro{max-width:720px;margin:0 0 22px;color:var(--muted,#74807c)}
+        .v5-identity-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;max-width:650px;margin-top:18px}
+        .v5-field{display:grid;gap:6px}
+        .v5-field label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#74807c)}
+        .v5-field input,.v5-field textarea{width:100%;padding:10px 11px;border:1px solid var(--line,#ddd6c9);border-radius:4px;background:var(--surface,#fffdf8);color:var(--ink,#17201f);font:inherit;outline:none}
+        .v5-field input:focus,.v5-field textarea:focus{border-color:var(--forest,#20514c)}
+        .v5-field input[readonly]{background:var(--paper,#f7f4ee);color:var(--muted,#74807c)}
+        .v5-primary,.v5-secondary{padding:10px 15px;border:1px solid var(--forest,#20514c);background:transparent;color:var(--forest,#20514c);font:700 .78rem/1.2 "Source Sans 3",Inter,sans-serif;letter-spacing:.04em;cursor:pointer}
+        .v5-primary:hover{background:var(--forest,#20514c);color:#fff}.v5-secondary{border-color:var(--line,#ddd6c9);color:var(--ink,#17201f)}
+        .v5-primary:disabled,.v5-secondary:disabled{opacity:.5;cursor:not-allowed}
+        .v5-join-status{margin-top:12px;min-height:22px;color:var(--muted,#74807c);font-size:.86rem}.v5-join-status[data-state="error"]{color:#8a3324}.v5-join-status[data-state="ok"]{color:var(--forest,#20514c)}
+        .v5-profile-shell[hidden],.v5-identity-shell[hidden]{display:none!important}
+        .v5-profile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin:6px 0 18px;padding-bottom:14px;border-bottom:1px solid var(--line,#ddd6c9)}
+        .v5-profile-badge{font:600 .75rem/1.2 "Source Sans 3",Inter,sans-serif;color:var(--forest,#20514c)}
+        .v5-profile-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin:16px 0}.v5-profile-form .wide{grid-column:1/-1}
+        .v5-profile-actions{display:flex;gap:10px;align-items:center;margin:8px 0 28px}
+        .v5-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line,#ddd6c9);border:1px solid var(--line,#ddd6c9)}
+        .v5-choice-card{padding:22px;background:var(--surface,#fffdf8)}.v5-choice-card h4{margin:0 0 7px;font:600 1.05rem/1.2 Fraunces,Georgia,serif}
+        .v5-choice-card p{min-height:44px;margin:0 0 16px;color:var(--muted,#74807c);font-size:.86rem}.v5-price{margin:8px 0 7px;font:600 1.8rem/1 Fraunces,Georgia,serif;color:var(--forest,#20514c)}
+        .v5-check{display:flex;align-items:flex-start;gap:9px;margin:10px 0 18px;font-size:.9rem}.v5-check input{margin-top:3px;accent-color:var(--forest,#20514c)}
+        .v5-donation-row{display:flex;align-items:stretch;margin:10px 0 16px;border-bottom:1px solid var(--line,#ddd6c9)}.v5-donation-row input{width:100%;min-width:0;padding:7px 2px;border:0;background:transparent;outline:none;font:600 1.55rem/1 Fraunces,Georgia,serif}.v5-donation-row span{display:grid;place-items:center;padding-left:8px;color:var(--muted,#74807c);font-weight:600}
+        .v5-volunteer-extra{display:grid;gap:9px;margin:10px 0 14px}.v5-volunteer-extra input,.v5-volunteer-extra textarea{width:100%;padding:8px 9px;border:1px solid var(--line,#ddd6c9);background:transparent;font:inherit}
+        @media(max-width:760px){.v5-identity-row{grid-template-columns:1fr}.v5-profile-form{grid-template-columns:1fr}.v5-profile-form .wide{grid-column:auto}.v5-choice-grid{grid-template-columns:1fr}.v5-choice-card p{min-height:0}.v5-profile-top{flex-direction:column}}
       `;
       doc.head.appendChild(style);
 
@@ -312,15 +445,165 @@ button{font:inherit;color:inherit}
         const payments = doc.createElement('div');
         payments.id='v5-membership-payments'; payments.className='v5-membership-payments';
         payments.innerHTML=`
-          <div class="eyebrow">Liittymismaksu</div><h3>Jäsenyys ja tuki</h3>
-          <p class="intro">Valitse jäsenmaksu tai tue yhdistyksen toimintaa haluamallasi summalla.</p>
-          <div class="v5-payment-grid">
-            <article class="v5-payment-card"><h4>Uusi jäsen</h4><div class="v5-payment-price">30 €</div><p class="v5-payment-note">Liittymismaksu 5 € + jäsenmaksu 25 €.</p><button type="button" data-payment-kind="new-member" data-product-code="member-new" data-amount="30">Maksa 30 €</button></article>
-            <article class="v5-payment-card"><h4>Vanha jäsen</h4><div class="v5-payment-price">25 €</div><p class="v5-payment-note">Vuosittainen jäsenmaksu.</p><button type="button" data-payment-kind="existing-member" data-product-code="member-renewal" data-amount="25">Maksa 25 €</button></article>
-            <article class="v5-payment-card"><h4>Lahjoita</h4><div class="v5-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" aria-label="Lahjoitussumma euroina"><span>€</span></div><p class="v5-payment-note">Valitse itse lahjoituksen summa.</p><button type="button" data-payment-kind="donation" data-product-code="donation">Lahjoita</button></article>
-          <div class="v5-payment-status" role="status" aria-live="polite" hidden></div></div>`;
+          <div class="v5-identity-shell">
+            <div class="eyebrow">Liity · tue · osallistu</div>
+            <h3>Asioi sähköpostiosoitteellasi</h3>
+            <p class="intro">Sähköpostiosoite toimii tunnisteena. Vahvistuksen jälkeen tunnistamme, oletko jo jäsen. Voit myös lahjoittaa tai ilmoittautua vapaaehtoiseksi ilman jäsenyyttä.</p>
+            <div class="v5-identity-row">
+              <div class="v5-field"><label>Sähköpostiosoite</label><input type="email" data-email autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+              <button class="v5-primary" type="button" data-action="identity">Jatka</button>
+            </div>
+            <div class="v5-join-status" data-status role="status" aria-live="polite"></div>
+          </div>
+
+          <div class="v5-profile-shell" hidden>
+            <div class="v5-profile-top">
+              <div><div class="eyebrow">Omat tiedot</div><h3 data-profile-title>Tervetuloa</h3><div class="v5-profile-badge" data-member-badge></div></div>
+              <button class="v5-secondary" type="button" data-action="change-email">Vaihda sähköposti</button>
+            </div>
+            <div class="v5-profile-form">
+              <div class="v5-field wide"><label>Sähköpostiosoite</label><input data-field="email" type="email" readonly></div>
+              <div class="v5-field"><label>Nimi</label><input data-field="full_name" autocomplete="name"></div>
+              <div class="v5-field"><label>Puhelin</label><input data-field="phone" autocomplete="tel"></div>
+              <div class="v5-field"><label>Kunta</label><input data-field="municipality"></div>
+              <div class="v5-field"><label>Lähiosoite</label><input data-field="address_line" autocomplete="street-address"></div>
+              <div class="v5-field"><label>Postinumero</label><input data-field="postal_code" autocomplete="postal-code"></div>
+              <div class="v5-field"><label>Postitoimipaikka</label><input data-field="city" autocomplete="address-level2"></div>
+            </div>
+            <div class="v5-profile-actions"><button class="v5-secondary" type="button" data-action="save-profile">Päivitä tiedot</button></div>
+
+            <div class="v5-choice-grid">
+              <article class="v5-choice-card" data-member-card>
+                <h4 data-member-title>Liity jäseneksi</h4>
+                <div class="v5-price" data-member-price>30 €</div>
+                <p data-member-note>Liittymismaksu 5 € + jäsenmaksu 25 €.</p>
+                <label class="v5-check" data-new-member-check><input type="checkbox" data-join-member> <span>Liity jäseneksi</span></label>
+                <button class="v5-primary" type="button" data-action="member-pay" disabled>Maksa 30 €</button>
+              </article>
+
+              <article class="v5-choice-card">
+                <h4>Lahjoita</h4>
+                <div class="v5-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" data-donation><span>€</span></div>
+                <p>Voit tukea yhdistyksen toimintaa haluamallasi summalla. Jäsenyyttä ei tarvita.</p>
+                <button class="v5-primary" type="button" data-action="donation-pay">Lahjoita</button>
+              </article>
+
+              <article class="v5-choice-card">
+                <h4>Vapaaehtoiseksi</h4>
+                <label class="v5-check"><input type="checkbox" data-volunteer> <span>Ilmoittaudun vapaaehtoiseksi</span></label>
+                <div class="v5-volunteer-extra"><input data-availability placeholder="Milloin voit osallistua?"><textarea data-volunteer-note rows="3" placeholder="Mistä tehtävistä olet kiinnostunut?"></textarea></div>
+                <p>Vapaaehtoiseksi voi ilmoittautua myös ilman jäsenyyttä.</p>
+                <button class="v5-secondary" type="button" data-action="volunteer-save">Tallenna ilmoittautuminen</button>
+              </article>
+            </div>
+            <div class="v5-join-status" data-action-status role="status" aria-live="polite"></div>
+          </div>`;
         joinSection.appendChild(payments);
-        payments.addEventListener('click',event=>{const b=event.target.closest('[data-payment-kind]');if(!b)return;const kind=b.dataset.paymentKind,input=payments.querySelector('.v5-donation-row input'),amount=kind==='donation'?Number(input?.value||0):Number(b.dataset.amount||0);if(kind==='donation'&&(!Number.isFinite(amount)||amount<1)){input?.focus();return;}parent.postMessage({type:'v5-payment-request',detail:{kind,product_code:b.dataset.productCode,amount,currency:'EUR'}},location.origin);});
+
+        const identityShell = payments.querySelector('.v5-identity-shell');
+        const profileShell = payments.querySelector('.v5-profile-shell');
+        const status = payments.querySelector('[data-status]');
+        const actionStatus = payments.querySelector('[data-action-status]');
+
+        const collectProfile = () => {
+          const out = {};
+          payments.querySelectorAll('[data-field]').forEach(input => out[input.dataset.field] = input.value.trim());
+          return out;
+        };
+
+        const setStatus = (el, message='', state='') => {
+          if (!el) return;
+          el.textContent = message || '';
+          el.dataset.state = state || '';
+        };
+
+        doc.defaultView.addEventListener('message', event => {
+          if (event.origin !== location.origin) return;
+          const data = event.data || {};
+          if (data.type === 'v5-join-action') {
+            setStatus(actionStatus, data.message || '', data.state || '');
+            return;
+          }
+          if (data.type !== 'v5-join-state') return;
+          if (data.state === 'signed-out') {
+            identityShell.hidden = false; profileShell.hidden = true;
+            setStatus(status, '', '');
+            return;
+          }
+          if (data.state === 'loading') {
+            setStatus(status, data.message || 'Ladataan…', 'loading');
+            return;
+          }
+          if (data.state === 'link-sent') {
+            identityShell.hidden = false; profileShell.hidden = true;
+            payments.querySelector('[data-email]').value = data.email || '';
+            setStatus(status, data.message || 'Tarkista sähköpostisi.', 'ok');
+            return;
+          }
+          if (data.state === 'error') {
+            setStatus(status, data.message || 'Tietojen lataus epäonnistui.', 'error');
+            return;
+          }
+          if (data.state === 'ready' && data.profile) {
+            const p = data.profile;
+            identityShell.hidden = true; profileShell.hidden = false;
+            const contact = p.contact || {};
+            payments.querySelector('[data-field="email"]').value = p.email || contact.email || '';
+            ['full_name','phone','municipality','address_line','postal_code','city'].forEach(name => {
+              const el = payments.querySelector(`[data-field="${name}"]`); if (el) el.value = contact[name] || '';
+            });
+            const member = !!p.is_member;
+            payments.querySelector('[data-profile-title]').textContent = member ? 'Jäsentietosi' : 'Yhteystietosi';
+            payments.querySelector('[data-member-badge]').textContent = member
+              ? `Jäsen${p.member?.member_number ? ' #' + p.member.member_number : ''}`
+              : 'Et ole vielä jäsen — voit silti lahjoittaa tai osallistua vapaaehtoiseksi.';
+            payments.querySelector('[data-member-title]').textContent = member ? 'Jäsenmaksu' : 'Liity jäseneksi';
+            payments.querySelector('[data-member-price]').textContent = member ? '25 €' : '30 €';
+            payments.querySelector('[data-member-note]').textContent = member ? 'Vuosittainen jäsenmaksu.' : 'Liittymismaksu 5 € + jäsenmaksu 25 €.';
+            const checkWrap = payments.querySelector('[data-new-member-check]');
+            const joinCheck = payments.querySelector('[data-join-member]');
+            const payButton = payments.querySelector('[data-action="member-pay"]');
+            checkWrap.hidden = member;
+            joinCheck.checked = member;
+            payButton.disabled = !member && !joinCheck.checked;
+            payButton.textContent = member ? 'Maksa 25 €' : 'Maksa 30 €';
+            payButton.dataset.productCode = member ? 'member-renewal' : 'member-new';
+            payButton.dataset.amount = member ? '25' : '30';
+            const volunteer = p.volunteer;
+            payments.querySelector('[data-volunteer]').checked = !!volunteer && ['interested','active'].includes(volunteer.status);
+            payments.querySelector('[data-availability]').value = volunteer?.availability || '';
+            payments.querySelector('[data-volunteer-note]').value = volunteer?.note || '';
+            setStatus(status, '', ''); setStatus(actionStatus, '', '');
+          }
+        });
+
+        payments.addEventListener('change', event => {
+          if (event.target.matches('[data-join-member]')) {
+            payments.querySelector('[data-action="member-pay"]').disabled = !event.target.checked;
+          }
+        });
+
+        payments.addEventListener('click', event => {
+          const button = event.target.closest('[data-action]'); if (!button) return;
+          const action = button.dataset.action;
+          if (action === 'identity') {
+            parent.postMessage({type:'v5-identity-start',detail:{email:payments.querySelector('[data-email]').value}},location.origin); return;
+          }
+          if (action === 'change-email') { parent.postMessage({type:'v5-change-email'},location.origin); return; }
+          const profile = collectProfile();
+          if (action === 'save-profile') { parent.postMessage({type:'v5-profile-save',detail:{profile}},location.origin); return; }
+          if (action === 'member-pay') {
+            parent.postMessage({type:'v5-member-pay',detail:{profile,product_code:button.dataset.productCode,amount:Number(button.dataset.amount),currency:'EUR'}},location.origin); return;
+          }
+          if (action === 'donation-pay') {
+            const amount = Number(payments.querySelector('[data-donation]').value || 0);
+            if (!Number.isFinite(amount) || amount < 1) { payments.querySelector('[data-donation]').focus(); setStatus(actionStatus,'Anna lahjoitussumma vähintään 1 €.','error'); return; }
+            parent.postMessage({type:'v5-donation-pay',detail:{profile,product_code:'donation',amount,currency:'EUR'}},location.origin); return;
+          }
+          if (action === 'volunteer-save') {
+            parent.postMessage({type:'v5-volunteer-save',detail:{profile,enabled:payments.querySelector('[data-volunteer]').checked,availability:payments.querySelector('[data-availability]').value,note:payments.querySelector('[data-volunteer-note]').value,interests:[]}},location.origin); return;
+          }
+        });
       }
 
       // "Avaa Atlas" ei vie pois hyvinvointivaltio-osoitteesta:
@@ -357,7 +640,7 @@ button{font:inherit;color:inherit}
     frame.loading = 'eager';
 
     frame.addEventListener('load', () => {
-      if (['yhdistys','ajankohtaista','liity'].includes(name)) cleanAssociationFrame();
+      if (['yhdistys','ajankohtaista','liity'].includes(name)) { cleanAssociationFrame(); setTimeout(syncJoinState, 0); }
       loader.hidden = true;
     }, { once:true });
 
