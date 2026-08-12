@@ -1390,21 +1390,62 @@ button{font:inherit;color:inherit}
         }
 
         // 2) Koko lohko "05 · AJATTELUTAPA".
-        const headingLike = [...doc.body.querySelectorAll('h1,h2,h3,h4,h5,h6,.eyebrow,.kicker,.section-label,[class*="eyebrow"],[class*="kicker"],[class*="label"]')]
-          .find(el => {
-            const text = normalizeEmbeddedText(el.textContent);
-            return text.includes('ajattelutapa') && /(^|\s)05(?:\s|·|\.|$)/.test(text);
-          });
+        // Numero 05 ja sana AJATTELUTAPA voivat olla eri sisarelementeissä, joten
+        // niitä ei vaadita samaan otsikkoelementtiin. Etsitään ensin pienin elementti,
+        // jonka oma tekstisisältö on Ajattelutapa, ja noustaan siitä lohkon juureen.
+        const thinkingLabel = [...doc.body.querySelectorAll('*')]
+          .filter(el => {
+            const ownText = normalizeEmbeddedText(
+              [...el.childNodes]
+                .filter(node => node.nodeType === Node.TEXT_NODE)
+                .map(node => node.textContent)
+                .join(' ')
+            );
+            return ownText === 'ajattelutapa' || ownText.includes('ajattelutapa');
+          })
+          .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
 
-        let thinkingSection = headingLike?.closest('section,article');
+        let thinkingSection = null;
+        if (thinkingLabel) {
+          // Ensisijaisesti semanttinen section/article.
+          thinkingSection = thinkingLabel.closest('section,article');
+
+          // Jos sivu on rakennettu pelkillä diveillä, etsitään pienin esi-isä,
+          // jossa näkyvät sekä 05 että AJATTELUTAPA.
+          if (!thinkingSection) {
+            let node = thinkingLabel;
+            while (node && node !== doc.body) {
+              const text = normalizeEmbeddedText(node.textContent);
+              if (text.includes('ajattelutapa') && /(^|\s)05(?:\s|·|\.|$)/.test(text)) {
+                thinkingSection = node;
+                break;
+              }
+              node = node.parentElement;
+            }
+          }
+
+          // Viimeinen varmistus: poista lähin järkevän kokoinen sisältökontti,
+          // vaikka numero 05 olisi toteutettu pseudo-elementtinä eikä textContentissa.
+          if (!thinkingSection) {
+            let node = thinkingLabel.parentElement;
+            while (node && node !== doc.body) {
+              const count = node.querySelectorAll('*').length;
+              if (['DIV','LI','MAIN'].includes(node.tagName) && count >= 2 && count <= 80) {
+                thinkingSection = node;
+                break;
+              }
+              node = node.parentElement;
+            }
+          }
+        }
+
+        // Varahaku semanttisista lohkoista pelkän Ajattelutapa-sanan perusteella.
         if (!thinkingSection) {
           thinkingSection = [...doc.body.querySelectorAll('section,article')]
-            .filter(el => {
-              const text = normalizeEmbeddedText(el.textContent);
-              return text.includes('ajattelutapa') && /(^|\s)05(?:\s|·|\.|$)/.test(text);
-            })
+            .filter(el => normalizeEmbeddedText(el.textContent).includes('ajattelutapa'))
             .sort((a,b) => a.querySelectorAll('*').length - b.querySelectorAll('*').length)[0];
         }
+
         thinkingSection?.remove();
       };
 
