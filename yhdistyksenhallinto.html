@@ -888,22 +888,22 @@ async function loadAll(){
   $("connStatus").textContent = "ladataan dataa…";
   try{
     const assocRes = await sb.from("association").select("*").eq("id", "main").maybeSingle();
-    if(assocRes.error) throw assocRes.error;
+    if(assocRes.error) throw new Error(`association: ${assocRes.error.message}`);
 
     const boardRes = await sb.from("association_board_members").select("*").order("sort_order", { ascending: true });
-    if(boardRes.error) throw boardRes.error;
+    if(boardRes.error) throw new Error(`association_board_members: ${boardRes.error.message}`);
 
     const meetingsRes = await sb.from("association_meetings").select("*").order("meeting_date", { ascending: false });
-    if(meetingsRes.error) throw meetingsRes.error;
+    if(meetingsRes.error) throw new Error(`association_meetings: ${meetingsRes.error.message}`);
 
     const rulesRes = await sb.from("association_rules").select("*").eq("id", "main").maybeSingle();
-    if(rulesRes.error) throw rulesRes.error;
+    if(rulesRes.error) throw new Error(`association_rules: ${rulesRes.error.message}`);
 
     const newsRes = await sb.from("association_news").select("*")
       .order("pinned", { ascending: false })
       .order("published_at", { ascending: false, nullsFirst: false })
       .order("sort_order", { ascending: true });
-    if(newsRes.error) throw newsRes.error;
+    if(newsRes.error) throw new Error(`association_news: ${newsRes.error.message}`);
 
     state.association = assocRes.data;
     state.boardMembers = boardRes.data;
@@ -924,7 +924,7 @@ async function loadAll(){
   }catch(err){
     const detail = (err && err.message) ? err.message : "Verkkovirhe tai CORS-esto.";
     const permissionLike = /permission|policy|row-level|RLS|ylläpitäj/i.test(detail);
-    $("connStatus").textContent = permissionLike ? "käyttöoikeusvirhe · kirjaudu uudelleen" : "virhe ladattaessa dataa -- katso selaimen konsoli (F12 / Kehittäjätyökalut)";
+    $("connStatus").textContent = permissionLike ? "käyttöoikeusvirhe · kirjaudu uudelleen" : `latausvirhe · ${detail}`;
     toast("Latausvirhe: " + detail, true);
     console.error("Latausvirhe:", err);
   }
@@ -1559,7 +1559,38 @@ async function adminMembers(action="list", extra={}){
   });
   const data=await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.error||"Jäsenrekisterin käsittely epäonnistui."); return data;
 }
-async function loadMemberRegistry(){ state.memberRegistry = await adminMembers("list"); }
+async function loadMemberRegistry(){
+  // Ensisijainen reitti on admin-members Edge Function. Jos sitä ei ole
+  // julkaistu / siihen ei ole projektioikeutta, admin ei saa kaatua:
+  // lue rekisteritaulut suoraan käyttäjän JWT:llä ja RLS-politiikoilla.
+  try{
+    state.memberRegistry = await adminMembers("list");
+    return;
+  }catch(edgeErr){
+    console.warn("admin-members ei vastannut, käytetään suoraa RLS-lukua:", edgeErr);
+  }
+
+  async function safeSelect(table, orderCol){
+    let q = sb.from(table).select("*");
+    if(orderCol) q = q.order(orderCol, { ascending:false });
+    const { data, error } = await q;
+    if(error){
+      console.warn(`Jäsenrekisteri: ${table} ei latautunut:`, error);
+      return [];
+    }
+    return data || [];
+  }
+
+  const [contacts,members,volunteers,memberships,donations,payments] = await Promise.all([
+    safeSelect("association_contacts", "created_at"),
+    safeSelect("association_members", "created_at"),
+    safeSelect("association_volunteers", "created_at"),
+    safeSelect("association_memberships", "created_at"),
+    safeSelect("donations", "created_at"),
+    safeSelect("payments", "created_at")
+  ]);
+  state.memberRegistry = {contacts,members,volunteers,memberships,donations,payments};
+}
 function registryRows(){
   const r=state.memberRegistry, byContact=new Map(r.contacts.map(c=>[c.id,c])), memberContacts=new Set(r.members.map(m=>m.contact_id).filter(Boolean));
   const rows=r.members.map(m=>({key:`m:${m.id}`,kind:"member",...byContact.get(m.contact_id),...m,isMember:true}));
