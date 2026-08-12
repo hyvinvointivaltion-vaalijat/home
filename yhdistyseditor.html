@@ -367,6 +367,17 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
 @media print{
   header.top,nav.tabs,.warn-banner,.status,.overlay:not(.print-only){display:none !important}
 }
+
+/* Jäsenrekisteri */
+.member-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 16px}
+.member-stat{padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}
+.member-stat b{display:block;font:600 1.35rem var(--serif);color:var(--forest-deep)}
+.member-stat span{font:10.5px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.pill.member-active{background:#e4ecd8;color:var(--forest-deep)} .pill.member-other{background:var(--birch);color:var(--muted)}
+.member-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.member-ledger{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.member-ledger h3{margin:0 0 8px;font:600 1rem var(--serif);color:var(--forest-deep)}
+@media(max-width:720px){.member-stats{grid-template-columns:1fr 1fr}.member-detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -407,6 +418,7 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
   <button data-tab="meetings">Kokoukset <span class="count" id="countMeetings">–</span></button>
   <button data-tab="news">Ajankohtaista <span class="count" id="countNews">–</span></button>
   <button data-tab="rules">Säännöt</button>
+  <button data-tab="members">Jäsenrekisteri <span class="count" id="countMembers">–</span></button>
 </nav>
 
 <main>
@@ -508,6 +520,34 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
       <button class="btn" id="previewRules">Esikatselu / Tulosta</button>
       <button class="btn primary" id="saveRules">Tallenna säännöt</button>
     </div>
+  </section>
+
+  <!-- ============ JÄSENREKISTERI ============ -->
+  <section class="panel" id="panel-members">
+    <div class="intro-note">Jäsenrekisteri kokoaa jäsenet, muut yhteyshenkilöt, vapaaehtoiset, jäsenmaksut ja lahjoitukset. Henkilötiedot näkyvät vain kirjautuneelle ylläpitäjälle.</div>
+    <div class="member-stats">
+      <div class="member-stat"><b id="statMembers">–</b><span>Jäseniä</span></div>
+      <div class="member-stat"><b id="statContacts">–</b><span>Henkilöitä yhteensä</span></div>
+      <div class="member-stat"><b id="statVolunteers">–</b><span>Vapaaehtoisia</span></div>
+      <div class="member-stat"><b id="statDonations">–</b><span>Lahjoituksia €</span></div>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="searchMembers" placeholder="Hae nimellä, sähköpostilla, numerolla tai kunnalla…">
+      <div class="chip-group" id="memberFilter">
+        <button class="chip active" data-member-filter="all">Kaikki</button>
+        <button class="chip" data-member-filter="member">Jäsenet</button>
+        <button class="chip" data-member-filter="volunteer">Vapaaehtoiset</button>
+        <button class="chip" data-member-filter="nonmember">Ei-jäsenet</button>
+      </div>
+    </div>
+    <table class="data" id="membersTable"><thead><tr>
+      <th class="sortable" data-sort="member_number">Jäsennro<span class="sort-arrow"></span></th>
+      <th class="sortable" data-sort="full_name">Nimi<span class="sort-arrow"></span></th>
+      <th class="sortable" data-sort="email">Sähköposti<span class="sort-arrow"></span></th>
+      <th class="sortable" data-sort="municipality">Kunta<span class="sort-arrow"></span></th>
+      <th>Tila</th><th>Maksut / osallistuminen</th><th></th>
+    </tr></thead><tbody id="membersBody"></tbody></table>
+    <div class="empty" id="membersEmpty" style="display:none">Jäsenrekisterissä ei ole vielä henkilöitä.</div>
   </section>
 
 </main>
@@ -678,6 +718,27 @@ td.mono{font:12.5px var(--mono);color:var(--muted)}
   </div>
 </div>
 
+<div class="overlay" id="overlayMember">
+ <div class="sheet" style="max-width:760px">
+  <div class="sheet-head"><h2 id="memberFormTitle">Henkilön tiedot</h2><button class="close-x" data-close="overlayMember">×</button></div>
+  <div class="sheet-body">
+   <div class="member-detail-grid">
+    <div class="field"><label>Jäsennumero</label><input type="text" id="mem_number" readonly></div>
+    <div class="field"><label>Jäsenyyden tila</label><select id="mem_status"><option value="active">Aktiivinen</option><option value="pending">Odottaa</option><option value="resigned">Eronnut</option><option value="inactive">Ei aktiivinen</option></select></div>
+    <div class="field"><label>Nimi</label><input type="text" id="mem_name"></div><div class="field"><label>Sähköposti</label><input type="text" id="mem_email"></div>
+    <div class="field"><label>Puhelin</label><input type="text" id="mem_phone"></div><div class="field"><label>Kunta</label><input type="text" id="mem_municipality"></div>
+    <div class="field"><label>Lähiosoite</label><input type="text" id="mem_address"></div><div class="field"><label>Postinumero</label><input type="text" id="mem_postal"></div>
+    <div class="field"><label>Postitoimipaikka</label><input type="text" id="mem_city"></div><div class="field"><label>Liittynyt</label><input type="text" id="mem_joined" readonly></div>
+   </div>
+   <div class="field"><label>Sisäinen huomautus</label><textarea id="mem_notes"></textarea></div>
+   <div class="member-ledger"><h3>Jäsenmaksut</h3><div id="mem_memberships" class="hint"></div></div>
+   <div class="member-ledger"><h3>Lahjoitukset</h3><div id="mem_donations" class="hint"></div></div>
+   <div class="member-ledger"><h3>Vapaaehtoisuus</h3><div id="mem_volunteer" class="hint"></div></div>
+  </div>
+  <div class="sheet-foot"><span class="hint">Maksutietoja ei muokata käsin tässä näkymässä.</span><button class="btn primary" id="saveMember">Tallenna tiedot</button></div>
+ </div>
+</div>
+
 <script type="module">
 "use strict";
 
@@ -703,6 +764,9 @@ const state = {
   meetings: [],
   rules: null,
   news: [],
+  memberRegistry: { contacts:[], members:[], volunteers:[], memberships:[], donations:[], payments:[] },
+  memberFilter: "all",
+  editingMemberKey: null,
   editingBoardMemberId: null,
   editingNewsId: null,
   editingMeetingId: null,
@@ -710,7 +774,8 @@ const state = {
   sort: {
     board: { key: "sort_order", dir: "asc" },
     meetings: { key: "meeting_date", dir: "desc" },
-    news: { key: "published_at", dir: "desc" }
+    news: { key: "published_at", dir: "desc" },
+    members: { key: "full_name", dir: "asc" }
   }
 };
 
@@ -842,6 +907,8 @@ async function loadAll(){
     state.rules = rulesRes.data;
     state.news = newsRes.data;
 
+    await loadMemberRegistry();
+
     $("connStatus").textContent =
       `yhdistetty · ${state.boardMembers.length} hallituksen jäsentä · ${state.meetings.length} kokousasiakirjaa · ${state.news.length} tiedotetta`;
 
@@ -849,6 +916,7 @@ async function loadAll(){
     renderMeetings();
     renderNews();
     renderRules();
+    renderMembers();
   }catch(err){
     $("connStatus").textContent = "virhe ladattaessa dataa -- katso selaimen konsoli (F12 / Kehittäjätyökalut)";
     const detail = (err && err.message) ? err.message : "Verkkovirhe tai CORS-esto.";
@@ -1473,6 +1541,48 @@ $("deleteNews").addEventListener("click", async () => {
 });
 
 /* ==========================================================
+   JÄSENREKISTERI
+   ========================================================== */
+async function adminMembers(action="list", extra={}){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session) throw new Error("Kirjautuminen vaaditaan.");
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/admin-members`,{
+    method:"POST", headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":`Bearer ${session.access_token}`},
+    body:JSON.stringify({action,...extra})
+  });
+  const data=await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.error||"Jäsenrekisterin käsittely epäonnistui."); return data;
+}
+async function loadMemberRegistry(){ state.memberRegistry = await adminMembers("list"); }
+function registryRows(){
+  const r=state.memberRegistry, byContact=new Map(r.contacts.map(c=>[c.id,c])), memberContacts=new Set(r.members.map(m=>m.contact_id).filter(Boolean));
+  const rows=r.members.map(m=>({key:`m:${m.id}`,kind:"member",...byContact.get(m.contact_id),...m,isMember:true}));
+  r.contacts.filter(c=>!memberContacts.has(c.id)).forEach(c=>rows.push({key:`c:${c.id}`,kind:"contact",...c,isMember:false}));
+  return rows;
+}
+function renderMembers(){
+  const r=state.memberRegistry, q=$("searchMembers").value.trim().toLowerCase(), vf=new Set(r.volunteers.filter(v=>["interested","active"].includes(v.status)).map(v=>v.contact_id));
+  let rows=registryRows().filter(x=>{const volunteer=vf.has(x.contact_id||x.id); const f=state.memberFilter; if(f==="member"&&!x.isMember)return false;if(f==="nonmember"&&x.isMember)return false;if(f==="volunteer"&&!volunteer)return false; return !q||[x.full_name,x.email,x.municipality,x.member_number].some(v=>String(v||"").toLowerCase().includes(q));});
+  rows=applySort(rows,"members",{member_number:x=>Number(x.member_number||999999999),full_name:x=>x.full_name||"",email:x=>x.email||"",municipality:x=>x.municipality||""});
+  const active=r.members.filter(m=>m.member_status==="active").length, volunteers=r.volunteers.filter(v=>["interested","active"].includes(v.status)).length, donationCents=r.donations.reduce((a,d)=>a+Number(d.amount_cents||0),0);
+  $("countMembers").textContent=r.members.length; $("statMembers").textContent=active; $("statContacts").textContent=r.contacts.length; $("statVolunteers").textContent=volunteers; $("statDonations").textContent=(donationCents/100).toLocaleString("fi-FI",{minimumFractionDigits:0,maximumFractionDigits:2});
+  $("membersEmpty").style.display=rows.length?"none":"block";
+  $("membersBody").innerHTML=rows.map(x=>{const contactId=x.contact_id||x.id, vol=vf.has(contactId), memberships=r.memberships.filter(y=>y.user_id&&y.user_id===x.user_id&&y.status==="active"), dons=r.donations.filter(y=>y.user_id&&y.user_id===x.user_id); return `<tr><td class="mono">${x.member_number||"—"}</td><td><strong>${esc(x.full_name||"—")}</strong></td><td class="mono">${esc(x.email||"")}</td><td>${esc(x.municipality||"")}</td><td><span class="pill ${x.isMember&&x.member_status==="active"?"member-active":"member-other"}">${x.isMember?esc(x.member_status||"jäsen"):"ei jäsen"}</span></td><td>${memberships.length?`${memberships.length} jäsenmaksu(a)`:""}${vol?`${memberships.length?" · ":""}vapaaehtoinen`:""}${dons.length?`${memberships.length||vol?" · ":""}${dons.length} lahjoitus(ta)`:""}</td><td class="actions"><button class="btn small" data-edit-member="${esc(x.key)}">Avaa</button></td></tr>`}).join("");
+  document.querySelectorAll("[data-edit-member]").forEach(b=>b.onclick=()=>openMember(b.dataset.editMember)); updateSortArrows("membersTable","members");
+}
+bindSortableHeaders("membersTable","members",renderMembers); $("searchMembers").addEventListener("input",renderMembers);
+document.querySelectorAll("#memberFilter .chip").forEach(c=>c.addEventListener("click",()=>{document.querySelectorAll("#memberFilter .chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");state.memberFilter=c.dataset.memberFilter;renderMembers()}));
+function openMember(key){
+  state.editingMemberKey=key; const x=registryRows().find(y=>y.key===key); if(!x)return; const r=state.memberRegistry, contactId=x.contact_id||x.id;
+  $("memberFormTitle").textContent=x.isMember?`Jäsen ${x.member_number?"#"+x.member_number:""}`:"Yhteyshenkilö"; $("mem_number").value=x.member_number||"—"; $("mem_status").value=x.isMember?(x.member_status||"active"):"inactive"; $("mem_status").disabled=!x.isMember;
+  $("mem_name").value=x.full_name||"";$("mem_email").value=x.email||"";$("mem_phone").value=x.phone||"";$("mem_municipality").value=x.municipality||"";$("mem_address").value=x.address_line||"";$("mem_postal").value=x.postal_code||"";$("mem_city").value=x.city||"";$("mem_joined").value=x.joined_at?new Date(x.joined_at).toLocaleDateString("fi-FI"):"—";$("mem_notes").value=x.notes||"";$("mem_notes").disabled=!x.isMember;
+  const ms=r.memberships.filter(y=>y.user_id&&y.user_id===x.user_id), ds=r.donations.filter(y=>y.user_id&&y.user_id===x.user_id), v=r.volunteers.find(y=>y.contact_id===contactId);
+  $("mem_memberships").innerHTML=ms.length?ms.sort((a,b)=>b.membership_year-a.membership_year).map(y=>`${esc(y.membership_year)} · ${esc(y.membership_type||"")} · ${esc(y.status||"")}${y.paid_at?" · maksettu "+new Date(y.paid_at).toLocaleDateString("fi-FI"):""}`).join("<br>"):"Ei jäsenmaksutietoja.";
+  $("mem_donations").innerHTML=ds.length?ds.map(y=>`${(Number(y.amount_cents||0)/100).toLocaleString("fi-FI",{style:"currency",currency:y.currency||"EUR"})} · ${new Date(y.donated_at||y.created_at).toLocaleDateString("fi-FI")}`).join("<br>"):"Ei lahjoituksia.";
+  $("mem_volunteer").textContent=v?`${v.status||""}${v.availability?" · "+v.availability:""}${v.note?" · "+v.note:""}`:"Ei vapaaehtoisilmoittautumista."; openSheet("overlayMember");
+}
+$("saveMember").addEventListener("click",async()=>{const x=registryRows().find(y=>y.key===state.editingMemberKey);if(!x)return;const patch={full_name:$("mem_name").value.trim(),email:$("mem_email").value.trim(),phone:$("mem_phone").value.trim(),municipality:$("mem_municipality").value.trim(),address_line:$("mem_address").value.trim(),postal_code:$("mem_postal").value.trim(),city:$("mem_city").value.trim()};if(x.isMember){patch.member_status=$("mem_status").value;patch.notes=$("mem_notes").value.trim();}try{await adminMembers(x.isMember?"update_member":"update_contact",{id:x.id,patch});toast("Jäsentiedot tallennettu.");closeSheet("overlayMember");await loadMemberRegistry();renderMembers()}catch(e){toast("Tallennus epäonnistui: "+e.message,true)}});
+
+/* ==========================================================
    SÄÄNNÖT
    ========================================================== */
 function renderRules(){
@@ -1591,7 +1701,7 @@ $("loginEmail").addEventListener("keydown", e => { if(e.key === "Enter") attempt
 
 $("logoutBtn").addEventListener("click", async () => {
   try{ await sb.auth.signOut(); }catch(err){ /* ei kriittinen */ }
-  state.boardMembers = []; state.meetings = []; state.news = []; state.rules = null;
+  state.boardMembers = []; state.meetings = []; state.news = []; state.rules = null; state.memberRegistry = {contacts:[],members:[],volunteers:[],memberships:[],donations:[],payments:[]};
   showLogin();
   toast("Kirjauduttu ulos.");
 });
