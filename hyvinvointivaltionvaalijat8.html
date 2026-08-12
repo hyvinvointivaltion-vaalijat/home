@@ -1003,7 +1003,7 @@ button{font:inherit;color:inherit}
 
       const titleCaseFi = value => String(value || '')
         .toLocaleLowerCase('fi-FI')
-        .replace(/(^|[\s–--/-])([\p{L}])/gu, (_, a, b) => a + b.toLocaleUpperCase('fi-FI'));
+        .replace(/(^|[\s–—/-])([\p{L}])/gu, (_, a, b) => a + b.toLocaleUpperCase('fi-FI'));
 
       function fallbackSphereTeaser(rawLabel) {
         const key = normaliseSphereLabel(rawLabel);
@@ -1168,32 +1168,67 @@ button{font:inherit;color:inherit}
       `;
       doc.head.appendChild(sphereStyle);
 
-      /* Pallon sisältö voi muodostua hieman iframe-loadin jälkeen. */
+      /* Pallon oikean alakulman nosto on SVG-ryhmä, ei tavallinen HTML-kortti.
+         Siirretään sen koko <g>-ryhmää alaspäin. Tämä säilyttää otsikon,
+         metatiedot ja leipätekstin keskinäisen asemoinnin. */
       function lowerRightSphereCallout() {
-        const vw = doc.defaultView?.innerWidth || 1200;
-        const vh = doc.defaultView?.innerHeight || 800;
-        const candidates = [...doc.querySelectorAll('div,section,aside,article')].filter(el => {
-          if (el.dataset.v5CalloutShifted === '1') return false;
-          const text = String(el.innerText || '').replace(/\s+/g,' ').trim();
-          if (text.length < 20 || text.length > 340) return false;
-          const r = el.getBoundingClientRect();
-          return r.width > 180 && r.width < 650 && r.height > 60 && r.height < 300 &&
-                 r.left > vw * .52 && r.top > vh * .58;
+        const win = doc.defaultView;
+        const vw = win?.innerWidth || 1200;
+        const vh = win?.innerHeight || 800;
+
+        // Etsi ensisijaisesti nostoon kuuluva iso otsikko / leipäteksti.
+        const all = [...doc.querySelectorAll('svg text, svg tspan, div, section, aside, article')];
+        const anchors = all.filter(el => {
+          const text = String(el.textContent || el.innerText || '').replace(/\s+/g,' ').trim();
+          if (!text) return false;
+          return /Kansakoulusta palvelujärjestelmään|Vaikuttavuus ennen volyymiä|Palvelujen arvo syntyy|Koulutus ja terveys alkavat muodostaa/i.test(text);
         });
-        if (!candidates.length) return;
-        const el = candidates.sort((a,b) => {
-          const ar=a.getBoundingClientRect(), br=b.getBoundingClientRect();
-          return (br.left + br.top) - (ar.left + ar.top);
-        })[0];
-        el.dataset.v5CalloutShifted='1';
-        const cs = doc.defaultView.getComputedStyle(el);
-        const shift = 86;
-        if (cs.position === 'absolute' || cs.position === 'fixed' || cs.position === 'relative') {
-          const top = parseFloat(cs.top);
-          if (Number.isFinite(top)) el.style.setProperty('top', `${top + shift}px`, 'important');
-          else el.style.setProperty('translate', `0 ${shift}px`, 'important');
+
+        let target = null;
+        for (const anchor of anchors) {
+          // SVG: nouse lähimpään ryhmään, joka näyttää koko oikean alakulman nostolta.
+          if (anchor.namespaceURI === 'http://www.w3.org/2000/svg') {
+            let g = anchor.closest('g');
+            let best = g;
+            while (g && g.parentElement && g.parentElement.tagName?.toLowerCase() === 'g') {
+              const parent = g.parentElement;
+              const txt = String(parent.textContent || '').replace(/\s+/g,' ').trim();
+              let box = null;
+              try { box = parent.getBoundingClientRect(); } catch {}
+              if (box && box.width >= 220 && box.width <= vw * .48 && box.height >= 70 && box.height <= vh * .42 && txt.length <= 700) {
+                best = parent;
+                g = parent;
+              } else break;
+            }
+            target = best || anchor;
+            break;
+          }
+          target = anchor.closest('div,section,aside,article') || anchor;
+          break;
+        }
+
+        // Varareitti: etsi oikean alakulman SVG-ryhmä geometrian perusteella.
+        if (!target) {
+          const groups = [...doc.querySelectorAll('svg g')].filter(g => {
+            if (g.dataset.v5CalloutShifted === '1') return false;
+            const text = String(g.textContent || '').replace(/\s+/g,' ').trim();
+            if (text.length < 25 || text.length > 700) return false;
+            const r = g.getBoundingClientRect();
+            return r.width > 220 && r.width < vw * .48 && r.height > 70 && r.height < vh * .42 &&
+                   r.left > vw * .54 && r.top > vh * .60;
+          });
+          target = groups.sort((a,b) => b.getBoundingClientRect().top - a.getBoundingClientRect().top)[0] || null;
+        }
+        if (!target || target.dataset.v5CalloutShifted === '1') return;
+
+        target.dataset.v5CalloutShifted = '1';
+        const shift = 82;
+        if (target.namespaceURI === 'http://www.w3.org/2000/svg') {
+          const old = target.getAttribute('transform') || '';
+          target.setAttribute('transform', `${old} translate(0 ${shift})`.trim());
         } else {
-          el.style.setProperty('translate', `0 ${shift}px`, 'important');
+          target.style.setProperty('position', target.style.position || 'relative', 'important');
+          target.style.setProperty('top', `${shift}px`, 'important');
         }
       }
 
@@ -1205,11 +1240,13 @@ button{font:inherit;color:inherit}
       setTimeout(runSphereEnhancement, 180);
       setTimeout(runSphereEnhancement, 650);
       setTimeout(runSphereEnhancement, 1400);
+      setTimeout(runSphereEnhancement, 2600);
 
       const sphereObserver = new MutationObserver(() => {
         enhanceSphereTeasers();
+        lowerRightSphereCallout();
       });
-      sphereObserver.observe(doc.body, { childList:true, subtree:true });
+      sphereObserver.observe(doc.body, { childList:true, subtree:true, characterData:true });
 
       const joinSection = doc.querySelector('#liity') || doc.querySelector('[id*="liity"]') ||
         [...doc.querySelectorAll('section')].find(section => /liity/i.test(section.querySelector('h1,h2,h3')?.textContent || ''));
@@ -1328,7 +1365,7 @@ button{font:inherit;color:inherit}
             payments.querySelector('[data-profile-title]').textContent = member ? 'Jäsentietosi' : 'Yhteystietosi';
             payments.querySelector('[data-member-badge]').textContent = member
               ? `Jäsen${p.member?.member_number ? ' #' + p.member.member_number : ''}`
-              : 'Et ole vielä jäsen -- voit silti lahjoittaa tai osallistua vapaaehtoiseksi.';
+              : 'Et ole vielä jäsen — voit silti lahjoittaa tai osallistua vapaaehtoiseksi.';
             payments.querySelector('[data-member-title]').textContent = member ? 'Jäsenmaksu' : 'Liity jäseneksi';
             payments.querySelector('[data-member-price]').textContent = member ? '25 €' : '30 €';
             payments.querySelector('[data-member-note]').textContent = member ? 'Vuosittainen jäsenmaksu.' : 'Liittymismaksu 5 € + jäsenmaksu 25 €.';
@@ -1508,7 +1545,7 @@ button{font:inherit;color:inherit}
 
     const showResult = (state, title, detail='') => {
       const isOk = state === 'ok';
-      const text = `${title}${detail ? ` -- ${detail}` : ''}`;
+      const text = `${title}${detail ? ` — ${detail}` : ''}`;
       if (banner) banner.innerHTML = `Paytrail <strong>TESTI</strong> · ${text}`;
       if (resultBox) {
         resultBox.hidden = false;
