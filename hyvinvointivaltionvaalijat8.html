@@ -929,6 +929,143 @@ button{font:inherit;color:inherit}
       `;
       doc.head.appendChild(style);
 
+      /* Navigointipallon ympärillä olevat tarkastelukulmat:
+         säilytetään alkuperäinen klikattavuus, mutta tehdään jokaisesta
+         otsikko + keskeinen kysymys -teaser. */
+      const sphereTeasers = {
+        'PERUSTURVAN SYNTY': {
+          title: 'Perusturvan synty',
+          question: 'Mistä yhteinen turva sai alkunsa?'
+        },
+        'SOSIAALINEN VAKUUTUS': {
+          title: 'Sosiaalinen vakuutus',
+          question: 'Kenen vastuulle elämän riskit kuuluvat?'
+        },
+        'RISKIEN JAKAMINEN': {
+          title: 'Riskien jakaminen',
+          question: 'Kuka kantaa riskin, kun elämä muuttuu?'
+        },
+        'YHTEISKUNTAAN KIINNITTYMINEN': {
+          title: 'Yhteiskuntaan kiinnittyminen',
+          question: 'Mikä saa ihmisen kuulumaan yhteiseen?'
+        },
+        'TYÖN TURVA': {
+          title: 'Työn turva',
+          question: 'Miten työstä tuli myös turvaa?'
+        },
+        'PERHE JA TOIMEENTULO': {
+          title: 'Perhe ja toimeentulo',
+          question: 'Kuka kantaa vastuun arjen toimeentulosta?'
+        }
+      };
+
+      const normaliseSphereLabel = value =>
+        String(value || '').replace(/\s+/g, ' ').trim().toLocaleUpperCase('fi-FI');
+
+      function enhanceSphereTeasers() {
+        let enhanced = 0;
+
+        /* Ensisijaisesti SVG-tekstit: näin alkuperäiset leader-linjat,
+           asemointi ja mahdolliset click-handlerit säilyvät. */
+        doc.querySelectorAll('svg text').forEach(textNode => {
+          if (textNode.dataset.v5SphereTeaser === '1') {
+            enhanced++;
+            return;
+          }
+
+          const key = normaliseSphereLabel(textNode.textContent);
+          const teaser = sphereTeasers[key];
+          if (!teaser) return;
+
+          const x = textNode.getAttribute('x') || '0';
+          const anchor = textNode.getAttribute('text-anchor') || '';
+          const originalTransform = textNode.getAttribute('transform');
+
+          while (textNode.firstChild) textNode.removeChild(textNode.firstChild);
+
+          const title = doc.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+          title.setAttribute('x', x);
+          title.setAttribute('dy', '0');
+          title.setAttribute('font-size', '1em');
+          title.setAttribute('font-weight', '700');
+          title.setAttribute('letter-spacing', '.12em');
+          title.textContent = teaser.title.toLocaleUpperCase('fi-FI');
+
+          const question = doc.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+          question.setAttribute('x', x);
+          question.setAttribute('dy', '1.55em');
+          question.setAttribute('font-size', '.82em');
+          question.setAttribute('font-weight', '500');
+          question.setAttribute('letter-spacing', '0');
+          question.setAttribute('opacity', '.76');
+          question.textContent = teaser.question;
+
+          textNode.append(title, question);
+          textNode.dataset.v5SphereTeaser = '1';
+          textNode.style.cursor = 'pointer';
+          textNode.setAttribute('role', 'link');
+          textNode.setAttribute('aria-label', `${teaser.title}. ${teaser.question}`);
+          if (anchor) textNode.setAttribute('text-anchor', anchor);
+          if (originalTransform) textNode.setAttribute('transform', originalTransform);
+          enhanced++;
+        });
+
+        /* Varareitti, jos jokin pallon otsikoista on HTML-elementtinä. */
+        [...doc.querySelectorAll('button,a,[role="button"],[data-axis],.sphere-label,.welfare-label')].forEach(el => {
+          if (el.dataset?.v5SphereTeaser === '1') return;
+          const key = normaliseSphereLabel(el.textContent);
+          const teaser = sphereTeasers[key];
+          if (!teaser) return;
+
+          el.dataset.v5SphereTeaser = '1';
+          el.classList.add('v5-sphere-teaser-html');
+          el.innerHTML = `<span class="v5-sphere-teaser-title">${teaser.title}</span><span class="v5-sphere-teaser-question">${teaser.question}</span>`;
+          el.setAttribute('aria-label', `${teaser.title}. ${teaser.question}`);
+          enhanced++;
+        });
+
+        return enhanced;
+      }
+
+      const sphereStyle = doc.createElement('style');
+      sphereStyle.id = 'v5-sphere-teasers';
+      sphereStyle.textContent = `
+        .v5-sphere-teaser-html{
+          display:grid!important;gap:3px!important;text-decoration:none!important;
+          cursor:pointer!important
+        }
+        .v5-sphere-teaser-title{
+          font:700 .7rem/1.15 "Source Sans 3",Inter,sans-serif!important;
+          letter-spacing:.13em!important;text-transform:uppercase!important
+        }
+        .v5-sphere-teaser-question{
+          display:block!important;max-width:210px!important;
+          font:500 .74rem/1.28 "Source Sans 3",Inter,sans-serif!important;
+          letter-spacing:0!important;text-transform:none!important;
+          color:var(--ink-soft,#525d60)!important
+        }
+        .v5-sphere-teaser-html:hover .v5-sphere-teaser-title{
+          color:var(--copper,#b4632c)!important
+        }
+        .v5-sphere-teaser-html:hover .v5-sphere-teaser-question{
+          color:var(--forest,#20514c)!important
+        }
+      `;
+      doc.head.appendChild(sphereStyle);
+
+      /* Pallon sisältö voi muodostua hieman iframe-loadin jälkeen. */
+      const runSphereEnhancement = () => enhanceSphereTeasers();
+      runSphereEnhancement();
+      setTimeout(runSphereEnhancement, 180);
+      setTimeout(runSphereEnhancement, 650);
+      setTimeout(runSphereEnhancement, 1400);
+
+      const sphereObserver = new MutationObserver(() => {
+        const count = enhanceSphereTeasers();
+        if (count >= Object.keys(sphereTeasers).length) sphereObserver.disconnect();
+      });
+      sphereObserver.observe(doc.body, { childList:true, subtree:true });
+
       const joinSection = doc.querySelector('#liity') || doc.querySelector('[id*="liity"]') ||
         [...doc.querySelectorAll('section')].find(section => /liity/i.test(section.querySelector('h1,h2,h3')?.textContent || ''));
       if (joinSection && !doc.getElementById('v5-membership-payments')) {
