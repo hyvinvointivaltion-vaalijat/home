@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hyvinvointivaltion Vaalijat ry · v12</title>
+<title>Hyvinvointivaltion Vaalijat ry · v12.2</title>
 <meta name="description" content="Hyvinvointivaltion Vaalijat ry yhteisellä Atlas-navigaatiolla; visualisoinnit avautuvat itsenäisinä täyden viewportin sivuina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,9 +79,9 @@ button{font:inherit;color:inherit}
   position:absolute;inset:0;overflow:auto;background:var(--paper);overscroll-behavior:contain
 }
 #associationRoot[hidden]{display:none}
+#visualRoot{position:absolute;inset:0;background:var(--paper)}
+#visualRoot[hidden]{display:none}
 .view-frame{display:block;width:100%;height:100%;border:0;background:var(--paper)}
-.murros-crop{position:absolute;inset:0;overflow:hidden;background:var(--paper)}
-.murros-crop .view-frame{position:absolute;left:0;top:-64px;width:100%;height:calc(100% + 64px)}
 .loader{
   position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);
   font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)
@@ -140,7 +140,8 @@ button{font:inherit;color:inherit}
 
 <main id="viewRoot">
   <section id="associationRoot" aria-live="polite"></section>
-    <div class="loader" id="loader">Ladataan näkymää…</div>
+  <section id="visualRoot" hidden aria-live="polite"></section>
+  <div class="loader" id="loader">Ladataan näkymää…</div>
 </main>
 
 <script>
@@ -195,6 +196,7 @@ button{font:inherit;color:inherit}
   const MODULE_ORDER = ["murroskartta","rengas","verkko","matriisi","paattely","maisema","tulkinta"];
 
   const associationRoot = document.getElementById("associationRoot");
+  const visualRoot = document.getElementById("visualRoot");
   const loader = document.getElementById("loader");
   const moduleMenu = document.getElementById("moduleMenu");
   const moduleCurrent = document.getElementById("moduleCurrent");
@@ -412,28 +414,72 @@ button{font:inherit;color:inherit}
     }
   }
 
+  function findAssociationTarget(name){
+    const words = name === "ajankohtaista"
+      ? ["ajankohtaista","uutiset","ajankohtaiset"]
+      : ["liity","jäseneksi","jäsenyys","liittyminen"];
+
+    const byId = [...associationRoot.querySelectorAll("[id]")].find(el => {
+      const id = normalizeText(el.id);
+      return words.some(word => id === word || id.includes(word));
+    });
+    if(byId) return byId;
+
+    const heading = [...associationRoot.querySelectorAll("h1,h2,h3,h4,h5,h6,.eyebrow,.kicker,.section-label,[class*='eyebrow'],[class*='kicker'],[class*='label']")]
+      .find(el => {
+        const t = normalizeText(el.textContent);
+        return words.some(word => t === word || t.includes(word));
+      });
+    if(heading) return heading.closest("section,article") || heading;
+
+    return [...associationRoot.querySelectorAll("section,article,div")]
+      .filter(el => {
+        const t = normalizeText(el.textContent);
+        return words.some(word => t.includes(word));
+      })
+      .sort((a,b) => a.querySelectorAll("*").length - b.querySelectorAll("*").length)[0] || null;
+  }
+
   async function showAssociation(name){
+    visualRoot.hidden = true;
+    visualRoot.innerHTML = "";
     associationRoot.hidden = false;
     await loadAssociation();
 
-    const anchor = VIEWS[name].anchor;
-    if(anchor){
-      requestAnimationFrame(() => {
-        const target = associationRoot.querySelector(`#${CSS.escape(anchor)}`) ||
-                       associationRoot.querySelector(`[id*="${CSS.escape(anchor)}"]`);
-        if(target) target.scrollIntoView({block:"start"});
-        else associationRoot.scrollTop = 0;
-      });
-    }else{
-      associationRoot.scrollTop = 0;
-    }
+    requestAnimationFrame(() => {
+      if(name === "yhdistys"){
+        associationRoot.scrollTop = 0;
+        return;
+      }
+      const target = findAssociationTarget(name);
+      if(target){
+        const rootTop = associationRoot.getBoundingClientRect().top;
+        const targetTop = target.getBoundingClientRect().top;
+        associationRoot.scrollTo({
+          top: associationRoot.scrollTop + targetTop - rootTop - 16,
+          behavior: "smooth"
+        });
+      }
+    });
   }
 
   function openVisualization(name){
     const view = VIEWS[name];
     if(!view?.url) return;
-    // V12: visualisointi avataan omana täyden viewportin sivunaan.
-    window.location.href = view.url;
+
+    associationRoot.hidden = true;
+    visualRoot.hidden = false;
+    visualRoot.innerHTML = "";
+    loader.hidden = false;
+
+    const frame = document.createElement("iframe");
+    frame.className = "view-frame";
+    frame.title = view.title;
+    frame.allow = "fullscreen";
+    frame.loading = "eager";
+    frame.src = view.url;
+    frame.addEventListener("load",() => { loader.hidden = true; },{once:true});
+    visualRoot.appendChild(frame);
   }
 
   async function showView(name){
@@ -443,23 +489,21 @@ button{font:inherit;color:inherit}
     setTabs(name);
 
     if(VIEWS[name].type === "association") await showAssociation(name);
-    else { openVisualization(name); return; }
+    else openVisualization(name);
 
     document.title = `${VIEWS[name].title} · Hyvinvointivaltion Vaalijat ry`;
   }
 
   function selectedView(){
     const key = location.hash.replace(/^#\/?/,"");
-    return ["yhdistys","ajankohtaista","liity"].includes(key) ? key : "yhdistys";
+    return VIEWS[key] ? key : "yhdistys";
   }
 
   function stepModule(delta){
     const current = MODULE_ORDER.includes(active) ? active : MODULE_ORDER[0];
     const i = MODULE_ORDER.indexOf(current);
     const next = MODULE_ORDER[(i+delta+MODULE_ORDER.length)%MODULE_ORDER.length];
-    moduleLabel.textContent = VIEWS[next].title;
-    moduleQuestion.textContent = VIEWS[next].question;
-    active = next;
+    location.hash = next;
   }
 
   function closeMenu(){
@@ -484,7 +528,7 @@ button{font:inherit;color:inherit}
     const button = e.target.closest("[data-module]");
     if(!button) return;
     closeMenu();
-    openVisualization(button.dataset.module);
+    location.hash = button.dataset.module;
   });
 
   document.addEventListener("click",e => {
