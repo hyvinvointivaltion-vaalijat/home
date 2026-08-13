@@ -1,0 +1,3123 @@
+<!DOCTYPE html>
+<html lang="fi" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hyvinvointivaltion Vaalijat ry · v13.5</title>
+<meta name="description" content="Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Hyvinvointivaltion Vaalijat ry — Hyvinvointivaltio on verkosto" />
+<meta property="og:description" content="Rakenteet, riippuvuudet ja muutos: elävä Atlas-aineisto ja yhdistyksen toiminta yhdellä sivulla." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Hyvinvointivaltion Vaalijat ry — Hyvinvointivaltio on verkosto" />
+<meta name="twitter:description" content="Rakenteet, riippuvuudet ja muutos: elävä Atlas-aineisto ja yhdistyksen toiminta yhdellä sivulla." />
+<meta property="og:locale" content="fi_FI" />
+<meta property="og:site_name" content="Hyvinvointivaltion Vaalijat ry" />
+<meta name="robots" content="index,follow" />
+<meta name="theme-color" content="#004458" />
+<meta name="color-scheme" content="light" />
+<link rel="canonical" href="./" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://harrikayhko.fi" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="modulepreload" href="https://harrikayhko.fi/atlas/components/atlas-ui.js" crossorigin>
+<script type="module" src="https://harrikayhko.fi/atlas/components/atlas-ui.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"NGO","name":"Hyvinvointivaltion Vaalijat ry","description":"Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena.","email":"juha.nurmela1@gmail.com","telephone":"+358408319466","areaServed":"FI","inLanguage":"fi"}
+</script>
+<style>
+:root{
+  --paper:#FCF4E9;
+  --paper-2:#FAEAD7;
+  --card:#FFFFFF;
+  --ink:#10262E;
+  --ink-soft:#4B6068;
+  --line:#EAD9C4;
+  --line-soft:#F2E5D5;
+  --deep:#004458;
+  --forest:#E50046;
+  --forest-2:#C0003C;
+  --copper:#F39200;
+  --amber:#FCC22E;
+  --slate:#6E7F86;
+  --maxw:1220px;
+  --nav-h:74px;
+  --ease:cubic-bezier(.22,.68,.24,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 24px)}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Sans 3",Inter,system-ui,sans-serif;
+  font-size:18px;line-height:1.68;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0;background:none;}
+h1,h2,h3{font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-weight:400;letter-spacing:-.02em;line-height:1.02;margin:0}
+h1{font-size:clamp(2.9rem,7.4vw,6rem)}
+h2{font-size:clamp(2.05rem,4.3vw,3.5rem);line-height:1.06}
+h3{font-size:clamp(1.2rem,1.9vw,1.55rem);line-height:1.2}
+p{margin:0 0 1.05em}
+a{color:inherit}
+::selection{background:rgba(243,146,0,.2)}
+:focus-visible{outline:2px solid var(--copper);outline-offset:4px;border-radius:4px}
+button,input{font:inherit}
+.skip{position:absolute;left:-9999px;top:0;z-index:99;background:var(--deep);color:#FFFFFF;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
+.skip:focus{left:0}
+[hidden]{display:none !important}
+.welfare-sphere:focus-visible{outline:2px solid var(--copper);outline-offset:6px}
+.f-muted{color:rgba(207,231,240,.45)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+.eyebrow{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);font-weight:600}
+.lead{font-size:clamp(1.08rem,1.55vw,1.3rem);color:var(--ink-soft);max-width:64ch}
+.micro{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate);font-weight:600}
+section{padding:clamp(76px,9.5vw,140px) 0;position:relative}
+section + section{border-top:1px solid var(--line-soft)}
+
+/* section head with number rail */
+.shead{display:grid;grid-template-columns:minmax(0,.38fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:start}
+.shead .num{font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-size:clamp(2.4rem,5vw,4rem);color:transparent;-webkit-text-stroke:1px var(--line);line-height:1;display:block;margin-bottom:10px}
+.shead .rail{position:sticky;top:calc(var(--nav-h) + 28px)}
+
+/* NAV */
+header.nav{
+  position:sticky;top:0;z-index:60;height:var(--nav-h);
+  background:rgba(252,244,233,.82);backdrop-filter:saturate(160%) blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s,background .3s;
+}
+header.nav.is-scrolled{border-color:var(--line);box-shadow:0 18px 40px -36px rgba(0,68,88,.7)}
+.nav-in{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:600;letter-spacing:-.015em}
+.brand span{font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-size:1.02rem}
+.brand .mark{width:26px;height:26px;flex:none}
+.brand .mark g{stroke:var(--forest)}
+.links{display:flex;align-items:center;gap:26px}
+.links a{position:relative;text-decoration:none;font-size:.9rem;font-weight:600;color:var(--ink-soft);transition:color .2s}
+.links a::after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--copper);transition:right .32s var(--ease)}
+.links a:hover,.links a.active{color:var(--ink)}
+.links a:hover::after,.links a.active::after{right:0}
+.links a[data-action="join"]{
+  color:#fff;background:var(--forest);padding:9px 18px;border-radius:999px;transition:transform .25s var(--ease),background .25s;
+}
+.links a[data-action="join"]::after{display:none}
+.links a[data-action="join"]:hover{background:var(--deep);transform:translateY(-2px)}
+.nav-progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--copper)}
+.burger{display:none;width:44px;height:38px;border:1px solid var(--line);background:transparent;border-radius:10px;position:relative;cursor:pointer}
+.burger span,.burger::before,.burger::after{content:"";position:absolute;left:11px;right:11px;height:1.6px;background:var(--ink);transition:transform .3s var(--ease),opacity .2s}
+.burger span{top:50%;transform:translateY(-50%)}
+.burger::before{top:13px}.burger::after{bottom:13px}
+.burger[aria-expanded="true"] span{opacity:0}
+.burger[aria-expanded="true"]::before{top:50%;transform:rotate(45deg)}
+.burger[aria-expanded="true"]::after{bottom:auto;top:50%;transform:rotate(-45deg)}
+.mobile{display:none;flex-direction:column;gap:2px;padding:10px 0 18px}
+.mobile a{padding:11px 2px;border-bottom:1px solid var(--line-soft);text-decoration:none;font-weight:600}
+.mobile.open{display:flex}
+
+/* HERO */
+.hero{padding:clamp(60px,9vw,110px) 0 clamp(60px,8vw,110px);border-top:0}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,6vw,80px);align-items:center}
+.hero-kicker{display:inline-flex;align-items:center;gap:10px;margin-bottom:26px}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--copper);box-shadow:0 0 0 5px rgba(243,146,0,.14)}
+.hero h1 .accent{font-style:italic;color:var(--forest)}
+.hero .lead{margin-top:26px;font-size:clamp(1.15rem,1.8vw,1.45rem)}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;text-decoration:none;font-weight:600;font-size:.94rem;
+  padding:13px 26px;border-radius:999px;border:1px solid transparent;transition:transform .25s var(--ease),background .25s,color .25s,border-color .25s;
+}
+.btn-primary{background:var(--forest);color:#FFFFFF;box-shadow:0 20px 40px -26px rgba(0,68,88,.85)}
+.btn-primary:hover{background:var(--deep);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--forest);background:rgba(229,0,70,.06);transform:translateY(-2px)}
+.hero figure{margin:0;position:relative}
+.hero figure svg{border-radius:20px;border:1px solid var(--line);background:var(--card);box-shadow:0 40px 90px -60px rgba(0,68,88,.7)}
+.figcap{margin-top:12px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+.hero-strip{
+  margin-top:clamp(48px,7vw,84px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+}
+.hero-strip div{background:var(--card);padding:22px 24px}
+.hero-strip b{display:block;font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-size:1.85rem;color:var(--forest);font-weight:400}
+.hero-strip span{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--slate)}
+
+/* generic two column */
+.two{display:grid;grid-template-columns:minmax(0,.38fr) minmax(0,1fr);gap:clamp(24px,5vw,64px)}
+
+/* NEWS */
+.news-heading{display:flex;flex-wrap:wrap;gap:20px;align-items:end;justify-content:space-between;margin-top:14px}
+.news-intro{margin-top:18px}
+.news-source{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
+.news-grid{
+  margin-top:clamp(28px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+}
+.news-card{background:var(--card);padding:30px 28px 32px;display:flex;flex-direction:column;gap:10px;transition:background .3s}
+.news-card:hover{background:#FFFDF7}
+.news-card.pinned{background:var(--paper-2);box-shadow:inset 3px 0 0 var(--copper)}
+.news-kicker{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);font-weight:700}
+.news-card h3{margin-top:2px}
+.news-excerpt{color:var(--ink-soft);font-size:.98rem;margin:0}
+.news-date{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-top:auto;padding-top:12px}
+.news-link{align-self:start;text-decoration:none;font-weight:700;font-size:.9rem;color:var(--forest);border-bottom:1px solid rgba(229,0,70,.3);padding-bottom:2px}
+.news-link:hover{color:var(--copper);border-color:var(--copper)}
+.news-loading,.news-error{background:var(--card);padding:34px 28px;color:var(--slate);grid-column:1/-1}
+.data-error{margin-top:18px;color:var(--copper);font-size:.92rem}
+.data-note{margin-top:22px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+
+figure{margin:0}
+
+/* KEYWORDS */
+.keywords{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.keywords span{
+  font-size:.7rem;letter-spacing:.18em;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);background:var(--card);
+}
+
+/* WRITINGS */
+.writings{margin-top:clamp(32px,4vw,52px);display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.write{background:var(--card);padding:32px 28px;transition:transform .35s var(--ease),background .3s}
+.write:hover{background:#FFFDF7}
+.write .meta{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);font-weight:700;margin-bottom:12px}
+.write h3{margin-bottom:10px}
+.write p{color:var(--ink-soft);font-size:.97rem;margin:0}
+
+/* ORG */
+.org-grid{margin-top:clamp(32px,4vw,52px);display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,48px);align-items:start}
+.org-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 30px 34px}
+.org-list{counter-reset:step;list-style:none;margin:18px 0 0;padding:0;display:grid;gap:16px}
+.org-list li{counter-increment:step;position:relative;padding-left:44px;color:var(--ink-soft)}
+.org-list li::before{
+  content:counter(step,decimal-leading-zero);position:absolute;left:0;top:2px;
+  font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-size:.85rem;color:var(--copper);border:1px solid var(--line);
+  width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:var(--paper-2);
+}
+.org-list li strong{display:block;color:var(--ink);font-weight:600}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills div{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;padding:9px 15px;border-radius:999px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-soft)}
+.org-meta{display:grid;gap:6px;margin:26px 0;font-size:.92rem;color:var(--ink-soft)}
+.org-meta strong{color:var(--ink)}
+
+/* BOARD */
+.board-grid{margin-top:clamp(30px,4vw,50px);display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.board-card{background:var(--card);padding:30px 28px;display:flex;flex-direction:column;gap:8px}
+.board-card .role{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);font-weight:700}
+.board-card p{color:var(--ink-soft);font-size:.95rem;margin:4px 0 0}
+.board-card .contact{margin-top:14px;display:flex;flex-wrap:wrap;gap:14px;font-size:.9rem}
+.board-card .contact a{color:var(--forest);text-decoration:none;border-bottom:1px solid rgba(229,0,70,.28)}
+.board-card .contact a:hover{color:var(--copper);border-color:var(--copper)}
+
+/* DOCS */
+.doc-groups{margin-top:clamp(30px,4vw,50px);display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.doc-group{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 26px}
+.doc-group h3{margin-bottom:14px}
+.doc-items{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.doc-items li{border-top:1px solid var(--line-soft);padding-top:14px}
+.doc-items .t{font-weight:600;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.doc-items .t a{color:var(--forest);text-decoration:none;border-bottom:1px solid rgba(229,0,70,.28)}
+.doc-items .t a:hover{color:var(--copper);border-color:var(--copper)}
+.doc-items .tag{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--paper-2);border:1px solid var(--line);color:var(--slate)}
+.doc-items .d{color:var(--ink-soft);font-size:.92rem;margin:6px 0 0}
+.doc-empty{color:var(--slate);font-size:.93rem;margin:0}
+
+/* JOIN */
+.join{background:var(--deep);color:#eef2ee;border-top:0}
+.join::before{content:"";position:absolute;inset:0;background:none;pointer-events:none}
+.join h2{color:#fdfbf5}
+.join .eyebrow{color:rgba(238,242,238,.55)}
+.join .lead{color:rgba(238,242,238,.76)}
+.join-grid{margin-top:clamp(32px,4vw,50px);display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,48px);align-items:start}
+.join .org-list li{color:rgba(238,242,238,.76)}
+.join .org-list li strong{color:#fdfbf5}
+.join .org-list li::before{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--amber)}
+.pay-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:28px 26px;backdrop-filter:blur(6px)}
+.pay-card .micro{color:rgba(238,242,238,.55)}
+.pay-lines{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;font-size:.96rem;color:rgba(238,242,238,.85)}
+.pay-lines li{border-bottom:1px dashed rgba(255,255,255,.14);padding-bottom:10px}
+.join .btn-primary{background:var(--copper);color:#fff}
+.join .btn-primary:hover{background:#9c531f}
+.join .btn-ghost{border-color:rgba(255,255,255,.28);color:#eef2ee}
+.join .btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.5)}
+
+/* BACK TO TOP */
+.backtop{
+  position:fixed;right:22px;bottom:22px;z-index:70;width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;
+  opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s;
+  box-shadow:0 18px 36px -24px rgba(0,68,88,.8);
+}
+.backtop.show{opacity:1;pointer-events:auto;transform:none}
+
+/* FOOTER */
+footer{background:#0b1f21;color:#CFE7F0;padding:clamp(60px,7vw,96px) 0 40px}
+footer h3{color:#fdfbf5}
+.f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.f-title{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(207,231,240,.5);margin-bottom:14px}
+footer a{display:block;color:#CFE7F0;text-decoration:none;padding:5px 0;font-size:.94rem;transition:color .2s}
+footer a:hover{color:var(--amber)}
+.f-bottom{margin-top:52px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;font-size:.85rem;color:rgba(207,231,240,.6)}
+.f-bottom a{display:inline-block}
+
+/* ATLAS LAB */
+.atlas-lab{--atlas-bg:#FCF4E9;--atlas-paper:#FFFFFF;--atlas-forest:#E50046;--atlas-forest-deep:#004458;--atlas-copper:#F39200;--atlas-line:#dcd5c8;--atlas-muted:#69726f;background:var(--paper);position:relative;overflow:hidden;border-top:1px solid var(--line)}
+.atlas-lab::before{content:"";position:absolute;inset:0;background:none}
+.atlas-lab > .wrap{position:relative;z-index:1;max-width:1260px}
+.atlas-kicker{color:var(--atlas-copper);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.atlas-intro{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(24px,4vw,56px);align-items:end}
+.atlas-intro h2{margin-top:14px;color:var(--atlas-forest-deep)}
+.atlas-intro .lead{margin-top:20px}
+.atlas-note{border-left:2px solid var(--atlas-copper);padding:6px 0 6px 20px;color:var(--ink-soft);font-size:.96rem}
+.atlas-shell{
+  margin-top:clamp(32px,4vw,52px);background:var(--atlas-paper);border:1px solid var(--atlas-line);
+  border-radius:22px;overflow:hidden;box-shadow:0 46px 110px -62px rgba(0,68,88,.6);position:relative;
+}
+.atlas-toolbar{padding:24px 26px 22px;border-bottom:1px solid var(--atlas-line);background:var(--atlas-paper);position:sticky;top:var(--nav-h);z-index:3}
+.atlas-toolbar-top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}
+.atlas-count{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--atlas-muted)}
+.atlas-theme-wrap{position:relative}
+.atlas-theme-row{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:10px}
+.atlas-theme-row input{
+  width:100%;padding:13px 46px 13px 16px;border:1px solid var(--atlas-line);border-radius:12px;
+  background:#fffef9;color:var(--atlas-forest-deep);font-weight:600;outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.atlas-theme-row input:focus{border-color:var(--atlas-forest);box-shadow:0 0 0 4px rgba(229,0,70,.12)}
+.atlas-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:8px;border:0;background:transparent;color:var(--atlas-muted);cursor:pointer}
+.atlas-clear:hover{background:#efe9df;color:var(--atlas-forest-deep)}
+.atlas-suggestions{
+  display:none;position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:9;max-height:280px;overflow:auto;
+  background:#fffef9;border:1px solid var(--atlas-line);border-radius:14px;box-shadow:0 30px 60px -34px rgba(0,68,88,.55);
+}
+.atlas-suggestions.open{display:block}
+.atlas-suggestion{width:100%;border:0;border-bottom:1px solid var(--atlas-line);background:transparent;text-align:left;padding:12px 16px;cursor:pointer;color:var(--atlas-forest-deep);display:flex;justify-content:space-between;gap:12px}
+.atlas-suggestion:last-child{border-bottom:0}
+.atlas-suggestion:hover,.atlas-suggestion[aria-selected="true"]{background:#f2eee6}
+.atlas-suggestion small{color:var(--atlas-muted)}
+.atlas-empty{padding:18px;color:var(--atlas-muted);font-size:.9rem}
+.atlas-nav{border:1px solid var(--atlas-line);border-radius:12px;background:#fffef9;color:var(--atlas-forest-deep);cursor:pointer;font-size:1.15rem;transition:background .2s,color .2s}
+.atlas-nav:hover{background:var(--atlas-forest-deep);color:#FFFFFF}
+.atlas-meta{display:flex;gap:10px;align-items:center;margin-top:14px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--atlas-muted)}
+.atlas-meta .kind{color:var(--atlas-copper);font-weight:700}
+.atlas-status{padding:12px 26px;font-size:.85rem;color:var(--atlas-muted);border-bottom:1px solid var(--atlas-line)}
+.atlas-stage{min-height:430px;padding:26px;background:#fbfaf5;transition:opacity .18s ease,transform .18s ease}
+.atlas-stage > *{min-height:380px;width:100%;display:block}
+.atlas-stage.is-loading{opacity:.38;transform:translateY(3px)}
+.atlas-foot{padding:14px 26px;border-top:1px solid var(--atlas-line);font-size:.78rem;letter-spacing:.1em;color:var(--atlas-muted);background:#faf7f0}
+atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-article{
+  display:block;width:100%;
+  --atlas-paper:#FFFFFF;--atlas-line:#ded8ca;--atlas-title:#1f4642;--atlas-ink:#172421;--atlas-accent:#F39200;
+  --atlas-radius:14px;--atlas-serif:"Jost","Source Sans 3",system-ui,sans-serif;--atlas-sans:"Source Sans 3",system-ui,sans-serif;
+}
+.atlas-reading{
+  margin-top:clamp(28px,3.5vw,44px);display:grid;grid-template-columns:1.28fr .72fr;gap:1px;background:var(--atlas-line);
+  border:1px solid var(--atlas-line);border-radius:20px;overflow:hidden;
+}
+.atlas-reading-visual{background:var(--atlas-paper);padding:28px 28px 24px;position:relative}
+.atlas-reading-visual h3{color:var(--atlas-forest-deep);margin-top:8px;margin-bottom:14px;font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-size:clamp(1.7rem,2.5vw,2.5rem);line-height:1.05}
+.reading-indicator-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px}
+.reading-indicator-tabs button{border:1px solid var(--atlas-line);background:#f7f4ec;color:var(--atlas-muted);padding:7px 11px;font:600 .64rem "Source Sans 3",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.18s ease}
+.reading-indicator-tabs button:hover{border-color:var(--atlas-forest);color:var(--atlas-forest-deep);background:#fffef9}
+.reading-indicator-tabs button.active{background:var(--atlas-forest-deep);border-color:var(--atlas-forest-deep);color:#FFFFFF}
+.atlas-indicator-visual{
+  position:relative;
+  border:1px solid #ded8ca;
+  border-radius:14px;
+  background:#fbfaf5;
+  overflow:hidden;
+  min-height:330px;
+  padding:0;
+}
+.atlas-indicator-visual atlas-stat-card{
+  display:block;
+  width:100%;
+  min-height:330px;
+  --atlas-paper:#fbfaf5;
+  --atlas-line:#e2dccf;
+  --atlas-title:#173f3b;
+  --atlas-ink:#172421;
+  --atlas-accent:#F39200;
+  --atlas-radius:0;
+  --atlas-serif:"Jost","Source Sans 3",system-ui,sans-serif;
+  --atlas-sans:"Source Sans 3",system-ui,sans-serif;
+}
+.atlas-indicator-visual atlas-stat-card::part(card){
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+.atlas-chart-note{
+  display:flex;
+  justify-content:space-between;
+  padding-top:12px;
+  color:#6E7F86;
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.atlas-reading-copy{
+  background:#173f3b;color:#FCF4E9;padding:clamp(30px,4vw,48px);
+  min-height:100%;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.atlas-reading-copy::before{
+  content:"";position:absolute;width:360px;height:360px;right:-170px;top:-180px;
+  border:1px solid rgba(252,244,233,.09);border-radius:50%;
+}
+.atlas-reading-copy::after{
+  content:"";position:absolute;width:220px;height:220px;right:-80px;top:-110px;
+  border:1px dashed rgba(252,244,233,.10);border-radius:50%;
+}
+.atlas-reading-copy > *{position:relative;z-index:1}
+.atlas-reading-copy .micro{color:#c99555}
+.atlas-claim{
+  font-family:"Jost","Source Sans 3",system-ui,sans-serif;font-size:clamp(2rem,3.1vw,3.05rem);
+  line-height:1.02;letter-spacing:-.025em;color:#FFFFFF;margin:14px 0 20px;max-width:12ch;
+}
+.atlas-reading-copy > p:not(.atlas-claim){color:rgba(252,244,233,.72);font-size:1rem;line-height:1.7;max-width:42ch}
+.atlas-mini-rule{width:56px;height:2px;background:#c46b31;margin:28px 0 20px}
+.atlas-reading-links{display:flex;flex-wrap:wrap;gap:8px}
+.atlas-reading-links span{
+  font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;padding:6px 10px;
+  border:0;color:rgba(252,244,233,.55);background:rgba(252,244,233,.06);
+}
+.atlas-chart-note{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--atlas-muted)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:980px){
+  .hero-grid,.two,.shead,.org-grid,.join-grid,.atlas-intro,.atlas-reading{grid-template-columns:1fr}
+  .shead .rail{position:static}
+  .hero-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .f-grid{grid-template-columns:1fr 1fr}
+  .links{display:none}
+  .burger{display:block}
+  .atlas-toolbar{position:static}
+}
+@media (max-width:620px){
+  body{font-size:17px}
+  .wrap{padding:0 20px}
+  .f-grid{grid-template-columns:1fr}
+  .atlas-theme-row{grid-template-columns:42px minmax(0,1fr) 42px}
+  .atlas-stage{padding:12px;min-height:360px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+
+@media(max-width:700px){
+  .atlas-indicator-visual,
+  .atlas-indicator-visual atlas-stat-card{
+    min-height:280px;
+  }
+}
+
+/* 01 · Lähtökohta — hyvinvointivaltion kiteytysvisualisointi */
+.welfare-figure{margin-top:clamp(44px,6vw,84px)}
+.welfare-map{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:var(--card);
+  box-shadow:0 34px 80px -58px rgba(0,68,88,.48);
+}
+.welfare-map svg{display:block;width:100%;height:auto}
+.welfare-map .node{cursor:default}
+.welfare-map .node circle{transition:transform .35s var(--ease),filter .35s var(--ease)}
+.welfare-map .node:hover circle{transform:scale(1.12);filter:drop-shadow(0 5px 8px rgba(0,68,88,.16))}
+.welfare-map .flow{
+  fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:8 12;animation:welfareFlow 16s linear infinite;
+}
+.welfare-map .flow.slow{animation-duration:24s}
+.welfare-map .flow.fast{animation-duration:11s}
+.welfare-map .label{font-family:"Source Sans 3",Inter,sans-serif;fill:var(--ink);font-size:15px;font-weight:600;letter-spacing:.08em}
+.welfare-map .small{font-family:"Source Sans 3",Inter,sans-serif;fill:var(--slate);font-size:11px;letter-spacing:.16em}
+.welfare-map .claim{font-family:"Jost","Source Sans 3",system-ui,sans-serif;fill:var(--deep);font-size:28px;letter-spacing:-.02em}
+.welfare-map .center-title{font-family:"Jost","Source Sans 3",system-ui,sans-serif;fill:#FFFFFF;font-size:31px;letter-spacing:-.02em}
+.welfare-map .center-small{font-family:"Source Sans 3",Inter,sans-serif;fill:rgba(255,255,255,.72);font-size:10px;font-weight:600;letter-spacing:.2em}
+.welfare-map .legend-line{stroke:var(--line);stroke-width:1}
+.welfare-map .ring{fill:none;stroke:var(--line-soft);stroke-width:1}
+.welfare-map .ring.accent{stroke:rgba(229,0,70,.20)}
+@keyframes welfareFlow{to{stroke-dashoffset:-240}}
+@media (prefers-reduced-motion:reduce){
+  .welfare-map .flow{animation:none}
+  .welfare-map .node circle{transition:none}
+}
+@media (max-width:760px){
+  .welfare-map{border-radius:18px}
+  .welfare-map svg{min-width:680px;transform-origin:left top}
+  .welfare-map{overflow-x:auto;overflow-y:hidden}
+}
+
+/* 01 · Navigoitava käsitepallo — frameless / engraved */
+.welfare-figure{margin-top:clamp(42px,6vw,82px)}
+.welfare-sphere{
+  position:relative;
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.sphere-head,.sphere-footer{display:none}
+.sphere-stage{
+  position:relative;
+  min-height:720px;
+  touch-action:none;
+  user-select:none;
+  cursor:grab;
+}
+.sphere-stage.is-dragging{cursor:grabbing}
+#welfare-sphere-svg{
+  display:block;
+  width:100%;
+  height:auto;
+  min-height:720px;
+  overflow:visible;
+}
+/* Käsitepallon sisältö: pallo on navigointilaite, ilmiöt elävät sen ympärillä */
+.sphere-center-copy text{
+  font:600 11px "Source Sans 3",sans-serif;
+  letter-spacing:.18em;
+  fill:#FAEAD7;
+  opacity:.72;
+}
+.sphere-center-copy text:first-child{font-size:12px}
+
+.sphere-phenomena .phenomenon{
+  transition:opacity .28s ease, transform .28s ease;
+}
+.sphere-phenomena .phenomenon-line{
+  stroke:#E0C9AC;
+  stroke-opacity:.65;
+  stroke-width:1;
+}
+.sphere-phenomena .phenomenon-dot{
+  fill:#F39200;
+}
+.sphere-phenomena .phenomenon-label{
+  font:600 10px "Source Sans 3",sans-serif;
+  letter-spacing:.13em;
+  fill:#4B6068;
+}
+.sphere-phenomena .phenomenon-label.active{
+  fill:#004458;
+}
+.sphere-readout{
+  position:absolute;
+  right:3%;
+  bottom:5%;
+  width:min(31%,340px);
+  padding:0 0 0 22px;
+  border-left:1px solid rgba(243,146,0,.55);
+  background:transparent;
+  color:var(--ink);
+  box-shadow:none;
+}
+.readout-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  color:#C97400;
+  font-size:.62rem;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  font-weight:700;
+}
+.readout-title{
+  font-family:"Jost","Source Sans 3",system-ui,sans-serif;
+  color:var(--deep);
+  font-size:clamp(1.35rem,2.15vw,2rem);
+  line-height:1.08;
+  letter-spacing:-.025em;
+  margin:10px 0 9px;
+}
+.readout-text{
+  color:var(--ink-soft);
+  font-size:.9rem;
+  line-height:1.5;
+}
+.sphere-engrave{
+  position:absolute;
+  inset:4% 9%;
+  border:1px solid rgba(224,201,172,.34);
+  border-radius:50%;
+  pointer-events:none;
+  transform:scaleX(.72);
+}
+.sphere-engrave::before,.sphere-engrave::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(224,201,172,.22);
+  border-radius:50%;
+}
+.sphere-engrave::before{inset:6% 11%}
+.sphere-engrave::after{inset:12% 22%}
+
+@media(max-width:900px){
+  .sphere-stage{min-height:760px}
+  #welfare-sphere-svg{min-height:760px}
+  .sphere-readout{right:7%;left:7%;bottom:3%;width:auto}
+}
+@media(max-width:620px){
+  .sphere-stage{min-height:720px}
+  #welfare-sphere-svg{min-height:720px}
+  .sphere-readout{right:6%;left:6%;bottom:2%;padding-left:16px}
+  .readout-title{font-size:1.5rem}
+}
+
+</style>
+
+<style id="phenomenon-gateway-css">
+  .sphere-phenomenon{
+    cursor:pointer;
+    transition:opacity .22s ease, transform .22s ease, text-decoration-color .22s ease;
+  }
+  .sphere-phenomenon:hover{
+    opacity:1 !important;
+    transform:translateY(-1px);
+    text-decoration:underline;
+    text-decoration-thickness:1px;
+    text-underline-offset:4px;
+  }
+  .sphere-phenomenon.main{
+    font-weight:600;
+  }
+  .sphere-gateway{
+    margin-top:18px;
+    min-height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    opacity:0;
+    transform:translateY(6px);
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .sphere-gateway.visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .sphere-gateway-title{
+    font-family:var(--serif, Georgia, serif);
+    font-size:1.05rem;
+    letter-spacing:.01em;
+  }
+  .sphere-gateway-link{
+    border-bottom:1px solid currentColor;
+    padding-bottom:3px;
+    font-size:.68rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="v13-shell-css">
+:root{--shell-nav-h:64px}
+header.nav{display:none!important}
+html{scroll-padding-top:calc(var(--shell-nav-h) + 18px)}
+body{overflow-x:hidden!important}
+
+.v13-topbar{
+  position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:18px;min-height:var(--shell-nav-h);
+  padding:9px 20px;background:rgba(252,244,233,.96);backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid var(--line,#EAD9C4);font-family:"Source Sans 3",Inter,system-ui,sans-serif
+}
+.v13-brand{display:flex;align-items:center;gap:10px;min-width:0}
+.v13-brand-mark{width:26px;height:26px;flex:none;border-radius:50%;background:var(--forest,#E50046);font:600 19px/1.1 "Jost","Source Sans 3",system-ui,sans-serif;white-space:nowrap}
+.v13-brand .sub{font:600 10px/1 "JetBrains Mono",monospace;letter-spacing:.07em;color:var(--slate,#6E7F86);text-transform:uppercase}
+.v13-nav{display:flex;align-items:center;gap:22px;margin-left:auto}
+.v13-tab,.v13-account{
+  position:relative;padding:7px 0;border:0;background:transparent;color:var(--slate,#6E7F86);
+  font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap
+}
+.v13-tab::after{content:"";position:absolute;left:0;right:100%;bottom:1px;height:1px;background:var(--copper,#F39200);transition:right .2s}
+.v13-tab[aria-selected="true"]{color:var(--ink,#10262E)}
+.v13-tab[aria-selected="true"]::after{right:0}
+.v13-account[data-active="true"]{color:var(--forest,#E50046)}
+.v13-pro{margin-left:5px;font-size:9px;letter-spacing:.08em;color:var(--copper,#F39200)}
+
+.v13-module-browser{position:relative;display:grid;grid-template-columns:28px minmax(230px,310px) 28px;align-items:center;gap:8px}
+.v13-module-arrow{display:grid;place-items:center;width:28px;height:42px;border:0;background:transparent;color:var(--slate,#6E7F86);font-size:22px;cursor:pointer}
+.v13-module-current{
+  display:grid;align-content:center;justify-items:center;min-width:0;height:48px;padding:5px 16px 6px;
+  border:1px solid rgba(243,146,0,.22);border-radius:999px;background:var(--card,#FFFFFF);cursor:pointer
+}
+.v13-module-title{font:600 12.5px/1.15 "Jost","Source Sans 3",system-ui,sans-serif}
+.v13-module-question{display:block;max-width:260px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9.5px;color:var(--slate,#6E7F86)}
+.v13-module-menu{
+  position:absolute;top:calc(100% + 10px);left:50%;z-index:1300;min-width:275px;padding:6px 0;transform:translateX(-50%);
+  background:rgba(252,244,233,.99);border:1px solid var(--line,#EAD9C4);border-radius:8px;box-shadow:0 20px 55px -30px rgba(0,68,88,.5)
+}
+.v13-module-menu[hidden]{display:none}
+.v13-module-option{width:100%;display:grid;gap:2px;padding:9px 12px;border:0;background:transparent;text-align:left;cursor:pointer}
+.v13-module-option strong{font:600 12.5px "Jost","Source Sans 3",system-ui,sans-serif}
+.v13-module-option small{font-size:10px;color:var(--slate,#6E7F86)}
+.v13-module-option:hover{background:rgba(255,255,255,.85)}
+.v13-tools{display:flex;gap:8px}
+.v13-icon{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line,#EAD9C4);border-radius:10px;background:var(--card,#FFFFFF);cursor:pointer}
+.v13-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
+.v13-theme[data-theme-state="dark"] .moon{display:none}
+.v13-theme[data-theme-state="light"] .sun{display:none}
+
+#v13VisualLayer{position:fixed;top:var(--shell-nav-h);left:0;right:0;bottom:0;z-index:900;background:var(--paper,#FCF4E9)}
+#v13VisualLayer[hidden]{display:none}
+#v13VisualLayer iframe{display:block;width:100%;height:100%;border:0;background:var(--paper,#FCF4E9)}
+.v13-visual-crop{position:relative;width:100%;height:100%;overflow:hidden}
+.v13-visual-crop.murros iframe{position:absolute;left:0;top:-62px;width:100%;height:calc(100% + 62px)}
+.v13-loader{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:var(--paper,#FCF4E9);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate,#6E7F86)}
+.v13-loader[hidden]{display:none}
+
+.v13-account-overlay{position:fixed;inset:0;z-index:1500;display:none;align-items:flex-start;justify-content:flex-end;padding:76px 18px 18px;background:rgba(23,32,31,.18)}
+.v13-account-overlay.open{display:flex}
+.v13-account-sheet{width:min(430px,calc(100vw - 24px));max-height:calc(100vh - 94px);overflow:auto;padding:22px;background:var(--card,#FFFFFF);border:1px solid var(--line,#EAD9C4);border-radius:12px;box-shadow:0 24px 60px -28px rgba(0,68,88,.55)}
+.v13-account-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--line,#EAD9C4)}
+.v13-account-head h2{margin:0;font:600 1.3rem "Jost","Source Sans 3",system-ui,sans-serif}
+.v13-account-close{border:0;background:transparent;font-size:20px;cursor:pointer;color:var(--slate,#6E7F86)}
+.v13-account-section{padding:16px 0;border-bottom:1px solid var(--line-soft,#F2E5D5)}
+.v13-account-field{display:grid;gap:6px}.v13-account-field label{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--slate,#6E7F86)}
+.v13-account-field input{padding:10px 11px;border:1px solid var(--line,#EAD9C4);border-radius:6px;background:var(--paper,#FCF4E9);color:var(--ink,#10262E);font:inherit}
+.v13-account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.v13-account-btn{padding:9px 12px;border:1px solid var(--line,#EAD9C4);border-radius:7px;background:transparent;font-weight:600;cursor:pointer}
+.v13-account-btn.primary{border-color:var(--forest,#E50046);background:var(--forest,#E50046);color:#fff}
+.v13-account-btn:disabled{opacity:.5;cursor:not-allowed}
+.v13-account-meta{font-size:12.5px;color:var(--slate,#6E7F86)}
+.v13-account-badge{display:inline-block;margin-top:8px;padding:3px 8px;border:1px solid var(--line,#EAD9C4);border-radius:999px;font-size:10px;color:var(--forest,#E50046)}
+.v13-account-badge.pro{border-color:var(--copper,#F39200);color:var(--copper,#F39200)}
+.v13-remember{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:12.5px;color:var(--slate,#6E7F86)}
+
+.v13-membership{width:min(1040px,calc(100% - 40px));margin:38px auto 0;padding-top:28px;border-top:1px solid rgba(255,255,255,.16)}
+.v13-membership .eyebrow{margin-bottom:8px}
+.v13-membership h3{margin:0 0 8px;font:500 clamp(1.55rem,3vw,2.25rem)/1.1 "Jost","Source Sans 3",system-ui,sans-serif;color:#FFFFFF}
+.v13-membership .intro{max-width:760px;margin:0 0 22px;color:rgba(238,242,238,.76)}
+.v13-identity-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;max-width:650px;margin-top:18px}
+.v13-field{display:grid;gap:6px}.v13-field label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#756f67}
+.v13-field input,.v13-field textarea{width:100%;padding:10px 11px;border:1px solid #d9d1c3;border-radius:8px;background:#f8f5ef;color:#17201f;font:inherit;outline:none}
+.v13-field input:focus,.v13-field textarea:focus{border-color:#F39200;box-shadow:0 0 0 3px rgba(243,146,0,.12)}
+.v13-primary,.v13-secondary{padding:10px 15px;border:1px solid #E50046;border-radius:999px;background:#E50046;color:#fff;font-weight:700;cursor:pointer}
+.v13-secondary{background:transparent;border-color:#c9783e;color:#fff}
+.v13-primary:disabled,.v13-secondary:disabled{opacity:.5;cursor:not-allowed}
+.v13-status{margin-top:12px;min-height:22px;color:rgba(255,255,255,.72);font-size:.86rem}.v13-status[data-state="error"]{color:#ffb2a3}.v13-status[data-state="ok"]{color:#a8d5c8}
+.v13-profile-shell[hidden],.v13-identity-shell[hidden]{display:none!important}
+.v13-profile-top{display:flex;align-items:center;justify-content:space-between;gap:22px;margin:8px 0 18px;padding-bottom:18px;border-bottom:1px solid rgba(221,214,201,.3)}
+.v13-profile-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 16px;margin:0;padding:22px;background:rgba(255,255,255,.97);border:1px solid rgba(221,214,201,.72);border-radius:14px}
+.v13-profile-form .wide{grid-column:1/-1}
+.v13-profile-actions{display:flex;gap:10px;margin:12px 0 30px}
+.v13-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.v13-choice-card{display:flex;flex-direction:column;min-height:280px;padding:22px;background:rgba(255,255,255,.98);border:1px solid rgba(221,214,201,.78);border-radius:14px;color:#17201f}
+.v13-choice-card h4{margin:0 0 7px;font:600 1.12rem "Jost","Source Sans 3",system-ui,sans-serif}
+.v13-choice-card p{min-height:52px;margin:0 0 14px;color:#74807c;font-size:.84rem;line-height:1.5}
+.v13-price{margin:6px 0 8px;font:600 2rem/1 "Jost","Source Sans 3",system-ui,sans-serif;color:#E50046}
+.v13-choice-card .v13-primary,.v13-choice-card .v13-secondary{margin-top:auto}
+.v13-choice-card .v13-secondary{color:#E50046;border-color:#d9d1c3}
+.v13-check{display:flex;align-items:flex-start;gap:9px;margin:10px 0 18px;color:#394442;font-size:.88rem}
+.v13-check input{margin-top:2px;accent-color:#E50046;width:17px;height:17px}
+.v13-donation-row{display:flex;align-items:center;margin:10px 0 16px;padding:0 12px;border:1px solid #d9d1c3;border-radius:8px;background:#f8f5ef}
+.v13-donation-row input{width:100%;padding:11px 0;border:0;background:transparent;outline:none;color:#17201f;font:600 1.45rem "Jost","Source Sans 3",system-ui,sans-serif}
+.v13-volunteer-extra{display:grid;gap:9px;margin:10px 0 14px}
+.v13-volunteer-extra input,.v13-volunteer-extra textarea{width:100%;padding:10px 11px;border:1px solid #d9d1c3;border-radius:8px;background:#f8f5ef;color:#17201f;font:inherit}
+
+.v13-paytrail-banner{position:fixed;right:14px;bottom:14px;z-index:1450;padding:8px 11px;border:1px solid var(--copper,#F39200);border-radius:7px;background:rgba(252,244,233,.96);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--copper,#F39200)}
+.v13-paytrail-result{position:fixed;left:50%;top:82px;z-index:1600;transform:translateX(-50%);width:min(640px,calc(100vw - 28px));padding:14px 18px;border:1px solid var(--line,#EAD9C4);border-radius:10px;background:rgba(255,255,255,.98);font-size:13px}
+.v13-paytrail-result[hidden]{display:none}
+
+html[data-theme="dark"]{
+  --paper:#111817;--paper-2:#17211f;--card:#182220;--ink:#f0eee7;--ink-soft:#b8c0bd;--line:#33413e;--line-soft:#283532;
+  --deep:#0a201f;--forest:#75b8ad;--forest-2:#6ba99f;--copper:#d48a55;--slate:#a7b0ad;
+}
+html[data-theme="dark"] body{color-scheme:dark}
+html[data-theme="dark"] .v13-topbar{background:rgba(17,24,23,.96)}
+html[data-theme="dark"] .v13-module-current{background:var(--card)}
+html[data-theme="dark"] .v13-module-menu{background:#17211f}
+html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
+
+
+/* V13.3 · Kuvio 1 — Yhteiskunta rakenteiden verkostona */
+.society-network-figure{margin:0;min-width:0}
+.society-network-card{
+  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;
+  background:var(--card,#FFFFFF);
+  box-shadow:0 40px 90px -60px rgba(0,68,88,.62);
+  isolation:isolate
+}
+.society-network-card::after{content:"";display:none}
+.society-network-meta{
+  position:absolute;z-index:4;left:22px;right:22px;top:18px;
+  display:flex;justify-content:space-between;gap:18px;
+  font-size:.61rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--slate,#6E7F86)
+}
+.society-network-meta span:last-child{font-weight:500;letter-spacing:.04em;text-transform:none;text-align:right}
+.society-network-svg{position:relative;z-index:1;display:block;width:100%;height:auto;min-height:440px}
+.society-grid path{fill:none;stroke:var(--line-soft,#F2E5D5);stroke-width:.7;opacity:.52}
+.society-orbits ellipse{fill:none;stroke:var(--forest,#E50046);stroke-width:.7;opacity:.13;stroke-dasharray:4 8}
+.society-link{
+  fill:none;stroke:var(--forest,#E50046);stroke-width:1.3;stroke-linecap:round;
+  opacity:.28;transition:opacity .4s ease,stroke-width .4s ease,stroke .4s ease;
+  stroke-dasharray:7 10;animation:societyFlow 14s linear infinite
+}
+.society-link.secondary{stroke:var(--slate,#6E7F86);stroke-width:.85;opacity:.18;animation-duration:19s}
+.society-link.is-active{stroke:var(--copper,#F39200);stroke-width:2.2;opacity:.88;animation-duration:6s}
+.society-link.is-neighbour{opacity:.52;stroke-width:1.5}
+.society-flow-pulses circle{fill:var(--copper,#F39200);opacity:.68}
+.society-core{cursor:pointer;outline:none}
+.society-core .core-halo{fill:var(--forest,#E50046);opacity:.055;transform-origin:360px 260px;animation:societyCorePulse 4.8s ease-in-out infinite}
+.society-core .core-ring{fill:none;stroke:var(--forest,#E50046);stroke-width:1;opacity:.3;stroke-dasharray:3 7;transform-origin:360px 260px;animation:societyRotate 30s linear infinite}
+.society-core text{font:700 11px/1 "Source Sans 3",Inter,sans-serif;letter-spacing:.15em;fill:#FFFFFF;pointer-events:none}
+.society-core .core-small{font-size:7.5px;font-weight:600;letter-spacing:.12em;opacity:.68}
+.society-node{cursor:pointer;outline:none;transition:opacity .3s ease}
+.society-node > circle:first-child{
+  fill:var(--card,#FFFFFF);stroke:var(--forest,#E50046);stroke-width:1.3;
+  filter:drop-shadow(0 7px 10px rgba(0,68,88,.10));
+  transform-box:fill-box;transform-origin:center;transition:transform .3s ease,fill .3s ease,stroke .3s ease
+}
+.society-node:nth-of-type(odd) > circle:first-child{stroke:var(--copper,#F39200)}
+.society-node .node-pulse{
+  fill:none;stroke:var(--copper,#F39200);stroke-width:1;opacity:0;
+  transform-box:fill-box;transform-origin:center
+}
+.society-node text{
+  font:700 9px/1 "Source Sans 3",Inter,sans-serif;letter-spacing:.14em;
+  fill:var(--ink-soft,#4B6068);pointer-events:none;transition:fill .3s ease
+}
+.society-node:hover > circle:first-child,.society-node:focus-visible > circle:first-child,.society-node.is-active > circle:first-child{
+  transform:scale(1.18);fill:var(--forest,#E50046);stroke:var(--forest,#E50046)
+}
+.society-node:hover text,.society-node:focus-visible text,.society-node.is-active text{fill:var(--copper,#F39200)}
+.society-node.is-active .node-pulse{animation:societyNodePulse 1.55s ease-out infinite}
+.society-node.is-muted{opacity:.32}
+.society-core.is-active .core-halo{opacity:.13;animation-duration:2.4s}
+.society-network-readout{
+  position:relative;z-index:3;width:auto;min-height:92px;
+  margin:-2px 22px 20px;padding:14px 18px 14px 18px;
+  border-top:1px solid var(--line-soft,#F2E5D5);
+  border-left:2px solid var(--copper,#F39200);
+  background:transparent
+}
+.society-network-kicker{display:block;margin-bottom:5px;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#F39200)}
+.society-network-readout strong{display:block;font:600 1.06rem/1.2 "Jost","Source Sans 3",system-ui,sans-serif;color:var(--deep,#004458)}
+.society-network-readout p{margin:5px 0 0;font-size:.76rem;line-height:1.45;color:var(--ink-soft,#4B6068)}
+@keyframes societyFlow{to{stroke-dashoffset:-170}}
+@keyframes societyCorePulse{0%,100%{transform:scale(.92);opacity:.04}50%{transform:scale(1.13);opacity:.11}}
+@keyframes societyNodePulse{0%{transform:scale(.78);opacity:.72}100%{transform:scale(1.48);opacity:0}}
+@keyframes societyRotate{to{transform:rotate(360deg)}}
+@keyframes societySheen{0%,70%,100%{transform:translateX(-120%)}82%{transform:translateX(120%)}}
+html[data-theme="dark"] .society-network-readout{background:transparent}
+html[data-theme="dark"] .society-node > circle:first-child{fill:#182220}
+html[data-theme="dark"] .society-network-card::after{opacity:.28}
+@media(max-width:780px){
+  .society-network-meta{left:14px;right:14px;top:12px;font-size:.54rem}
+  .society-network-meta span:last-child{display:none}
+  .society-network-svg{min-width:600px;min-height:420px}
+  .society-network-card{overflow-x:auto;overflow-y:hidden}
+  .society-network-readout{position:relative;left:auto;bottom:auto;width:auto;margin:0 14px 14px;padding:12px 14px 12px 14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .society-link,.society-core .core-halo,.society-core .core-ring,.society-node .node-pulse,.society-network-card::after{animation:none!important}
+  .society-flow-pulses{display:none}
+}
+
+/* V13.2 · Lohko 01 — v10:n navigointipallon teaserit */
+.sphere-readout{bottom:-5%!important}
+.v13-sphere-teaser-html{display:grid!important;gap:3px!important;text-decoration:none!important;cursor:pointer!important}
+.v13-sphere-teaser-title{font:700 .7rem/1.15 "Source Sans 3",Inter,sans-serif!important;letter-spacing:.13em!important;text-transform:uppercase!important}
+.v13-sphere-teaser-question{display:block!important;max-width:230px!important;font:500 .78rem/1.3 "Source Sans 3",Inter,sans-serif!important;letter-spacing:0!important;text-transform:none!important;color:var(--ink-soft,#4B6068)!important}
+svg text[data-v13-sphere-teaser="1"] tspan:first-child{fill:var(--ink,#10262E)!important;font-size:1.18em!important;font-weight:700!important}
+svg text[data-v13-sphere-teaser="1"] tspan:last-child{fill:var(--ink-soft,#4B6068)!important;font-size:.94em!important;font-weight:500!important}
+svg text[data-v13-sphere-teaser="1"]:hover tspan:first-child{fill:var(--copper,#F39200)!important}
+svg text[data-v13-sphere-teaser="1"]:hover tspan:last-child{fill:var(--forest,#E50046)!important}
+.v13-sphere-teaser-html:hover .v13-sphere-teaser-title{color:var(--copper,#F39200)!important}
+.v13-sphere-teaser-html:hover .v13-sphere-teaser-question{color:var(--forest,#E50046)!important}
+
+@media(max-width:980px){
+  .v13-topbar{flex-wrap:wrap;gap:8px;padding:8px 12px}
+  .v13-brand{flex:1}.v13-brand .sub{display:none}
+  .v13-nav{order:3;width:100%;margin-left:0;justify-content:space-between;gap:10px;overflow-x:auto}
+  .v13-module-browser{grid-template-columns:24px minmax(190px,240px) 24px}
+  :root{--shell-nav-h:116px}
+  .v13-account-overlay{padding-top:126px}
+}
+@media(max-width:760px){
+  .v13-choice-grid,.v13-profile-form,.v13-identity-row{grid-template-columns:1fr}
+  .v13-profile-form .wide{grid-column:auto}
+  .v13-choice-card{min-height:0}
+}
+
+/* V13.5 · yhtenäinen, gradientiton värikieli ja huolitellut lomakkeet */
+.society-core .core-disc{fill:var(--card,#FFFFFF)!important;stroke:var(--forest,#E50046);stroke-width:2}
+.society-core .core-ring{stroke:var(--copper,#F39200);opacity:.52}
+.society-core .core-halo{fill:var(--forest,#E50046);opacity:.055}
+.society-core text{fill:var(--deep,#004458)!important}
+.society-core .core-small{fill:var(--slate,#6E7F86)!important;opacity:1}
+.society-node > circle:first-child{fill:var(--card,#FFFFFF)}
+.society-node:hover > circle:first-child,.society-node:focus-visible > circle:first-child,.society-node.is-active > circle:first-child{fill:var(--paper-2,#FAEAD7);stroke:var(--forest,#E50046)}
+html[data-theme="dark"] .society-core .core-disc,html[data-theme="dark"] .society-node > circle:first-child{fill:var(--card,#182220)!important}
+html[data-theme="dark"] .society-core text{fill:var(--ink,#f0eee7)!important}
+html[data-theme="dark"] .society-core .core-small{fill:var(--ink-soft,#b8c0bd)!important}
+input,textarea,select,button{font-family:"Source Sans 3",Inter,system-ui,sans-serif}
+input,textarea,select{font-size:1rem;line-height:1.4}
+label{line-height:1.25}
+.v13-account-sheet,.v13-profile-form,.v13-choice-card,.pay-card,.org-card,.doc-group,.news-card,.write,.board-card,.atlas-shell,.atlas-reading-visual,.atlas-indicator-visual{background:var(--card,#FFFFFF)!important;background-image:none!important}
+.v13-account-sheet{border-radius:16px;padding:24px}
+.v13-account-head{padding-bottom:18px;margin-bottom:2px}
+.v13-account-head h2{font-size:1.45rem;letter-spacing:-.02em}
+.v13-account-section{padding:18px 0}
+.v13-account-meta{font-size:.9rem;line-height:1.5;color:var(--ink-soft,#4B6068)}
+.v13-account-field,.v13-field{gap:7px}
+.v13-account-field label,.v13-field label{color:var(--ink-soft,#4B6068)!important;font-size:.68rem!important;font-weight:700!important;letter-spacing:.12em!important;text-transform:uppercase}
+.v13-account-field input,.v13-field input,.v13-field textarea,.v13-volunteer-extra input,.v13-volunteer-extra textarea{min-height:48px;padding:11px 13px!important;border:1px solid var(--line,#EAD9C4)!important;border-radius:10px!important;background:var(--card,#FFFFFF)!important;color:var(--ink,#10262E)!important;box-shadow:none!important;transition:border-color .18s ease,box-shadow .18s ease,background .18s ease}
+.v13-field textarea,.v13-volunteer-extra textarea{min-height:96px;resize:vertical}
+.v13-account-field input:focus,.v13-field input:focus,.v13-field textarea:focus,.v13-volunteer-extra input:focus,.v13-volunteer-extra textarea:focus{outline:none;border-color:var(--copper,#F39200)!important;box-shadow:0 0 0 3px rgba(243,146,0,.12)!important}
+.v13-field input[readonly]{background:var(--paper-2,#FAEAD7)!important;color:var(--slate,#6E7F86)!important}
+.v13-profile-form{padding:24px;gap:18px 20px;border-color:var(--line,#EAD9C4);box-shadow:none}
+.v13-profile-top{align-items:flex-start;margin-bottom:20px;padding-bottom:20px}
+.v13-profile-actions{margin:14px 0 34px}
+.v13-choice-grid{gap:18px}
+.v13-choice-card{min-height:290px;padding:24px;border-color:var(--line,#EAD9C4)!important;box-shadow:none!important}
+.v13-choice-card h4{color:var(--ink,#10262E);font-size:1.18rem;letter-spacing:-.01em}
+.v13-choice-card p{color:var(--ink-soft,#4B6068);font-size:.92rem;line-height:1.55}
+.v13-price{color:var(--forest,#E50046);font-size:2.15rem}
+.v13-check{color:var(--ink-soft,#4B6068);line-height:1.45}
+.v13-check input{accent-color:var(--forest,#E50046)}
+.v13-primary,.v13-secondary,.v13-account-btn{min-height:42px;border-radius:999px;padding:10px 17px;font-weight:700;letter-spacing:.01em;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+.v13-primary,.v13-account-btn.primary{background:var(--forest,#E50046);border-color:var(--forest,#E50046);color:#fff}
+.v13-primary:hover,.v13-account-btn.primary:hover{background:var(--forest-2,#C0003C);border-color:var(--forest-2,#C0003C);transform:translateY(-1px)}
+.v13-secondary{background:transparent;border-color:var(--line,#EAD9C4);color:var(--ink,#10262E)}
+.v13-secondary:hover{border-color:var(--forest,#E50046);color:var(--forest,#E50046)}
+.v13-donation-row{min-height:52px;border-color:var(--line,#EAD9C4);background:var(--card,#FFFFFF)}
+.v13-donation-row input{color:var(--ink,#10262E);font-size:1.35rem}
+.v13-status{font-size:.9rem;line-height:1.45}
+.join .v13-membership .intro{max-width:72ch;line-height:1.6}
+.join .v13-membership h3{letter-spacing:-.02em}
+.join .v13-profile-shell{color:var(--ink,#10262E)}
+.pay-card{border-color:rgba(255,255,255,.18)!important;color:var(--ink,#10262E)}
+.pay-card .micro{color:var(--slate,#6E7F86)}
+.pay-lines{color:var(--ink-soft,#4B6068)}
+.pay-lines li{border-bottom:1px solid var(--line-soft,#F2E5D5)}
+html[data-theme="dark"] .v13-account-sheet,html[data-theme="dark"] .v13-profile-form,html[data-theme="dark"] .v13-choice-card,html[data-theme="dark"] .pay-card,html[data-theme="dark"] .org-card,html[data-theme="dark"] .doc-group,html[data-theme="dark"] .news-card,html[data-theme="dark"] .write,html[data-theme="dark"] .board-card,html[data-theme="dark"] .atlas-shell,html[data-theme="dark"] .atlas-reading-visual,html[data-theme="dark"] .atlas-indicator-visual{background:var(--card,#182220)!important}
+html[data-theme="dark"] .v13-account-field input,html[data-theme="dark"] .v13-field input,html[data-theme="dark"] .v13-field textarea,html[data-theme="dark"] .v13-volunteer-extra input,html[data-theme="dark"] .v13-volunteer-extra textarea,html[data-theme="dark"] .v13-donation-row{background:var(--paper-2,#17211f)!important;color:var(--ink,#f0eee7)!important;border-color:var(--line,#33413e)!important}
+</style>
+
+
+
+
+<style id="kf-skin-css">
+/* ===== Kansalaisfoorumi-henkinen ilme =====
+   Valkoinen pohja, ei yhtään liukuväriä, oranssi pääväri,
+   lihavat suuraakkosotsikot geometrisella groteskilla ja serif-leipäteksti. */
+:root{
+  --kf-orange:#ED7102;
+  --kf-orange-2:#F39200;
+  --kf-magenta:#E50046;
+  --kf-blue:#74C9E5;
+  --kf-blue-soft:#EAF6FB;
+  --kf-teal:#004458;
+  --kf-cream:#FAEAD7;
+  --paper:#FFFFFF;
+  --paper-2:#FFFFFF;
+  --card:#FFFFFF;
+  --line:#DCDCDC;
+  --line-soft:#EAEAEA;
+  --ink:#111111;
+  --ink-soft:#3D3D3D;
+  --slate:#6B6B6B;
+  --deep:#004458;
+  --forest:#ED7102;
+  --forest-2:#D06200;
+  --copper:#E50046;
+  --amber:#F39200;
+}
+
+/* --- kaikki liukuvärit pois (paitsi SVG-kuvituksesta) --- */
+body *:not(svg):not(svg *):not(img),
+body::before, body::after,
+.join::before, .atlas-stage, .atlas-toolbar, .welfare-map, .news-card.pinned,
+.v13-brand-mark, .v13-module-current, .nav-progress{
+  background-image:none !important;
+}
+body::before{display:none !important}
+body{background:#fff !important}
+section, .atlas-shell, .atlas-stage, .atlas-toolbar, .welfare-map,
+.news-card, .news-card.pinned, .write, .org-card, .hero-strip div,
+.v13-module-current, .v13-module-menu{background-color:#fff !important}
+.v13-brand-mark{background:var(--kf-orange) !important}
+.nav-progress{background:var(--kf-orange) !important;height:4px}
+
+/* --- typografia: lihavat suuraakkosotsikot + serif-leipäteksti --- */
+body{font-family:Georgia,"Noto Serif","Times New Roman",serif;color:var(--ink)}
+h1,h2,h3,.brand span,.v13-brand h1,.btn,.links a,.mobile a,.eyebrow,.micro,
+.news-kicker,.write .meta,.figcap,.news-source,.data-note,.keywords span,
+.hero-strip span,.v13-tab,.v13-account,.v13-module-title{
+  font-family:"Jost","Source Sans 3",system-ui,sans-serif;
+}
+h1,h2{text-transform:uppercase;font-weight:700;letter-spacing:-.01em;line-height:1.05;color:var(--ink)}
+h3{font-weight:700;color:var(--kf-teal);letter-spacing:0}
+.hero h1 .accent{font-style:normal;color:var(--kf-orange)}
+.lead,p{color:var(--ink-soft)}
+.eyebrow,.micro,.news-source,.data-note,.figcap{font-weight:700;letter-spacing:.1em;color:var(--kf-teal);text-transform:uppercase}
+.news-kicker,.write .meta{color:var(--kf-orange);font-weight:700;letter-spacing:.1em}
+
+/* --- navigaatio: oranssi viiva ja pillimäinen aktiivinen linkki --- */
+header.nav,.v13-topbar{background:#fff !important;border-bottom:4px solid var(--kf-orange) !important;box-shadow:none !important}
+.links a{font-weight:700;color:var(--ink)}
+.links a::after{display:none}
+.links a.active,.v13-tab[aria-selected="true"]{color:#fff !important;background:var(--kf-orange);border-radius:999px;padding:7px 16px}
+.v13-tab[aria-selected="true"]::after{display:none}
+.nav-dot{background:var(--kf-orange);box-shadow:none}
+
+/* --- painikkeet --- */
+.btn,.links a[data-action="join"]{border-radius:999px;font-weight:700;box-shadow:none !important;text-transform:none}
+.btn-primary,.links a[data-action="join"]{background:var(--kf-orange) !important;color:#fff !important;border-color:var(--kf-orange)}
+.btn-primary:hover,.links a[data-action="join"]:hover{background:var(--kf-teal) !important}
+.btn-ghost{border:2px solid var(--kf-teal);color:var(--kf-teal);background:#fff}
+.btn-ghost:hover{background:var(--kf-blue-soft);border-color:var(--kf-blue)}
+
+/* --- pinnat: valkoiset kortit, selkeät reunat, pehmeät kulmat --- */
+.hero figure svg,.hero-strip,.news-grid,.writings,.org-card,.welfare-map,
+.atlas-shell,.v13-module-menu,.atlas-stage{
+  border-radius:20px;box-shadow:none !important;border-color:var(--line);
+}
+.hero-strip,.news-grid,.writings{overflow:hidden;background:var(--line)}
+.hero-strip b{color:var(--kf-orange);font-weight:700;font-family:"Jost",sans-serif}
+.keywords span{border-radius:999px;border:2px solid var(--kf-blue);color:var(--kf-teal);font-weight:700;background:#fff}
+.news-link{color:var(--kf-orange);border-color:var(--kf-orange);font-weight:700}
+.news-link:hover{color:var(--kf-teal);border-color:var(--kf-teal)}
+.shead .num{-webkit-text-stroke:0;color:var(--kf-orange);font-weight:700}
+::selection{background:var(--kf-cream)}
+:focus-visible{outline:3px solid var(--kf-orange)}
+
+/* --- tunnusomainen neljän värin pisteraita otsikoiden edessä --- */
+.shead .rail::before{
+  content:"";display:block;width:16px;height:76px;margin-bottom:14px;border-radius:999px;
+  background:var(--kf-orange);
+}
+
+/* --- korjaukset: suuraakkoset eivät saa levittää palstoja --- */
+.hero-grid{grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr) !important}
+.two,.shead,.org-grid{grid-template-columns:minmax(0,.34fr) minmax(0,1fr)}
+h1,h2{overflow-wrap:normal;word-break:keep-all}
+h1{font-size:clamp(2rem,4.4vw,3.9rem)}
+h2{font-size:clamp(1.7rem,3.4vw,2.8rem)}
+.figcap,.eyebrow,.micro{letter-spacing:.08em}
+.hero figure,.hero figure svg{width:100%}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Siirry sisältöön</a>
+
+
+<header class="v13-topbar" id="v13Topbar">
+  <div class="v13-brand">
+    <span class="v13-brand-mark" aria-hidden="true"></span>
+    <h1>Hyvinvointivaltion Vaalijat ry</h1>
+    <span class="sub">Atlas</span>
+  </div>
+  <nav class="v13-nav" aria-label="Päänavigaatio">
+    <button class="v13-tab" id="v13AssociationTab" type="button" aria-selected="true">Yhdistys</button>
+    <button class="v13-tab" id="v13NewsTab" type="button" aria-selected="false">Ajankohtaista</button>
+    <button class="v13-tab" id="v13JoinTab" type="button" aria-selected="false">Liity</button>
+    <button class="v13-account" id="v13AccountTab" type="button" data-active="false">Tunnistaudu</button>
+
+    <div class="v13-module-browser">
+      <button class="v13-module-arrow" id="v13Prev" type="button" aria-label="Edellinen visualisointi">‹</button>
+      <button class="v13-module-current" id="v13Current" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span class="v13-module-title" id="v13ModuleLabel">Murroskartta</span>
+        <span class="v13-module-question" id="v13ModuleQuestion">Mistä Suomen suuret murrokset syntyivät?</span>
+      </button>
+      <button class="v13-module-arrow" id="v13Next" type="button" aria-label="Seuraava visualisointi">›</button>
+      <div class="v13-module-menu" id="v13ModuleMenu" role="listbox" hidden></div>
+    </div>
+  </nav>
+  <div class="v13-tools">
+    <button class="v13-icon v13-theme" id="v13ThemeBtn" type="button" data-theme-state="light" aria-label="Vaihda tummaan teemaan">
+      <svg class="moon" viewBox="0 0 24 24"><path d="M20 15.2A8.5 8.5 0 1 1 8.8 4a7 7 0 0 0 11.2 11.2Z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+    </button>
+    <button class="v13-icon" id="v13FsBtn" type="button" aria-label="Koko näyttö">
+      <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+</header>
+<div id="v13VisualLayer" hidden>
+  <div class="v13-loader" id="v13Loader">Ladataan visualisointia…</div>
+</div>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#E50046" stroke-width="1.1"><circle cx="12" cy="4" r="2"/><circle cx="4" cy="17" r="2"/><circle cx="20" cy="17" r="2"/><path d="M12 6v9M12 15l-6.6 1.4M12 15l6.6 1.4M5 15.2 11 6.4M19 15.2 13 6.4"/></g></svg>
+      <span>Hyvinvointivaltion Vaalijat ry</span>
+    </a>
+    <nav class="links" aria-label="Päänavigaatio">
+      <a href="#jarjestelma">Ajatus</a>
+      <a href="#atlas-live">Atlas</a>
+      <a href="#teemat">Ajankohtaista</a>
+      <a href="#kirjoitukset">Kirjoitukset</a>
+      <a href="#yhdistys">Yhdistys</a>
+      <a href="#hallitus">Hallitus</a>
+      <a href="#liity" data-action="join">Liity mukaan</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Avaa valikko" aria-expanded="false" aria-controls="mobile"><span></span></button>
+  </div>
+  <div class="wrap"><nav class="mobile" id="mobile" aria-label="Mobiilivalikko" hidden>
+    <a href="#jarjestelma">Ajatus</a>
+    <a href="#atlas-live">Rakennemuutosten atlas</a>
+    <a href="#teemat">Ajankohtaista</a>
+    <a href="#kirjoitukset">Kirjoitukset</a>
+    <a href="#yhdistys">Yhdistys</a>
+    <a href="#hallitus">Hallitus</a>
+    <a href="#asiakirjat">Asiakirjat</a>
+    <a href="#liity">Liity mukaan</a>
+  </nav></div>
+  <div class="nav-progress" role="progressbar" aria-hidden="true"></div>
+</header>
+
+
+<div class="v13-paytrail-banner" id="v13PaytrailBanner">Paytrail <strong>TESTI</strong></div>
+<div class="v13-paytrail-result" id="v13PaytrailResult" hidden role="status" aria-live="polite"></div>
+
+<div class="v13-account-overlay" id="v13AccountOverlay" aria-hidden="true">
+  <aside class="v13-account-sheet" role="dialog" aria-modal="true" aria-labelledby="v13AccountTitle">
+    <div class="v13-account-head">
+      <div><div class="micro">Jäsenpalvelu</div><h2 id="v13AccountTitle">Tunnistaudu</h2></div>
+      <button class="v13-account-close" id="v13AccountClose" type="button" aria-label="Sulje">×</button>
+    </div>
+    <div id="v13SignedOut">
+      <div class="v13-account-section" id="v13EmailStep">
+        <p class="v13-account-meta">Anna sähköpostiosoitteesi. Lähetämme siihen 6-numeroisen vahvistustunnuksen.</p>
+        <div class="v13-account-field"><label>Sähköpostiosoite</label><input id="v13AccountEmail" type="email" autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+        <label class="v13-remember"><input id="v13Remember" type="checkbox"> <span>Pidä minut kirjautuneena tällä laitteella</span></label>
+        <div class="v13-account-actions"><button class="v13-account-btn primary" id="v13Continue" type="button">Lähetä vahvistustunnus</button></div>
+        <div class="v13-account-meta" id="v13LoginStatus" style="margin-top:10px"></div>
+      </div>
+      <div class="v13-account-section" id="v13OtpStep" hidden>
+        <p class="v13-account-meta" id="v13OtpIntro"></p>
+        <div class="v13-account-field"><label>Vahvistustunnus</label><input id="v13Otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000"></div>
+        <div class="v13-account-actions">
+          <button class="v13-account-btn primary" id="v13VerifyOtp" type="button">Vahvista ja jatka</button>
+          <button class="v13-account-btn" id="v13ResendOtp" type="button">Lähetä uusi tunnus <span id="v13Cooldown"></span></button>
+          <button class="v13-account-btn" id="v13OtpBack" type="button">Vaihda sähköposti</button>
+        </div>
+        <div class="v13-account-meta" id="v13OtpStatus" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div id="v13SignedIn" hidden>
+      <div class="v13-account-section">
+        <strong id="v13AccountName">Kirjautunut käyttäjä</strong>
+        <div class="v13-account-meta" id="v13AccountEmailShown"></div>
+        <div id="v13AccountBadges"></div>
+        <div class="v13-account-actions">
+          <button class="v13-account-btn" id="v13OpenProfile" type="button">Omat tiedot</button>
+          <button class="v13-account-btn" id="v13Logout" type="button">Kirjaudu ulos</button>
+        </div>
+      </div>
+      <div class="v13-account-section"><div class="micro">Atlas</div><p class="v13-account-meta" id="v13AtlasAccess">Tarkistetaan käyttöoikeutta…</p></div>
+    </div>
+  </aside>
+</div>
+
+<main id="main">
+<span id="top" aria-hidden="true"></span>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <div class="eyebrow hero-kicker"><span class="nav-dot"></span> Hyvinvointivaltion Vaalijat ry</div>
+      <h1>Hyvinvointivaltio on <span class="accent">enemmän</span> kuin budjetti.</h1>
+      <p class="lead">Se on verkosto, jossa yhden osan muutos vaikuttaa koko järjestelmään — työhön, terveyteen, luottamukseen ja talouteen yhtä aikaa.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#jarjestelma">Tutustu ajatukseemme</a>
+        <a class="btn btn-ghost" href="#atlas-live">Avaa Atlas →</a>
+      </div>
+    </div>
+    <figure class="reveal society-network-figure" id="society-network-figure">
+      <div class="society-network-card">
+        <div class="society-network-meta">
+          <span>YHTEISKUNTA · RAKENTEIDEN VERKOSTO</span>
+          <span id="society-network-state">Yhden osan muutos etenee koko järjestelmään</span>
+        </div>
+
+        <svg class="society-network-svg" viewBox="0 0 720 520" role="img"
+             aria-labelledby="society-network-title society-network-desc">
+          <title id="society-network-title">Yhteiskunta rakenteiden verkostona</title>
+          <desc id="society-network-desc">Animoitu verkosto, jossa työ, terveys, talous, koulutus, asuminen, luottamus, yhteisöt ja luonto vaikuttavat toisiinsa yhteisen järjestelmän kautta.</desc>
+
+          <defs>
+            <filter id="society-node-shadow" x="-80%" y="-80%" width="260%" height="260%">
+              <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#004458" flood-opacity=".14"/>
+            </filter>
+          </defs>
+
+          <g class="society-grid" aria-hidden="true">
+            <path d="M70 100H650M70 180H650M70 260H650M70 340H650M70 420H650"/>
+            <path d="M120 60V460M240 60V460M360 60V460M480 60V460M600 60V460"/>
+          </g>
+
+          <g class="society-orbits" aria-hidden="true">
+            <ellipse cx="360" cy="260" rx="225" ry="150"/>
+            <ellipse cx="360" cy="260" rx="145" ry="205" transform="rotate(34 360 260)"/>
+          </g>
+
+          <g class="society-links" aria-hidden="true">
+            <path class="society-link" data-from="tyo" data-to="core" d="M164 154 Q240 186 314 232"/>
+            <path class="society-link" data-from="terveys" data-to="core" d="M143 292 Q236 286 307 270"/>
+            <path class="society-link" data-from="talous" data-to="core" d="M223 414 Q281 350 327 298"/>
+            <path class="society-link" data-from="koulutus" data-to="core" d="M311 84 Q326 161 343 216"/>
+            <path class="society-link" data-from="asuminen" data-to="core" d="M563 146 Q474 180 402 231"/>
+            <path class="society-link" data-from="luottamus" data-to="core" d="M586 291 Q486 286 412 270"/>
+            <path class="society-link" data-from="yhteisot" data-to="core" d="M510 412 Q448 351 394 300"/>
+            <path class="society-link" data-from="luonto" data-to="core" d="M410 456 Q388 366 375 306"/>
+
+            <path class="society-link secondary" data-from="tyo" data-to="koulutus" d="M172 142 Q236 72 299 82"/>
+            <path class="society-link secondary" data-from="tyo" data-to="talous" d="M157 171 Q170 302 214 402"/>
+            <path class="society-link secondary" data-from="terveys" data-to="asuminen" d="M149 282 Q356 170 552 148"/>
+            <path class="society-link secondary" data-from="terveys" data-to="luottamus" d="M151 300 Q361 356 574 299"/>
+            <path class="society-link secondary" data-from="koulutus" data-to="luottamus" d="M324 93 Q472 150 575 280"/>
+            <path class="society-link secondary" data-from="asuminen" data-to="yhteisot" d="M568 161 Q568 292 518 398"/>
+            <path class="society-link secondary" data-from="talous" data-to="luonto" d="M235 423 Q321 475 397 457"/>
+            <path class="society-link secondary" data-from="luonto" data-to="yhteisot" d="M423 453 Q471 451 505 421"/>
+          </g>
+
+          <g class="society-flow-pulses" aria-hidden="true">
+            <circle r="3.2"><animateMotion dur="5.2s" repeatCount="indefinite" path="M164 154 Q240 186 314 232"/></circle>
+            <circle r="2.8"><animateMotion dur="6.4s" begin="-2.1s" repeatCount="indefinite" path="M563 146 Q474 180 402 231"/></circle>
+            <circle r="3"><animateMotion dur="5.8s" begin="-3.4s" repeatCount="indefinite" path="M223 414 Q281 350 327 298"/></circle>
+            <circle r="2.6"><animateMotion dur="7.1s" begin="-1.2s" repeatCount="indefinite" path="M586 291 Q486 286 412 270"/></circle>
+          </g>
+
+          <g class="society-core" data-node="core" tabindex="0" role="button"
+             aria-label="Yhteinen järjestelmä. Kaikki rakenteet vaikuttavat toisiinsa.">
+            <circle class="core-halo" cx="360" cy="260" r="74"/>
+            <circle class="core-ring" cx="360" cy="260" r="61"/>
+            <circle class="core-disc" cx="360" cy="260" r="52"  filter="url(#society-node-shadow)"/>
+            <text x="360" y="250" text-anchor="middle">YHTEINEN</text>
+            <text x="360" y="267" text-anchor="middle">JÄRJESTELMÄ</text>
+            <text class="core-small" x="360" y="285" text-anchor="middle">RISKI · ARVO · TURVA</text>
+          </g>
+
+          <g class="society-node" data-node="tyo" tabindex="0" role="button"
+             data-label="Työ" data-message="Työ kytkee toimeentulon, osaamisen, terveyden ja julkisen talouden."
+             aria-label="Työ. Työ kytkee toimeentulon, osaamisen, terveyden ja julkisen talouden.">
+            <circle cx="155" cy="150" r="23"/>
+            <circle class="node-pulse" cx="155" cy="150" r="31"/>
+            <text x="155" y="119" text-anchor="middle">TYÖ</text>
+          </g>
+
+          <g class="society-node" data-node="terveys" tabindex="0" role="button"
+             data-label="Terveys" data-message="Terveys vaikuttaa toimintakykyyn, työhön, palvelutarpeeseen ja luottamukseen."
+             aria-label="Terveys. Terveys vaikuttaa toimintakykyyn, työhön, palvelutarpeeseen ja luottamukseen.">
+            <circle cx="132" cy="300" r="20"/>
+            <circle class="node-pulse" cx="132" cy="300" r="28"/>
+            <text x="132" y="338" text-anchor="middle">TERVEYS</text>
+          </g>
+
+          <g class="society-node" data-node="talous" tabindex="0" role="button"
+             data-label="Talous" data-message="Talous ylläpitää yhteisiä rakenteita, mutta on samalla niistä riippuvainen."
+             aria-label="Talous. Talous ylläpitää yhteisiä rakenteita, mutta on samalla niistä riippuvainen.">
+            <circle cx="220" cy="421" r="21"/>
+            <circle class="node-pulse" cx="220" cy="421" r="29"/>
+            <text x="220" y="459" text-anchor="middle">TALOUS</text>
+          </g>
+
+          <g class="society-node" data-node="koulutus" tabindex="0" role="button"
+             data-label="Koulutus" data-message="Koulutus muuttaa osaamista, liikkuvuutta, työtä ja osallisuuden mahdollisuuksia."
+             aria-label="Koulutus. Koulutus muuttaa osaamista, liikkuvuutta, työtä ja osallisuuden mahdollisuuksia.">
+            <circle cx="315" cy="78" r="19"/>
+            <circle class="node-pulse" cx="315" cy="78" r="27"/>
+            <text x="315" y="45" text-anchor="middle">KOULUTUS</text>
+          </g>
+
+          <g class="society-node" data-node="asuminen" tabindex="0" role="button"
+             data-label="Asuminen" data-message="Asuminen yhdistää alueet, varallisuuden, palvelut ja arjen turvallisuuden."
+             aria-label="Asuminen. Asuminen yhdistää alueet, varallisuuden, palvelut ja arjen turvallisuuden.">
+            <circle cx="574" cy="145" r="21"/>
+            <circle class="node-pulse" cx="574" cy="145" r="29"/>
+            <text x="574" y="111" text-anchor="middle">ASUMINEN</text>
+          </g>
+
+          <g class="society-node" data-node="luottamus" tabindex="0" role="button"
+             data-label="Luottamus" data-message="Luottamus pitää järjestelmän koossa ja vaikuttaa yhteistyöhön sekä hyväksyttävyyteen."
+             aria-label="Luottamus. Luottamus pitää järjestelmän koossa ja vaikuttaa yhteistyöhön sekä hyväksyttävyyteen.">
+            <circle cx="590" cy="298" r="22"/>
+            <circle class="node-pulse" cx="590" cy="298" r="30"/>
+            <text x="590" y="337" text-anchor="middle">LUOTTAMUS</text>
+          </g>
+
+          <g class="society-node" data-node="yhteisot" tabindex="0" role="button"
+             data-label="Yhteisöt" data-message="Yhteisöt tuottavat arjen tukea, osallisuutta ja kykyä sopeutua muutokseen."
+             aria-label="Yhteisöt. Yhteisöt tuottavat arjen tukea, osallisuutta ja kykyä sopeutua muutokseen.">
+            <circle cx="516" cy="414" r="20"/>
+            <circle class="node-pulse" cx="516" cy="414" r="28"/>
+            <text x="516" y="453" text-anchor="middle">YHTEISÖT</text>
+          </g>
+
+          <g class="society-node" data-node="luonto" tabindex="0" role="button"
+             data-label="Luonto" data-message="Luonto asettaa talouden ja hyvinvoinnin aineelliset reunaehdot."
+             aria-label="Luonto. Luonto asettaa talouden ja hyvinvoinnin aineelliset reunaehdot.">
+            <circle cx="412" cy="457" r="18"/>
+            <circle class="node-pulse" cx="412" cy="457" r="26"/>
+            <text x="412" y="493" text-anchor="middle">LUONTO</text>
+          </g>
+        </svg>
+
+        <div class="society-network-readout" aria-live="polite">
+          <span class="society-network-kicker" id="society-network-kicker">VERKOSTOVAIKUTUS</span>
+          <strong id="society-network-heading">Yksi muutos ei jää yhteen kohtaan.</strong>
+          <p id="society-network-copy">Rakenteet välittävät vaikutuksia eteenpäin. Valitse solmu tai seuraa animaatiota.</p>
+        </div>
+      </div>
+      <figcaption class="figcap">Kuvio 1 — Yhteiskunta rakenteiden verkostona · kosketa rakennetta nähdäksesi sen yhteydet</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 01 LÄHTÖKOHTA -->
+<section id="jarjestelma">
+  <div class="wrap">
+    <div class="shead">
+      <div class="rail reveal">
+        <span class="num">01</span>
+        <div class="eyebrow">Lähtökohta</div>
+      </div>
+      <div class="reveal">
+        <h2>Hyvinvointivaltio on yhteinen järjestelmä</h2>
+        <p class="lead" style="margin-top:26px">
+          Hyvinvointivaltio ei ole ensisijaisesti menoerä tai palveluluettelo.
+          Se on järjestelmä, joka jakaa riskejä, rakentaa toimintakykyä ja
+          palauttaa osan syntyvästä arvosta takaisin yhteiseen käyttöön.
+        </p>
+      </div>
+    </div>
+
+    <figure class="welfare-figure reveal">
+      <div class="welfare-sphere" id="welfare-sphere">
+        <div class="sphere-stage">
+          <div class="sphere-engrave" aria-hidden="true"></div>
+<div id="sphere-gateway" class="sphere-gateway" aria-live="polite">
+  <span id="sphere-gateway-title" class="sphere-gateway-title"></span>
+  <span id="sphere-gateway-link" class="sphere-gateway-link" role="button" tabindex="0">
+    Tutki visualisointia →
+  </span>
+</div>
+
+<svg id="welfare-sphere-svg" viewBox="0 0 1200 650" role="img"
+            aria-label="Navigoitava hyvinvointivaltion käsitepallo. Palloa voi kääntää 360 astetta; näkymä kertoo vuosikymmenen, tarkastelukulman ja siihen liittyvät keskeiset murrokset.">
+            <defs>
+              <radialGradient id="sphereCore" cx="38%" cy="32%" r="72%">
+                <stop offset="0%" stop-color="#496e67"/>
+                <stop offset="55%" stop-color="#274f4a"/>
+                <stop offset="100%" stop-color="#143936"/>
+              </radialGradient>
+              <radialGradient id="sphereGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".20"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="sphereShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#004458" flood-opacity=".20"/>
+              </filter>
+              <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#004458" flood-opacity=".20"/>
+              </filter>
+              <clipPath id="sphereClip">
+                <circle cx="600" cy="325" r="248"/>
+              </clipPath>
+            </defs>
+
+            <g class="sphere-world">
+              <circle cx="600" cy="325" r="252" fill="url(#sphereCore)" fill-opacity=".92"/>
+              <circle cx="600" cy="325" r="252" fill="none" stroke="#8f9c95" stroke-opacity=".28" stroke-width="1.1"/>
+              <circle cx="600" cy="325" r="220" fill="url(#sphereGlow)" opacity=".28"/>
+
+              <g clip-path="url(#sphereClip)" id="sphere-grid"></g>
+              <g clip-path="url(#sphereClip)" id="sphere-links"></g>
+              <g id="sphere-nodes"></g>
+
+              <ellipse id="sphere-equator" cx="600" cy="325" rx="246" ry="62" fill="none" stroke="#FFFFFF" stroke-opacity=".22" stroke-width="1.2"/>
+              <ellipse id="sphere-meridian" cx="600" cy="325" rx="78" ry="248" fill="none" stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1.2"/>
+            </g>
+<g id="sphere-phenomena" class="sphere-phenomena" pointer-events="none"></g>
+
+            <g class="sphere-center-copy" pointer-events="none">
+              <text x="600" y="300" text-anchor="middle">HYVINVOINTI</text>
+              <text x="600" y="326" text-anchor="middle">ON JÄRJESTELMÄ</text>
+              <text x="600" y="350" text-anchor="middle">EI YKSI PALVELU</text>
+            </g>
+          </svg>
+
+          <div class="sphere-readout" id="sphere-readout" aria-live="polite">
+            <div class="readout-meta"><span id="sphere-era">2025+</span><span id="sphere-zone">OSALLISUUS</span></div>
+            <div class="readout-title" id="sphere-title">Osallisuus on hyvinvointivaltion päämäärä — ja voimavara.</div>
+            <div class="readout-text" id="sphere-text">
+              Hyvinvointi näkyy lopulta siinä, pystyykö ihminen osallistumaan työhön, perheeseen, yhteisöön ja yhteiseen päätöksentekoon.
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="figcap">Kuvio 2 — Hyvinvointivaltio navigoitavana käsiteavaruuteena.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 02 TEHTÄVÄ -->
+<section id="miksi">
+  <div class="wrap shead">
+    <div class="rail reveal"><span class="num">02</span><div class="eyebrow">Tehtävä</div></div>
+    <div class="reveal">
+      <h2>Hyvinvointivaltiota pitää ymmärtää ennen kuin sitä voidaan uudistaa.</h2>
+      <p class="lead" style="margin-top:26px">Hyvinvointivaltion Vaalijat ry kokoaa yhteen näkökulmia suomalaisen yhteiskunnan rakenteisiin, muutoksiin ja tulevaisuuteen.</p>
+      <p class="lead">Emme tarkastele hyvinvointivaltiota staattisena rakenteena vaan muuttuvana järjestelmänä.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ATLAS -->
+<section id="atlas-live" class="atlas-lab">
+  <div class="wrap">
+    <div class="atlas-intro">
+      <div class="reveal">
+        <div class="atlas-kicker">03 · Atlas UI Kit — elävä aineisto</div>
+        <h2>Hyvinvointivaltio näkyy myös datassa.</h2>
+        <p class="lead">Staattisten kuvioiden sijaan sivu näyttää rakennemuutoksen tilastona, aikajanana, verkostona ja rakenteiden matriisina. Sama Atlas-ajattelu kulkee läpi koko sivun.</p>
+      </div>
+      <div class="atlas-note reveal">Valitse teema, vaihda näkymää ja tarkastele samaa ilmiötä eri mittakaavoissa. Kuvaaja ei ole koriste: se on osa argumenttia.</div>
+    </div>
+
+    <div class="atlas-shell reveal">
+      <div class="atlas-toolbar">
+        <div class="atlas-toolbar-top">
+          <span class="atlas-kicker">Teemaselain</span>
+          <span id="atlas-count" class="atlas-count"></span>
+        </div>
+        <div class="atlas-theme-row">
+          <button class="atlas-nav" id="atlas-prev" type="button" aria-label="Edellinen teema">‹</button>
+          <div class="atlas-theme-wrap">
+            <input id="atlas-theme" type="search" autocomplete="off" placeholder="Kirjoita tai selaa teemaa…" aria-label="Atlas-teema" aria-controls="atlas-suggestions" aria-expanded="false">
+            <button class="atlas-clear" id="atlas-clear" type="button" aria-label="Tyhjennä haku" title="Tyhjennä">×</button>
+            <div id="atlas-suggestions" class="atlas-suggestions" role="listbox" aria-label="Atlas-teemat"></div>
+          </div>
+          <button class="atlas-nav" id="atlas-next" type="button" aria-label="Seuraava teema">›</button>
+        </div>
+        <div class="atlas-meta">
+          <span id="atlas-kind" class="kind"></span><span>·</span><span>Atlas UI Kit</span>
+        </div>
+      </div>
+      <div id="atlas-status" class="atlas-status">Ladataan Atlas-komponenttia…</div>
+      <div id="atlas-stage" class="atlas-stage"></div>
+      <div class="atlas-foot">← → selaa teemoja · kirjoita hakusana · Enter avaa lähimmän osuman</div>
+    </div>
+
+    <div class="atlas-reading reveal">
+      <article class="atlas-reading-visual">
+        <div class="micro">Rakenteen lukeminen · Atlas-indikaattori</div>
+        <h3 id="reading-visual-title">Julkinen velka / BKT</h3>
+        <div class="reading-indicator-tabs" id="reading-indicator-tabs" role="tablist" aria-label="Rakenteen lukemisen indikaattorit">
+          <button type="button" class="active" data-card="JULKINEN_VELKA_POLKU" role="tab" aria-selected="true">velka</button>
+          <button type="button" data-card="TYOLLISYYS_POLKU" role="tab" aria-selected="false">työllisyys</button>
+          <button type="button" data-card="VAESTON_IKAANTYMINEN" role="tab" aria-selected="false">väestö</button>
+          <button type="button" data-card="TYOTTOMYYS_1990_2024" role="tab" aria-selected="false">työttömyys</button>
+        </div>
+        <div class="atlas-indicator-visual" id="reading-indicator" aria-live="polite"></div>
+        <div class="atlas-chart-note"><span>kehityskulku</span><span>vertailu · viive · riippuvuus</span></div>
+      </article>
+      <aside class="atlas-reading-copy" id="atlas-reading-copy">
+        <div>
+          <div class="micro">Mitä kuvaaja kertoo?</div>
+          <p class="atlas-claim" id="reading-claim">Julkinen velka ei ole yksittäinen luku.</p>
+          <p id="reading-description">Velan merkitys syntyy suhteesta talouden kokoon, kasvuun ja muihin rakenteellisiin paineisiin. Indikaattori näyttää suunnan; tulkinta kysyy, mitä sen ympärillä muuttuu.</p>
+          <div class="atlas-mini-rule"></div>
+          <div class="atlas-reading-links"><span>indikaattori</span><span>kehityskulku</span><span>viive</span><span>riippuvuus</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 04 AJANKOHTAISTA (yhdistys.json) -->
+<section id="teemat">
+  <div class="wrap">
+    <div class="shead">
+      <div class="rail reveal"><span class="num">04</span><div class="eyebrow">Ajankohtaista</div></div>
+      <div class="reveal">
+        <div class="news-heading">
+          <div>
+            <h2>Yhdistyksen tiedotus</h2>
+            <p class="lead news-intro">Tiedotteet, tapahtumat ja uudet sisällöt — päivittyvät suoraan yhdistys.json-aineistosta.</p>
+          </div>
+          <div class="news-source">Hyvinvoinnin vaalijat · tiedotus</div>
+        </div>
+      </div>
+    </div>
+    <div id="association-news" class="news-grid reveal" aria-live="polite">
+      <div class="news-loading">Ladataan ajankohtaisia…</div>
+    </div>
+    <p id="news-error" class="data-error" hidden>Ajankohtaisia ei voitu ladata juuri nyt.</p>
+  </div>
+</section>
+
+
+<!-- 06 KIRJOITUKSET -->
+<section id="kirjoitukset">
+  <div class="wrap">
+    <div class="shead">
+      <div class="rail reveal"><span class="num">06</span><div class="eyebrow">Kirjoitukset</div></div>
+      <div class="reveal"><h2>Ajatuksia hyvinvointivaltiosta</h2>
+      <p class="lead" style="margin-top:22px">Lyhyitä avauksia rakenteista, joita harvoin katsotaan yhdessä.</p></div>
+    </div>
+    <div class="writings">
+      <article class="write reveal"><div class="meta">Rakenteet</div><h3>Kun korjaava kierre katkeaa</h3><p>Mitä tapahtuu, kun järjestelmän itseään korjaavat mekanismit heikkenevät vähitellen?</p></article>
+      <article class="write reveal"><div class="meta">Järjestelmä</div><h3>Hyvinvointivaltio verkostona</h3><p>Miksi yksittäisen palvelun tarkastelu ei riitä kokonaisuuden ymmärtämiseen.</p></article>
+      <article class="write reveal"><div class="meta">Työ</div><h3>Työn uusi järjestelmä</h3><p>Työn muutos ei ole vain työmarkkinakysymys vaan koko hyvinvointimallin kysymys.</p></article>
+      <article class="write reveal"><div class="meta">Väestö</div><h3>Väestönmuutos ja järjestelmän kestävyys</h3><p>Ikärakenteen muutos vaikuttaa hitaasti mutta hyvin pitkäkestoisesti.</p></article>
+      <article class="write reveal"><div class="meta">Talous</div><h3>Rahan jälkeen — mistä arvo syntyy?</h3><p>Arvon lähteet muuttuvat, kun tuotanto, palvelut ja teknologia järjestyvät uudelleen.</p></article>
+      <article class="write reveal"><div class="meta">Luottamus</div><h3>Luottamus infrastruktuurina</h3><p>Luottamus on hyvinvointivaltion näkymätön rakenne, joka kantaa tai murtuu hitaasti.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- 07 YHDISTYS (yhdistys.json) -->
+<section id="yhdistys">
+  <div class="wrap">
+    <div class="shead">
+      <div class="rail reveal"><span class="num">07</span><div class="eyebrow">Yhdistys</div></div>
+      <div class="reveal">
+        <h2 data-org="name">Hyvinvointivaltion Vaalijat ry</h2>
+        <p class="eyebrow" style="margin:18px 0 0" data-org="kicker"></p>
+        <p class="lead" style="margin-top:20px" data-org="mission"></p>
+        <p data-org="role_in_atlas" style="color:var(--ink-soft)"></p>
+      </div>
+    </div>
+    <p id="org-error" class="data-error" hidden>Yhdistyksen tietoja (yhdistys.json) ei voitu ladata. Tarkista, että tiedosto on samassa kansiossa sivun kanssa.</p>
+    <div class="org-grid">
+      <div class="org-card reveal">
+        <div class="micro" data-org="activities_title">Mitä yhdistys tekee?</div>
+        <ol class="org-list" id="org-activities"></ol>
+      </div>
+      <div class="reveal">
+        <div class="pills">
+          <div>Riippumaton</div><div>Yhteiskunnallinen</div><div>Rakentava</div><div>Tutkiva</div><div>Tulevaisuuteen suuntautuva</div>
+        </div>
+        <div class="org-meta">
+          <span>Puheenjohtaja <strong data-org="chair"></strong></span>
+          <span>Päivitetty <strong data-org="updated"></strong></span>
+        </div>
+        <div class="btns" id="org-links"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 HALLITUS (yhdistys.json) -->
+<section id="hallitus">
+  <div class="wrap">
+    <div class="shead">
+      <div class="rail reveal"><span class="num">08</span><div class="eyebrow">Hallitus</div></div>
+      <div class="reveal"><h2>Kuka vastaa toiminnasta</h2>
+      <p class="lead" style="margin-top:22px" data-org="board.lead"></p></div>
+    </div>
+    <div class="board-grid reveal" id="org-board"></div>
+  </div>
+</section>
+
+<!-- 09 ASIAKIRJAT (yhdistys.json) -->
+<section id="asiakirjat">
+  <div class="wrap">
+    <div class="shead">
+      <div class="rail reveal"><span class="num">09</span><div class="eyebrow">Asiakirjat</div></div>
+      <div class="reveal"><h2>Säännöt, kertomukset ja aineistot</h2></div>
+    </div>
+    <div class="doc-groups reveal" id="org-docs"></div>
+    <p class="data-note">Lähde: yhdistys.json</p>
+  </div>
+</section>
+
+<!-- 10 LIITY (yhdistys.json) -->
+<section id="liity" class="join">
+  <div class="wrap inner">
+    <div class="eyebrow reveal">10 — Liity mukaan</div>
+    <h2 class="reveal" style="margin-top:12px">Hyvinvointivaltio tarvitsee vaalijoita.</h2>
+    <p class="lead reveal" style="margin-top:24px" data-org="membership.lead"></p>
+    <div class="join-grid">
+      <ol class="org-list reveal" id="org-steps"></ol>
+      <div class="pay-card reveal">
+        <div class="micro">Jäsenmaksut ja tilitiedot</div>
+        <ul class="pay-lines" id="org-payment"></ul>
+      </div>
+    </div>
+    <div class="btns reveal" id="org-join"></div>
+  </div>
+
+<div class="v13-membership" id="v13Membership">
+  <div class="v13-identity-shell">
+    <div class="eyebrow">Liity · tue · osallistu</div>
+    <h3>Asioi sähköpostiosoitteellasi</h3>
+    <p class="intro">Sähköpostiosoite toimii tunnisteena. Lähetämme siihen 6-numeroisen vahvistustunnuksen. Vahvistuksen jälkeen voit täyttää tai päivittää yhteystietosi ja valita jäsenyyden, lahjoituksen tai vapaaehtoisuuden.</p>
+    <div class="v13-identity-row">
+      <div class="v13-field"><label>Sähköpostiosoite</label><input type="email" data-email autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+      <button class="v13-primary" type="button" data-action="identity">Jatka</button>
+    </div>
+    <div class="v13-status" data-status role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="v13-profile-shell" hidden>
+    <div class="v13-profile-top">
+      <div><div class="eyebrow">Omat tiedot</div><h3 data-profile-title>Tervetuloa</h3><div data-member-badge></div></div>
+      <button class="v13-secondary" type="button" data-action="change-email">Vaihda sähköposti</button>
+    </div>
+    <div class="v13-profile-form">
+      <div class="v13-field wide"><label>Sähköpostiosoite</label><input data-field="email" type="email" autocomplete="email"></div>
+      <div class="v13-field"><label>Nimi</label><input data-field="full_name" autocomplete="name"></div>
+      <div class="v13-field"><label>Puhelin</label><input data-field="phone" autocomplete="tel"></div>
+      <div class="v13-field"><label>Kunta</label><input data-field="municipality"></div>
+      <div class="v13-field"><label>Lähiosoite</label><input data-field="address_line" autocomplete="street-address"></div>
+      <div class="v13-field"><label>Postinumero</label><input data-field="postal_code" autocomplete="postal-code"></div>
+      <div class="v13-field"><label>Postitoimipaikka</label><input data-field="city" autocomplete="address-level2"></div>
+    </div>
+    <div class="v13-profile-actions"><button class="v13-secondary" type="button" data-action="save-profile">Päivitä tiedot</button></div>
+
+    <div class="v13-choice-grid">
+      <article class="v13-choice-card" data-member-card>
+        <h4 data-member-title>Liity jäseneksi</h4>
+        <div class="v13-price" data-member-price>30 €</div>
+        <p data-member-note>Liittymismaksu 5 € + jäsenmaksu 25 €.</p>
+        <label class="v13-check" data-new-member-check><input type="checkbox" data-join-member> <span>Liity jäseneksi</span></label>
+        <button class="v13-primary" type="button" data-action="member-pay" disabled>Maksa 30 €</button>
+      </article>
+
+      <article class="v13-choice-card">
+        <h4>Lahjoita</h4>
+        <div class="v13-donation-row"><input type="number" min="1" step="1" inputmode="decimal" placeholder="Summa" data-donation><span>€</span></div>
+        <p>Voit tukea yhdistyksen toimintaa haluamallasi summalla. Jäsenyyttä ei tarvita.</p>
+        <button class="v13-primary" type="button" data-action="donation-pay">Lahjoita</button>
+      </article>
+
+      <article class="v13-choice-card">
+        <h4>Vapaaehtoiseksi</h4>
+        <label class="v13-check"><input type="checkbox" data-volunteer> <span>Ilmoittaudun vapaaehtoiseksi</span></label>
+        <div class="v13-volunteer-extra"><input data-availability placeholder="Milloin voit osallistua?"><textarea data-volunteer-note rows="3" placeholder="Mistä tehtävistä olet kiinnostunut?"></textarea></div>
+        <p>Vapaaehtoiseksi voi ilmoittautua myös ilman jäsenyyttä.</p>
+        <button class="v13-secondary" type="button" data-action="volunteer-save">Tallenna ilmoittautuminen</button>
+      </article>
+    </div>
+    <div class="v13-status" data-action-status role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+</section>
+
+</main>
+
+<button class="backtop" id="backtop" type="button" aria-label="Takaisin ylös" hidden>↑</button>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <h3>Hyvinvointivaltion Vaalijat ry</h3>
+        <p style="max-width:36ch;color:rgba(207,231,240,.7)">Rakennamme ymmärrystä suomalaisen hyvinvointivaltion muutoksesta.</p>
+      </div>
+      <div>
+        <div class="f-title">Sivusto</div>
+        <a href="#top">Etusivu</a>
+        <a href="#yhdistys">Yhdistys</a>
+        <a href="#teemat">Ajankohtaista</a>
+        <a href="#atlas-live">Rakennemuutosten atlas</a>
+        <a href="#kirjoitukset">Kirjoitukset</a>
+        <a href="#hallitus">Hallitus</a>
+        <a href="#asiakirjat">Asiakirjat</a>
+      </div>
+      <div>
+        <div class="f-title">Yhteystiedot</div>
+        <a href="mailto:juha.nurmela1@gmail.com" data-org-footer="email">juha.nurmela1@gmail.com</a>
+        <a href="tel:+358408319466">040 831 9466</a>
+        <p style="color:rgba(207,231,240,.55);margin:8px 0 0">Puheenjohtaja <span data-org="chair"></span></p>
+        <p style="color:rgba(207,231,240,.55);margin:8px 0 0">Y-tunnus: lisätään myöhemmin</p>
+        <p style="color:rgba(207,231,240,.55);margin:4px 0 0">Sosiaalinen media: lisätään myöhemmin</p>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <div>© 2026 Hyvinvointivaltion Vaalijat ry</div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap">
+        <span class="f-muted">Tietosuojaseloste (tulossa)</span>
+        <span class="f-muted">Evästeet (tulossa)</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const b = document.getElementById('burger');
+  const m = document.getElementById('mobile');
+  const header = document.querySelector('header.nav');
+  const backtop = document.getElementById('backtop');
+  const navLinks = [...document.querySelectorAll('.links a[href^="#"]')];
+
+  if (b && m) {
+    const setMenu = (open) => {
+      m.classList.toggle('open', open);
+      m.hidden = !open;
+      b.setAttribute('aria-expanded', String(open));
+      b.setAttribute('aria-label', open ? 'Sulje valikko' : 'Avaa valikko');
+    };
+    setMenu(false);
+    b.addEventListener('click', () => setMenu(!m.classList.contains('open')));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && m.classList.contains('open')) { setMenu(false); b.focus(); }
+    });
+    m.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  }
+
+  let ticking = false;
+  const apply = () => {
+    ticking = false;
+    const y = window.scrollY;
+    header?.classList.toggle('is-scrolled', y > 8);
+    if (backtop) { const show = y > 700; backtop.classList.toggle('show', show); backtop.hidden = !show; }
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(apply); } };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  apply();
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  backtop?.addEventListener('click', () => {
+    window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    document.getElementById('main')?.focus?.();
+  });
+
+  const targets = navLinks
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+      });
+    }, {rootMargin:'-30% 0px -60% 0px', threshold:0});
+    targets.forEach(t => io.observe(t));
+  }
+})();
+</script>
+<script>
+(() => {
+  const themes = [
+    {label:"Hyvinvoinnin murrokset", kind:"Murrosaikajana", tag:"atlas-timeline", attrs:{domain:"hyvinvointi",limit:"12"}},
+    {label:"Terveydenhuolto", kind:"Murrosaikajana", tag:"atlas-timeline", attrs:{domain:"terveys",limit:"12"}},
+    {label:"Koulutus", kind:"Murrosaikajana", tag:"atlas-timeline", attrs:{domain:"koulutus",limit:"12"}},
+    {label:"Hyvinvointivaltion rakentuminen", kind:"Yhteysverkko", tag:"atlas-network", attrs:{focus:"hyvinvointivaltion-rakentuminen-1880",depth:"2"}},
+    {label:"Hyvinvointialueiden käynnistyminen", kind:"Yhteysverkko", tag:"atlas-network", attrs:{focus:"hyvinvointialueet-2023",depth:"2"}},
+    {label:"Terveys, koulutus ja talous", kind:"Rakennematriisi", tag:"atlas-matrix", attrs:{domains:"terveys,koulutus,talous",depth:"2"}},
+    {label:"Työ, väestö ja hyvinvointi", kind:"Rakennematriisi", tag:"atlas-matrix", attrs:{domains:"työ,väestö,hyvinvointi",depth:"2"}},
+    {label:"Sote-uudistusten aikakausi", kind:"Aihekokonaisuus", tag:"atlas-topic", attrs:{item:"sote-pitka-uudistus"}},
+    {label:"Hyvinvointialueiden talouskriisi", kind:"Aihekokonaisuus", tag:"atlas-topic", attrs:{item:"hyvinvointialueiden-talouskriisi-2023"}}
+  ];
+
+  /* Rakenteen lukeminen käyttää omia Atlas UI Kit -indikaattoreitaan. */
+  const readingProfiles = [
+    {card:"JULKINEN_VELKA_POLKU",title:"Julkinen velka / BKT",claim:"Julkinen velka ei ole yksittäinen luku.",description:"Velan merkitys syntyy suhteesta talouden kokoon, kasvuun ja muihin rakenteellisiin paineisiin. Indikaattori näyttää suunnan; tulkinta kysyy, mitä sen ympärillä muuttuu."},
+    {card:"TYOLLISYYS_POLKU",title:"Työllisyysaste",claim:"Työllisyys on järjestelmän kantava virta.",description:"Työllisyys vaikuttaa samanaikaisesti julkiseen rahoitukseen, palvelujen kysyntään ja ihmisten toimeentuloon. Siksi sen muutos ei jää työmarkkinoiden sisälle."},
+    {card:"VAESTON_IKAANTYMINEN",title:"Väestön ikääntyminen",claim:"Väestörakenne muuttuu hitaasti — mutta muuttaa paljon.",description:"Ikääntyminen näkyy pitkällä aikavälillä työssä, palvelujen tarpeessa, rahoituksessa ja sukupolvien välisissä riippuvuuksissa."},
+    {card:"TYOTTOMYYS_1990_2024",title:"Työttömyysaste",claim:"Työmarkkinan muutos näkyy viiveellä muualla.",description:"Työttömyys ei ole vain työmarkkinoiden mittari. Sen vaikutukset kulkevat tulojen, palvelujen ja julkisen talouden kautta."}
+  ];
+  const readingIndicator=document.getElementById("reading-indicator");
+  const readingClaim=document.getElementById("reading-claim");
+  const readingDescription=document.getElementById("reading-description");
+  const readingTitle=document.getElementById("reading-visual-title");
+  const readingTabs=document.getElementById("reading-indicator-tabs");
+
+  function updateReadingIndicator(profile){
+    if(readingClaim) readingClaim.textContent=profile.claim;
+    if(readingDescription) readingDescription.textContent=profile.description;
+    if(readingTitle) readingTitle.textContent=profile.title;
+
+    /*
+     * Rakenteen lukemisen kuvaaja tulee nyt oikeasti
+     * Atlas UI Kitistä. Emme piirrä käyrää itse.
+     *
+     * Komponentti luodaan uudelleen, jotta myös Atlas UI Kitin
+     * oma chart-renderöinti varmasti käynnistyy kortin vaihtuessa.
+     */
+    if(readingIndicator){
+      /* Kortti luodaan vasta kun komponentti on määritelty ja
+         attribuutti asetetaan ennen liittämistä — muuten Atlas UI Kit
+         yrittää ladata korttia "undefined". */
+      const mount = () => {
+        const card=document.createElement("atlas-stat-card");
+        card.id="reading-atlas-card";
+        card.setAttribute("card", profile.card);
+        readingIndicator.replaceChildren(card);
+      };
+      customElements.whenDefined("atlas-stat-card").then(mount).catch(mount);
+    }
+  }
+  if(readingTabs){
+    readingTabs.addEventListener("click",event=>{
+      const button=event.target.closest("button[data-card]");
+      if(!button)return;
+      const profile=readingProfiles.find(p=>p.card===button.dataset.card);
+      if(!profile)return;
+      readingTabs.querySelectorAll("button").forEach(btn=>{
+        const active=btn===button;
+        btn.classList.toggle("active",active);
+        btn.setAttribute("aria-selected",active?"true":"false");
+      });
+      updateReadingIndicator(profile);
+    });
+  }
+  updateReadingIndicator(readingProfiles[0]);
+
+  const input = document.getElementById("atlas-theme");
+  const prev = document.getElementById("atlas-prev");
+  const next = document.getElementById("atlas-next");
+  const clear = document.getElementById("atlas-clear");
+  const suggestions = document.getElementById("atlas-suggestions");
+  const count = document.getElementById("atlas-count");
+  const kind = document.getElementById("atlas-kind");
+  const stage = document.getElementById("atlas-stage");
+  const status = document.getElementById("atlas-status");
+  if (!input || !stage) return;
+
+  let index = 0;
+  let token = 0;
+  let filtered = themes.slice();
+
+  const normalize = s => String(s ?? "").trim().toLocaleLowerCase("fi-FI");
+
+  function sync() {
+    const t = themes[index];
+    input.value = t.label;
+    kind.textContent = t.kind;
+    count.textContent = `${index + 1} / ${themes.length}`;
+  }
+
+  function renderSuggestions(query = "") {
+    const q = normalize(query);
+    filtered = q ? themes.filter(t => normalize(t.label).includes(q) || normalize(t.kind).includes(q)) : themes.slice(0, 7);
+    suggestions.innerHTML = "";
+
+    if (!filtered.length) {
+      suggestions.innerHTML = '<div class="atlas-empty">Ei osumia. Kokeile toista hakusanaa.</div>';
+    } else {
+      filtered.slice(0, 7).forEach((t, i) => {
+        const realIndex = themes.indexOf(t);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "atlas-suggestion";
+        btn.setAttribute("role", "option");
+        btn.setAttribute("aria-selected", String(realIndex === index));
+        btn.innerHTML = `<span>${t.label}</span><small>${t.kind}</small>`;
+        btn.addEventListener("click", () => {
+          render(realIndex);
+          closeSuggestions();
+          input.focus();
+        });
+        suggestions.appendChild(btn);
+      });
+    }
+  }
+
+  function openSuggestions() {
+    renderSuggestions(input.value === themes[index].label ? "" : input.value);
+    suggestions.classList.add("open");
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  function closeSuggestions() {
+    suggestions.classList.remove("open");
+    input.setAttribute("aria-expanded", "false");
+  }
+
+  function render(i) {
+    index = (i + themes.length) % themes.length;
+    sync();
+    stage.classList.add("is-loading");
+    stage.replaceChildren();
+
+    const t = themes[index];
+    /* Rakenteen lukemisen indikaattoria ohjataan omilla välilehdillään;
+       teemavalinnassa ei ole card-tunnusta, joten sitä ei nollata tässä. */
+
+
+    const el = document.createElement(t.tag);
+    Object.entries(t.attrs).forEach(([k, v]) => el.setAttribute(k, v));
+    stage.appendChild(el);
+
+    const current = ++token;
+    status.textContent = "Ladataan visualisointia…";
+
+    customElements.whenDefined(t.tag).then(() => {
+      if (current === token) {
+        status.textContent = `Näkymä: ${t.kind} · ${t.label}`;
+        stage.classList.remove("is-loading");
+      }
+    }).catch(() => {
+      if (current === token) {
+        status.textContent = "Atlas-komponenttia ei voitu ladata juuri nyt.";
+        stage.classList.remove("is-loading");
+      }
+    });
+  }
+
+  prev?.addEventListener("click", () => render(index - 1));
+  next?.addEventListener("click", () => render(index + 1));
+
+  input.addEventListener("focus", openSuggestions);
+  input.addEventListener("input", () => {
+    const q = normalize(input.value);
+    const hit = themes.findIndex(t => normalize(t.label) === q);
+    if (hit >= 0) {
+      index = hit;
+      kind.textContent = themes[hit].kind;
+      count.textContent = `${hit + 1} / ${themes.length}`;
+    }
+    openSuggestions();
+  });
+
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      const q = normalize(input.value);
+      const hit = themes.findIndex(t => normalize(t.label).includes(q));
+      if (hit >= 0) render(hit);
+      closeSuggestions();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault(); render(index - 1); closeSuggestions();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault(); render(index + 1); closeSuggestions();
+    } else if (e.key === "Escape") {
+      closeSuggestions();
+    }
+  });
+
+  clear?.addEventListener("click", () => {
+    input.value = "";
+    input.focus();
+    openSuggestions();
+  });
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".atlas-theme-wrap")) closeSuggestions();
+  });
+
+  render(0);
+})();
+</script>
+<script>
+/* Yhdistyksen tiedot ladataan erillisestä yhdistys.json -tiedostosta. */
+(() => {
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const el = id => document.getElementById(id);
+  const get = (o, path) => path.split(".").reduce((a, k) => (a == null ? a : a[k]), o);
+
+  const mailto = e => `<a href="mailto:${esc(e)}">${esc(e)}</a>`;
+  const tel = p => `<a href="tel:${esc(String(p).replace(/[^\d+]/g, ""))}">${esc(p)}</a>`;
+
+  function render(d){
+    document.querySelectorAll("[data-org]").forEach(n => {
+      const v = get(d, n.getAttribute("data-org"));
+      if(typeof v === "string" && v) n.textContent = v;
+    });
+
+    const acts = el("org-activities");
+    if(acts) acts.innerHTML = (d.activities || []).map(a => `<li>${esc(a)}</li>`).join("");
+
+    const links = el("org-links");
+    if(links) links.innerHTML = (d.links || []).map((l, i) =>
+      `<a class="btn ${i === 0 ? "btn-primary" : "btn-ghost"}" href="${esc(l.url)}"${l.external ? ' target="_blank" rel="noopener"' : ""}>${esc(l.label)}</a>`).join("");
+
+    const board = el("org-board");
+    if(board) board.innerHTML = (d.board?.members || []).map(m => `
+      <article class="board-card">
+        <div class="role">${esc(m.role || "")}</div>
+        <h3>${esc(m.name || "")}</h3>
+        ${m.note ? `<p>${esc(m.note)}</p>` : ""}
+        <div class="contact">
+          ${m.email ? mailto(m.email) : ""}
+          ${m.phone ? tel(m.phone) : ""}
+          ${m.profile_url ? `<a href="${esc(m.profile_url)}" target="_blank" rel="noopener">Esittely</a>` : ""}
+        </div>
+      </article>`).join("");
+
+    const docs = el("org-docs");
+    if(docs) docs.innerHTML = (d.documents || []).map(g => `
+      <div class="doc-group">
+        <h3>${esc(g.title)}</h3>
+        ${(g.items && g.items.length) ? `<ul class="doc-items">${g.items.map(it => `
+          <li>
+            <div class="t">${it.url ? `<a href="${esc(it.url)}"${/^https?:/.test(it.url) ? ' target="_blank" rel="noopener"' : ""}>${esc(it.title)}</a>` : esc(it.title)}
+              ${it.type ? `<span class="tag">${esc(it.type)}</span>` : ""}</div>
+            ${it.description ? `<p class="d">${esc(it.description)}${it.date ? ` · ${esc(it.date)}` : ""}</p>` : ""}
+          </li>`).join("")}</ul>`
+          : `<p class="doc-empty">${esc(g.empty_text || "Aineistoa ei ole vielä julkaistu.")}</p>`}
+      </div>`).join("");
+
+    const steps = el("org-steps");
+    if(steps) steps.innerHTML = (d.membership?.steps || []).map(s =>
+      `<li><strong>${esc(s.title)}</strong>${esc(s.text)}</li>`).join("");
+
+    const pay = el("org-payment");
+    if(pay) pay.innerHTML = (d.membership?.payment_lines || []).map(l => `<li>${esc(l)}</li>`).join("");
+
+    const join = el("org-join");
+    if(join && d.membership?.join_url) join.innerHTML =
+      `<a class="btn btn-primary" href="${esc(d.membership.join_url)}" target="_blank" rel="noopener">${esc(d.membership.join_label || "Liity mukaan")}</a>` +
+      `<a class="btn btn-ghost" href="mailto:${esc(d.board?.members?.[0]?.email || "")}">Ilmoita yhteystietosi</a>`;
+
+    const chairEmail = d.board?.members?.[0]?.email;
+    const f = document.querySelector('[data-org-footer="email"]');
+    if(f && chairEmail){ f.href = "mailto:" + chairEmail; f.textContent = chairEmail; }
+
+    const news = el("association-news");
+    if(news){
+      const now = Date.now();
+      const rows = (d.news || [])
+        .filter(n => n && n.status === "julkaistu" && (!n.published_at || new Date(n.published_at).getTime() <= now))
+        .sort((a,b) => {
+          if(Boolean(a.pinned) !== Boolean(b.pinned)) return a.pinned ? -1 : 1;
+          const da = a.published_at ? new Date(a.published_at).getTime() : 0;
+          const db = b.published_at ? new Date(b.published_at).getTime() : 0;
+          if(db !== da) return db - da;
+          return (Number(a.sort_order)||9999) - (Number(b.sort_order)||9999);
+        });
+
+      const formatNewsDate = value => {
+        if(!value) return "";
+        const d = new Date(value);
+        if(Number.isNaN(d.getTime())) return value;
+        return new Intl.DateTimeFormat("fi-FI", {year:"numeric", month:"long", day:"numeric"}).format(d);
+      };
+
+      news.innerHTML = rows.length ? rows.map(n => `
+        <article class="news-card ${n.pinned ? "pinned" : ""}">
+          ${n.kicker ? `<div class="news-kicker">${esc(n.kicker)}</div>` : ""}
+          <h3>${esc(n.title)}</h3>
+          ${n.excerpt ? `<p class="news-excerpt">${esc(n.excerpt)}</p>` : ""}
+          <div class="news-date">${esc(formatNewsDate(n.published_at))}</div>
+          ${n.link_url ? `<a class="news-link" href="${esc(n.link_url)}"${/^https?:/.test(n.link_url) ? ' target="_blank" rel="noopener noreferrer"' : ""}>${esc(n.link_label || "Lue lisää")} →</a>` : ""}
+        </article>`).join("") : '<div class="news-loading">Ajankohtaista julkaistaan pian.</div>';
+    }
+
+    if(d.name) document.title = `${d.name} -- Hyvinvointivaltio on verkosto`;
+  }
+
+  fetch("./yhdistys.json", { cache: "no-cache" })
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(render)
+    .catch(() => { const e = el("org-error"); if(e) e.hidden = false; });
+})();
+</script>
+
+<script>
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e => e.classList.add('in')); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+  els.forEach((el, i) => { el.style.transitionDelay = `${Math.min(i % 4, 3) * 70}ms`; io.observe(el); });
+
+  const bar = document.querySelector('.nav-progress');
+  if(bar){
+    let raf = 0;
+    const upd = () => {
+      raf = 0;
+      const h = document.documentElement;
+      const p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
+      bar.style.width = (p * 100).toFixed(2) + '%';
+    };
+    const q = () => { if (!raf) raf = requestAnimationFrame(upd); };
+    document.addEventListener('scroll', q, { passive: true });
+    window.addEventListener('resize', q, { passive: true });
+    upd();
+  }
+})();
+</script>
+
+<script>
+/* 01 · Navigoitava käsitepallo
+   360° = vuosikymmenen näkökulma
+   pystyliike = tarkastelukulma / järjestelmän vyöhyke
+   pallon ympärillä näkyvät kyseisen näkökulman keskeiset murrokset
+*/
+(() => {
+  const svg = document.getElementById("welfare-sphere-svg");
+  const stage = document.getElementById("welfare-sphere");
+  if (!svg || !stage) return;
+
+  const grid = document.getElementById("sphere-grid");
+  const links = document.getElementById("sphere-links");
+  const nodesLayer = document.getElementById("sphere-nodes");
+  const phenomenaLayer = document.getElementById("sphere-phenomena");
+  const readoutEra = document.getElementById("sphere-era");
+  const readoutZone = document.getElementById("sphere-zone");
+  const readoutTitle = document.getElementById("sphere-title");
+  const readoutText = document.getElementById("sphere-text");
+
+  const cx = 600, cy = 325, R = 248;
+  const times = ["1950-luku", "1970-luku", "1990-luku", "2010-luku", "2020-luku"];
+  const zones = ["RAHOITUS", "TURVA", "PALVELUT", "KYVYKKYYS", "OSALLISUUS"];
+  const zoneLabels = ["Rahoitus", "Turva", "Palvelut", "Kyvykkyys", "Osallisuus"];
+
+  const matrix = [
+    [
+      ["Jälleenrakennuksen rahoitus", "Veropohjaa ja yhteisiä voimavaroja rakennetaan sodanjälkeisen yhteiskunnan perustaksi."],
+      ["Perusturvan alku", "Riskien jakaminen alkaa laajentua yhteisiksi instituutioiksi."],
+      ["Kansakoulusta palvelujärjestelmään", "Koulutus ja terveys alkavat muodostaa laajempaa yhteistä infrastruktuuria."],
+      ["Työkyky yhteisenä kysymyksenä", "Toimintakyky kytkeytyy työhön, terveyteen ja yhteiskuntaan osallistumiseen."],
+      ["Yhteiskuntaan mukaan", "Hyvinvoinnin mitta ei ole vain turva vaan mahdollisuus kuulua yhteiseen yhteiskuntaan."]
+    ],
+    [
+      ["Kasvun rahoituspohja", "Laajeneva työ ja tuotanto antavat tilaa universaalien järjestelmien rakentamiselle."],
+      ["Universaali turva", "Sosiaaliturvan logiikka siirtyy kohti kattavampaa riskien jakamista."],
+      ["Palveluista infrastruktuuriksi", "Terveys, koulutus ja sosiaalipalvelut muodostavat hyvinvointivaltion selkärangan."],
+      ["Inhimillinen pääoma", "Osaamisesta ja terveydestä tulee kasvun ja hyvinvoinnin yhteisiä tuotannontekijöitä."],
+      ["Mahdollisuuksien tasaaminen", "Osallisuutta rakennetaan tasaamalla lähtökohtia, ei vain korjaamalla seurauksia."]
+    ],
+    [
+      ["Veropohjan paine", "Kansantalouden rakennemuutos alkaa näkyä siinä, millä yhteisiä palveluja voidaan rahoittaa."],
+      ["Riskit monimuotoistuvat", "Työelämän, perheiden ja väestön muutokset muuttavat turvan tarpeita."],
+      ["Palvelujärjestelmän paine", "Hyvinvointivaltion tehtävät kasvavat samalla kun niiden yhteensovittaminen vaikeutuu."],
+      ["Työkyvystä toimintakykyyn", "Hyvinvointi ei palaudu työmarkkina-asemaan: terveys, osaaminen ja arki kytkeytyvät yhteen."],
+      ["Luottamus ja osallistuminen", "Järjestelmän legitimiteetti riippuu siitä, koetaanko se oikeudenmukaiseksi ja toimivaksi."]
+    ],
+    [
+      ["Kestävyys ja rahoitus", "Ikääntyminen, hidas kasvu ja velka tekevät rahoituspohjasta järjestelmän keskeisen solmukohdan."],
+      ["Turvan kohdentamisen dilemma", "Universaalisuuden, kohdentamisen ja kannustimien välistä tasapainoa joudutaan arvioimaan uudelleen."],
+      ["Palvelut verkostoksi", "Palvelujen määrä ei yksin ratkaise: ratkaisevaa on niiden yhteensopivuus ja vaikuttavuus."],
+      ["Ennaltaehkäisevä toimintakyky", "Terveys, osaaminen ja arjen toimintakyky ovat yhä enemmän järjestelmän tuottavuuden ehtoja."],
+      ["Osallisuus järjestelmän tuotoksena", "Työ, yhteisöt ja kansalaisuus palauttavat hyvinvointia takaisin yhteiseen järjestelmään."]
+    ],
+    [
+      ["Uusi arvopohja", "Rahoitus ei ole vain menojen kattamista vaan yhteisen toimintakyvyn ylläpitämistä."],
+      ["Joustava turva", "Turvan pitää seurata muuttuvia elämäntilanteita ilman että vastuu katoaa järjestelmään."],
+      ["Vaikuttavuus ennen volyymia", "Palvelujen arvo syntyy siitä, mitä ne muuttavat ihmisten elämässä ja yhteiskunnassa."],
+      ["Kyvykkyys on pääomaa", "Terveys, osaaminen ja toimintakyky ovat hyvinvointivaltion tulevaisuuden keskeisiä varantoja."],
+      ["Luottamus → jatkuvuus", "Hyvinvointivaltio toimii vain, jos ihmiset voivat luottaa siihen — ja osallistua sen uudistamiseen."]
+    ]
+  ];
+
+  // Viisi aikakautta × viisi näkökulmaa: jokaisessa 6 keskeistä murrosta.
+  const phenomena = [
+    [
+      ["Jälleenrakennus", "Yhteiset voimavarat", "Universaalisuuden alku", "Palvelujen perusta", "Työkyvyn rakentuminen", "Yhteinen vastuu"],
+      ["Perusturvan synty", "Sosiaalinen vakuutus", "Perhe ja toimeentulo", "Riskien jakaminen", "Työn turva", "Yhteiskuntaan kiinnittyminen"],
+      ["Kansakoulu", "Terveydenhuolto", "Asuntopolitiikka", "Palveluinfrastruktuuri", "Työkyky", "Osallisuuden perusta"],
+      ["Työkyky", "Koulutus", "Terveys", "Tuottavuus", "Arjen turva", "Yhteinen toimintakyky"],
+      ["Kansalaisuus", "Mahdollisuudet", "Yhteisöt", "Perhe", "Työ", "Osallisuus"]
+    ],
+    [
+      ["Kasvun rahoitus", "Työn verotus", "Universaalit järjestelmät", "Teollistuminen", "Julkinen kapasiteetti", "Yhteiset investoinnit"],
+      ["Universaali turva", "Eläketurva", "Perhepolitiikka", "Työttömyysturva", "Riskien tasaus", "Turvan kattavuus"],
+      ["Peruskoulu", "Terveyskeskus", "Päivähoito", "Sosiaalipalvelut", "Palveluverkko", "Julkinen infrastruktuuri"],
+      ["Inhimillinen pääoma", "Koulutus", "Terveys", "Työkyky", "Osaaminen", "Liikkuvuus"],
+      ["Tasa-arvo", "Sosiaalinen liikkuvuus", "Osallistuminen", "Työelämä", "Kansalaisyhteiskunta", "Mahdollisuuksien tasaaminen"]
+    ],
+    [
+      ["Veropohjan paine", "Laman rahoitus", "Rakennemuutos", "Velka", "Menopaine", "Kasvun hidastuminen"],
+      ["Työttömyysriski", "Väestön muutos", "Perheiden muutos", "Eriarvoisuus", "Turvan paine", "Uudet riskit"],
+      ["Palvelujen kasvu", "Järjestelmän pirstoutuminen", "Yhteensovitus", "Tehokkuus", "Kustannuspaine", "Palvelujen paine"],
+      ["Työkyky → toimintakyky", "Mielenterveys", "Osaaminen", "Arjen hallinta", "Pitkittynyt työttömyys", "Osallistumisen esteet"],
+      ["Luottamus", "Legitimiteetti", "Eriarvoisuuden kokemus", "Osallistuminen", "Yhteisöllisyys", "Järjestelmän oikeutus"]
+    ],
+    [
+      ["Kestävyysvaje", "Ikääntyminen", "Velka", "Hidas kasvu", "Rahoituspohja", "Julkisen talouden paine"],
+      ["Turvan kohdentaminen", "Kannustimet", "Universaalisuus", "Palvelujen ja etuuksien rajat", "Elämäntilanteet", "Turvan uudelleenmuotoilu"],
+      ["Palvelut verkostoksi", "Digitalisaatio", "Yhteensopivuus", "Vaikuttavuus", "Integraatio", "Tuottavuus"],
+      ["Ennaltaehkäisy", "Terveys", "Osaaminen", "Työkyky", "Arjen toimintakyky", "Inhimillinen pääoma"],
+      ["Osallisuus", "Työ", "Yhteisöt", "Kansalaisuus", "Luottamus", "Järjestelmän jatkuvuus"]
+    ],
+    [
+      ["Uusi arvopohja", "Rahoituksen riittävyys", "Julkinen kapasiteetti", "Kasvun laatu", "Arvon reitti", "Yhteinen toimintakyky"],
+      ["Joustava turva", "Elämäntilanteet", "Yksilöllistyminen", "Riskien uusi jako", "Turvan jatkuvuus", "Vastuun rajat"],
+      ["Vaikuttavuus", "Palvelujen arvo", "Digitaalisuus", "Yhteensopivuus", "Ennaltaehkäisy", "Palvelujen uusi reitti"],
+      ["Kyvykkyys pääomana", "Terveys", "Osaaminen", "Toimintakyky", "AI ja työ", "Uusi tuottavuus"],
+      ["Luottamus", "Jatkuvuus", "Osallistuminen", "Yhteisöt", "Kansalaisuus", "Hyvinvointivaltion uudistuminen"]
+    ]
+  ];
+
+  let yaw = 0, pitch = 0;
+  let activeTi = 4, activeZi = 4;
+  let dragging = false, px = 0, py = 0;
+
+  const ns = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs={}) => {
+    const n = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([k,v]) => n.setAttribute(k,v));
+    return n;
+  };
+
+  function rad(d){ return d * Math.PI / 180; }
+
+  function project(lonDeg, latDeg){
+    const lon = rad(lonDeg + yaw);
+    const lat = rad(latDeg);
+    const p = rad(pitch);
+    let x = Math.cos(lat) * Math.sin(lon);
+    let y = Math.sin(lat);
+    let z = Math.cos(lat) * Math.cos(lon);
+    const y2 = y * Math.cos(p) - z * Math.sin(p);
+    const z2 = y * Math.sin(p) + z * Math.cos(p);
+    return {x:cx + R*x, y:cy - R*y2, z:z2};
+  }
+
+  function pathForLat(lat){
+    const pts=[];
+    for(let lon=-180;lon<=180;lon+=4){
+      const p=project(lon,lat);
+      pts.push([p.x,p.y,p.z]);
+    }
+    let d="";
+    pts.forEach((p,i)=>{ d += `${i?"L":"M"}${p[0].toFixed(1)} ${p[1].toFixed(1)} `; });
+    return {d,pts};
+  }
+
+  function pathForLon(lon){
+    const pts=[];
+    for(let lat=-90;lat<=90;lat+=4){
+      const p=project(lon,lat);
+      pts.push([p.x,p.y,p.z]);
+    }
+    let d="";
+    pts.forEach((p,i)=>{ d += `${i?"L":"M"}${p[0].toFixed(1)} ${p[1].toFixed(1)} `; });
+    return {d,pts};
+  }
+
+  function drawGrid(){
+    grid.replaceChildren();
+    [-60,-30,0,30,60].forEach(lat=>{
+      const q=pathForLat(lat);
+      grid.appendChild(el("path",{
+        d:q.d,fill:"none",stroke:"#FFFFFF",
+        "stroke-opacity":lat===0?".28":".09",
+        "stroke-width":lat===0?"1.2":"1"
+      }));
+    });
+    [-90,-60,-30,0,30,60,90].forEach(lon=>{
+      const q=pathForLon(lon);
+      grid.appendChild(el("path",{
+        d:q.d,fill:"none",stroke:"#FFFFFF",
+        "stroke-opacity":lon===0?".22":".07",
+        "stroke-width":lon===0?"1.1":"1"
+      }));
+    });
+  }
+
+  function drawPhenomena(){
+    phenomenaLayer.replaceChildren();
+
+    const items = phenomena[activeTi][activeZi];
+    const positions = [
+      {x:260,y:100,anchor:"end",lx:340,ly:155},
+      {x:940,y:105,anchor:"start",lx:860,ly:160},
+      {x:220,y:315,anchor:"end",lx:350,ly:315},
+      {x:980,y:315,anchor:"start",lx:850,ly:315},
+      {x:300,y:535,anchor:"end",lx:370,ly:475},
+      {x:900,y:535,anchor:"start",lx:830,ly:475}
+    ];
+
+    items.forEach((label,i)=>{
+      const pos=positions[i];
+      const g=el("g",{class:"phenomenon"});
+      const active=(i===0);
+      const line=el("line",{
+        class:"phenomenon-line",
+        x1:pos.lx,y1:pos.ly,x2:pos.x+(pos.anchor==="start"?-10:10),y2:pos.y
+      });
+      const dot=el("circle",{class:"phenomenon-dot",cx:pos.lx,cy:pos.ly,r:active?"3":"2"});
+      const text=el("text",{
+        class:"phenomenon-label"+(active?" active":""),
+        x:pos.x,y:pos.y,
+        "text-anchor":pos.anchor
+      });
+      text.textContent=label.toUpperCase();
+      g.append(line,dot,text);
+      phenomenaLayer.appendChild(g);
+    });
+  }
+
+  function updateState(){
+    // Yaw kiertää 360°. Viisi aikakautta jakavat ympyrän viiteen näkökulma-alueeseen.
+    const normalized = ((yaw % 360) + 360) % 360;
+    activeTi = Math.floor(((normalized + 36) % 360) / 72);
+    // Pitch kertoo tarkastelukulman pystysuunnassa, mutta ei piirrä sitä akselina.
+    const normalizedPitch = Math.max(-38, Math.min(38, pitch));
+    const zoneIndex = Math.round((normalizedPitch + 38) / 76 * (zones.length - 1));
+    activeZi = Math.max(0, Math.min(zones.length - 1, zoneIndex));
+
+    readoutEra.textContent = times[activeTi];
+    readoutZone.textContent = `${zoneLabels[activeZi]} · ${Math.round(normalized)}°`;
+    readoutTitle.textContent = matrix[activeTi][activeZi][0];
+    readoutText.textContent = matrix[activeTi][activeZi][1];
+
+    drawPhenomena();
+  }
+
+  function render(){
+    drawGrid();
+    // Pallossa ei ole enää vuosipisteitä: liike vaihtaa näkökulmaa,
+    // ja ilmiöt elävät pallon ympärillä.
+    nodesLayer.replaceChildren();
+    links.replaceChildren();
+    updateState();
+  }
+
+  stage.setAttribute("tabindex","0");
+  stage.setAttribute("role","application");
+  stage.setAttribute(
+    "aria-label",
+    "Käsitepallo: vedä palloa 360 astetta. Kierto vaihtaa vuosikymmentä ja pystysuuntainen liike tarkastelukulmaa."
+  );
+
+  stage.addEventListener("keydown",e=>{
+    const step = e.shiftKey ? 18 : 6;
+    let used = true;
+    if(e.key==="ArrowLeft") yaw -= step;
+    else if(e.key==="ArrowRight") yaw += step;
+    else if(e.key==="ArrowUp") pitch = Math.max(-38, pitch - step);
+    else if(e.key==="ArrowDown") pitch = Math.min(38, pitch + step);
+    else if(e.key==="Home"){ yaw=0; pitch=0; }
+    else used = false;
+
+    if(used){
+      e.preventDefault();
+      render();
+    }
+  });
+
+  stage.addEventListener("pointerdown",e=>{
+    dragging=true;
+    px=e.clientX;
+    py=e.clientY;
+    stage.classList.add("is-dragging");
+    stage.setPointerCapture(e.pointerId);
+  });
+
+  stage.addEventListener("pointermove",e=>{
+    if(!dragging) return;
+
+    const dx=e.clientX-px;
+    const dy=e.clientY-py;
+    px=e.clientX;
+    py=e.clientY;
+
+    yaw += dx * .42;
+    pitch = Math.max(-38, Math.min(38, pitch + dy * .24));
+    render();
+  });
+
+  const endDrag = e => {
+    dragging=false;
+    stage.classList.remove("is-dragging");
+    if(e && e.pointerId !== undefined){
+      try{ stage.releasePointerCapture(e.pointerId); }catch{}
+    }
+  };
+
+  stage.addEventListener("pointerup",endDrag);
+  stage.addEventListener("pointercancel",endDrag);
+  stage.addEventListener("lostpointercapture",()=>endDrag());
+
+  stage.addEventListener("dblclick",()=>{
+    yaw=0;
+    pitch=0;
+    render();
+  });
+
+  render();
+})();
+</script>
+
+
+<script id="phenomenon-gateway-js">
+(() => {
+  const gateway = document.getElementById("sphere-gateway");
+  const gatewayTitle = document.getElementById("sphere-gateway-title");
+  const gatewayLink = document.getElementById("sphere-gateway-link");
+
+  if (!gateway || !gatewayTitle || !gatewayLink) return;
+
+  const atlasRoutes = {
+    "TYÖN MURROS": "#atlas",
+    "PALVELUJEN PAINE": "#atlas",
+    "VÄESTÖN KESKITTYMINEN": "#atlas",
+    "JULKISEN TALOUDEN MURROS": "#atlas",
+    "VELKA": "#atlas",
+    "LUOTTAMUKSEN MUUTOS": "#atlas",
+    "TOIMINTAKYVYN MUUTOS": "#atlas",
+    "KOULUTUKSEN LAAJENEMINEN": "#atlas",
+    "DEMOGRAFINEN MURROS": "#atlas",
+    "TUOTTAVUUDEN MURROS": "#atlas"
+  };
+
+  function slugify(value) {
+    return value
+      .toLocaleLowerCase("fi-FI")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ä/g, "a")
+      .replace(/ö/g, "o")
+      .replace(/å/g, "a")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+
+  function showGateway(label) {
+    if (!label) return;
+    gatewayTitle.textContent = label;
+    gateway.dataset.phenomenon = label;
+    gateway.classList.add("visible");
+  }
+
+  function openAtlas(label) {
+    const id = slugify(label);
+
+    // If the page already exposes an Atlas navigation function,
+    // use it. Otherwise fall back to the Atlas section.
+    if (typeof window.openAtlasForPhenomenon === "function") {
+      window.openAtlasForPhenomenon(label, id);
+      return;
+    }
+
+    const atlas = document.querySelector("#atlas, [data-section='atlas'], .atlas-section");
+    if (atlas) {
+      atlas.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Preserve the selected phenomenon for a later Atlas bridge.
+    window.location.hash = `atlas-${id}`;
+    window.dispatchEvent(new CustomEvent("atlas:phenomenon", {
+      detail: { label, id }
+    }));
+  }
+
+  gatewayLink.addEventListener("click", () => {
+    openAtlas(gateway.dataset.phenomenon);
+  });
+
+  gatewayLink.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openAtlas(gateway.dataset.phenomenon);
+    }
+  });
+
+  /*
+   * The existing sphere code can call this whenever the active
+   * front-facing phenomenon changes.
+   */
+  window.updateSphereGateway = showGateway;
+})();
+</script>
+
+
+<script id="sphere-gateway-adapter">
+(() => {
+  const observer = new MutationObserver(() => {
+    const candidates = [
+      document.querySelector("#sphere-status"),
+      document.querySelector("#sphere-active"),
+      document.querySelector(".sphere-active"),
+      document.querySelector("[data-sphere-active]")
+    ];
+
+    for (const el of candidates) {
+      const text = el?.textContent?.trim();
+      if (!text) continue;
+
+      const match = text.match(/(?:^|·)\s*([^·|]+?)(?:\s*·|$)/);
+      const label = match ? match[1].trim() : text;
+
+      if (label && typeof window.updateSphereGateway === "function") {
+        window.updateSphereGateway(label);
+        break;
+      }
+    }
+  });
+
+  observer.observe(document.body, {
+    subtree: true,
+    childList: true,
+    characterData: true
+  });
+})();
+</script>
+
+
+<script id="v13-shell-js">
+(() => {
+  "use strict";
+
+  const SUPABASE_URL = 'https://zzbubbrsgiqsvsovkkmf.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_YNqxZI4Oj-DSjVBoTKhQ2Q_4DchUIBb';
+  const REMEMBER_KEY = 'v13RememberLogin';
+  const THEME_KEY = 'v13Theme';
+
+  const VIEWS = {
+    murroskartta:{title:'Murroskartta',question:'Mistä Suomen suuret murrokset syntyivät?',url:'https://harrikayhko.fi/atlas/murroskartta.html'},
+    rengas:{title:'Rengas',question:'Miten yksi murros kytkeytyy muihin muutoksiin?',url:'https://harrikayhko.fi/atlas/murros/index.html#rengas'},
+    verkko:{title:'Verkko',question:'Mitkä ilmiöt muodostavat historian vaikutusverkoston?',url:'https://harrikayhko.fi/atlas/murros/index.html#verkko'},
+    matriisi:{title:'Matriisi',question:'Missä murrokset ja näkökulmat leikkaavat toisensa?',url:'https://harrikayhko.fi/atlas/murros/matriisi.html'},
+    paattely:{title:'Päättely',question:'Miten päätöksistä ja rakenteista syntyi nykyhetki?',url:'https://harrikayhko.fi/atlas/index.html'},
+    maisema:{title:'Maisema 3D',question:'Miltä Suomen rakennemuutos näyttää kokonaisena maisemana?',url:'https://harrikayhko.fi/atlas/maisema.html'},
+    tulkinta:{title:'Tulkinta',question:'Miten sama historia muuttuu, kun näkökulma vaihtuu?',url:'https://harrikayhko.fi/atlas/tulkinta.html'}
+  };
+  const MODULE_ORDER = Object.keys(VIEWS);
+
+  const visualLayer = document.getElementById('v13VisualLayer');
+  const loader = document.getElementById('v13Loader');
+  const moduleMenu = document.getElementById('v13ModuleMenu');
+  const moduleLabel = document.getElementById('v13ModuleLabel');
+  const moduleQuestion = document.getElementById('v13ModuleQuestion');
+  const moduleCurrent = document.getElementById('v13Current');
+  const themeBtn = document.getElementById('v13ThemeBtn');
+  const associationTab = document.getElementById('v13AssociationTab');
+  const newsTab = document.getElementById('v13NewsTab');
+  const joinTab = document.getElementById('v13JoinTab');
+  const accountTab = document.getElementById('v13AccountTab');
+  const accountOverlay = document.getElementById('v13AccountOverlay');
+  const membership = document.getElementById('v13Membership');
+  let activeFrame = null;
+  let activeModule = 'murroskartta';
+  let rememberSession = localStorage.getItem(REMEMBER_KEY) === '1';
+
+  const authStorage = {
+    getItem(key){ return sessionStorage.getItem(key) ?? localStorage.getItem(key); },
+    setItem(key,value){
+      if(rememberSession){ localStorage.setItem(key,value); sessionStorage.removeItem(key); }
+      else { sessionStorage.setItem(key,value); localStorage.removeItem(key); }
+    },
+    removeItem(key){ sessionStorage.removeItem(key); localStorage.removeItem(key); }
+  };
+
+  const supabaseClient = window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+    auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:authStorage}
+  });
+
+  function setRememberPreference(enabled){
+    rememberSession = !!enabled;
+    if(rememberSession) localStorage.setItem(REMEMBER_KEY,'1');
+    else localStorage.removeItem(REMEMBER_KEY);
+  }
+
+  moduleMenu.innerHTML = MODULE_ORDER.map(name =>
+    `<button class="v13-module-option" type="button" data-module="${name}"><strong>${VIEWS[name].title}</strong><small>${VIEWS[name].question}</small></button>`
+  ).join('');
+
+  function currentTheme(){ return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'; }
+  function sendThemeToVisualization(){
+    if(activeFrame?.contentWindow){
+      activeFrame.contentWindow.postMessage({type:'atlas-theme',theme:currentTheme(),source:'v13'},'*');
+    }
+  }
+  function applyTheme(theme,persist=true){
+    const next = theme === 'dark' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    themeBtn.dataset.themeState = next;
+    themeBtn.setAttribute('aria-label',next === 'dark' ? 'Vaihda vaaleaan teemaan' : 'Vaihda tummaan teemaan');
+    if(persist) localStorage.setItem(THEME_KEY,next);
+    sendThemeToVisualization();
+  }
+  applyTheme(localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light',false);
+
+  function setTabs(active){
+    associationTab.setAttribute('aria-selected',String(active === 'yhdistys'));
+    newsTab.setAttribute('aria-selected',String(active === 'ajankohtaista'));
+    joinTab.setAttribute('aria-selected',String(active === 'liity'));
+  }
+
+  function closeVisual(){
+    if(activeFrame){ activeFrame.src='about:blank'; activeFrame=null; }
+    visualLayer.hidden = true;
+    visualLayer.querySelectorAll('iframe,.v13-visual-crop').forEach(el=>el.remove());
+    loader.hidden = true;
+  }
+
+  function scrollToSection(id){
+    closeVisual();
+    setTabs(id === 'teemat' ? 'ajankohtaista' : id);
+    const target = document.getElementById(id);
+    if(!target) return;
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+    history.replaceState(null,'',id === 'teemat' ? '#ajankohtaista' : `#${id}`);
+  }
+
+  function openVisualization(name){
+    const view = VIEWS[name]; if(!view) return;
+    activeModule = name;
+    moduleLabel.textContent = view.title;
+    moduleQuestion.textContent = view.question;
+    setTabs('');
+    closeVisual();
+    visualLayer.hidden = false;
+    loader.hidden = false;
+
+    const frame = document.createElement('iframe');
+    frame.title = view.title;
+    frame.allow = 'fullscreen';
+    frame.loading = 'eager';
+    frame.src = view.url;
+    activeFrame = frame;
+    frame.addEventListener('load',()=>{loader.hidden=true;sendThemeToVisualization();},{once:true});
+
+    if(name === 'rengas' || name === 'verkko'){
+      const crop = document.createElement('div');
+      crop.className = 'v13-visual-crop murros';
+      crop.appendChild(frame);
+      visualLayer.appendChild(crop);
+    }else{
+      visualLayer.appendChild(frame);
+    }
+    history.replaceState(null,'',`#${name}`);
+  }
+
+  function stepModule(delta){
+    const i = MODULE_ORDER.indexOf(activeModule);
+    openVisualization(MODULE_ORDER[(i + delta + MODULE_ORDER.length) % MODULE_ORDER.length]);
+  }
+
+  // ---------- Lohko 01 · v10:n navigointipallon teaserit ----------
+  const sphereTeasers = {
+    'KANSAKOULU': {title:'Koulutus',question:'Miten koulusta tuli koko yhteiskuntaa muuttava infrastruktuuri?',target:'paattely'},
+    'ASUNTOPOLITIIKKA': {title:'Asuminen',question:'Miten koti, alue ja asumisen hinta jakavat mahdollisuuksia?',target:'matriisi'},
+    'TYÖKYKY': {title:'Työkyky',question:'Milloin työkyky on yksilön asia – ja milloin järjestelmän?',target:'verkko'},
+    'TERVEYDENHUOLTO': {title:'Terveydenhuolto',question:'Miten hoivasta ja terveydestä tuli yhteinen järjestelmä?',target:'rengas'},
+    'PALVELUINFRASTRUKTUURI': {title:'Palvelut',question:'Mitä tapahtuu, kun hyvinvointi riippuu yhteisestä palveluverkosta?',target:'maisema'},
+    'OSALLISUUDEN PERUSTA': {title:'Osallisuus',question:'Mikä saa ihmisen kokemaan kuuluvansa yhteiskuntaan?',target:'tulkinta'},
+    'PERUSTURVAN SYNTY': {title:'Perusturva',question:'Mistä yhteinen turva sai alkunsa?',target:'paattely'},
+    'SOSIAALINEN VAKUUTUS': {title:'Sosiaalivakuutus',question:'Kenen vastuulle elämän riskit kuuluvat?',target:'rengas'},
+    'RISKIEN JAKAMINEN': {title:'Riskien jakaminen',question:'Kuka kantaa riskin, kun elämä muuttuu?',target:'verkko'},
+    'YHTEISKUNTAAN KIINNITTYMINEN': {title:'Kiinnittyminen',question:'Mikä saa ihmisen kuulumaan yhteiseen?',target:'tulkinta'},
+    'TYÖN TURVA': {title:'Työn turva',question:'Miten työstä tuli myös turvaa?',target:'matriisi'},
+    'PERHE JA TOIMEENTULO': {title:'Perhe ja toimeentulo',question:'Kuka kantaa vastuun arjen toimeentulosta?',target:'maisema'}
+  };
+
+  const normaliseSphereLabel = value =>
+    String(value || '').replace(/\s+/g,' ').trim().toLocaleUpperCase('fi-FI');
+
+  const titleCaseFi = value => String(value || '')
+    .toLocaleLowerCase('fi-FI')
+    .replace(/(^|[\s–—/-])([\p{L}])/gu,(_,a,b)=>a+b.toLocaleUpperCase('fi-FI'));
+
+  function fallbackSphereTeaser(rawLabel){
+    const key=normaliseSphereLabel(rawLabel);
+    const title=titleCaseFi(key);
+    const rules=[
+      [/KOUL|OPP|SIVIST|YLIOPIST|TUTKIN/,'Miten osaaminen muuttaa yksilön mahdollisuuksia ja koko yhteiskuntaa?'],
+      [/ASUN|KOTI|LÄHIÖ|KAUPUN|ALUE/,'Miten paikka, koti ja alue jakavat mahdollisuuksia ja turvaa?'],
+      [/TYÖ|TYÖKY|AMMAT|PALK|TYÖMARK/,'Miten työn ehdot määrittävät turvaa, osallisuutta ja toimeentuloa?'],
+      [/TERVE|SAIRA|HOIVA|HOITO|LÄÄK|HYVINVOINT/,'Kenen vastuulla hyvinvointi on, kun avun tarve kasvaa?'],
+      [/PALVEL|INFRA|KUNTA|JULKI|HALLIN/,'Mitä tapahtuu, kun arki alkaa riippua yhteisestä järjestelmästä?'],
+      [/PERHE|LAPSI|VANHE|SYNTY|TOIMEENTULO/,'Miten perheen vastuu ja yhteiskunnan vastuu ovat muuttuneet?'],
+      [/ELÄKE|VAKUUT|TURVA|RISKI|SOSIAALI/,'Kuka kantaa riskin silloin, kun yksilö ei enää pysty kantamaan sitä yksin?'],
+      [/OSALL|KANSAL|YHTEIS|LUOTTAM|KIINNIT/,'Mikä saa ihmisen kokemaan, että yhteiskunta on myös hänen?'],
+      [/RAHA|VERO|VELKA|OMIST|TALOUS/,'Kuka maksaa, kuka hyötyy ja miten vastuu jakautuu?'],
+      [/MAATAL|METSÄ|TEOLL|ENERG|TUOTAN/,'Miten tuotannon muutos rakentaa uusia mahdollisuuksia – ja uusia riippuvuuksia?'],
+      [/DIGI|TIETO|TEKNO|AUTOMA|AI|TEKOÄLY/,'Mitä muuttuu, kun järjestelmä alkaa toimia teknologian ehdoilla?'],
+      [/MUUTTO|VÄEST|IKÄ|KAUPUNGIST|MAAHAN/,'Miten väestön muutos siirtää hyvinvoinnin ehtoja paikasta ja sukupolvesta toiseen?']
+    ];
+    const matched=rules.find(([rx])=>rx.test(key));
+    return {title,question:matched?matched[1]:`Miten ${title.toLocaleLowerCase('fi-FI')} muutti hyvinvoinnin ehtoja?`,target:'paattely'};
+  }
+
+  function getSphereTeaser(rawLabel){
+    const key=normaliseSphereLabel(rawLabel);
+    return sphereTeasers[key] || fallbackSphereTeaser(rawLabel);
+  }
+
+  function openSphereTopic(teaser,event){
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    if(teaser?.target && VIEWS[teaser.target]) openVisualization(teaser.target);
+  }
+
+  function enhanceSphereTeasers(){
+    const sphere=document.getElementById('welfare-sphere');
+    if(!sphere) return 0;
+    let enhanced=0;
+
+    sphere.querySelectorAll('svg text').forEach(textNode=>{
+      if(textNode.dataset.v13SphereTeaser==='1'){enhanced++;return;}
+      const rawLabel=String(textNode.textContent||'').replace(/\s+/g,' ').trim();
+      if(!rawLabel || rawLabel.length>42) return;
+
+      const letters=rawLabel.replace(/[^A-Za-zÅÄÖåäö]/g,'');
+      const upper=rawLabel.replace(/[^A-ZÅÄÖ]/g,'');
+      const upperShare=upper.length/Math.max(1,letters.length);
+      if(
+        upperShare<.72 ||
+        /^\d/.test(rawLabel) ||
+        /HYVINVOINTI|ON JÄRJESTELMÄ|EI YKSI PALVELU/i.test(rawLabel) ||
+        textNode.closest('.sphere-center-copy') ||
+        textNode.closest('.sphere-readout')
+      ) return;
+
+      const teaser=getSphereTeaser(rawLabel);
+      const x=textNode.getAttribute('x')||'0';
+      const anchorValue=textNode.getAttribute('text-anchor')||'';
+      const originalTransform=textNode.getAttribute('transform');
+
+      while(textNode.firstChild) textNode.removeChild(textNode.firstChild);
+
+      const title=document.createElementNS('http://www.w3.org/2000/svg','tspan');
+      title.setAttribute('x',x); title.setAttribute('dy','0');
+      title.setAttribute('font-size','1em'); title.setAttribute('font-weight','700');
+      title.setAttribute('letter-spacing','.10em');
+      title.textContent=teaser.title.toLocaleUpperCase('fi-FI');
+
+      const question=document.createElementNS('http://www.w3.org/2000/svg','tspan');
+      question.setAttribute('x',x); question.setAttribute('dy','1.5em');
+      question.setAttribute('font-size','.78em'); question.setAttribute('font-weight','500');
+      question.setAttribute('letter-spacing','0'); question.setAttribute('opacity','.78');
+      question.textContent=teaser.question;
+
+      textNode.append(title,question);
+      textNode.dataset.v13SphereTeaser='1';
+      textNode.dataset.v13Target=teaser.target||'';
+      textNode.style.cursor='pointer'; textNode.style.pointerEvents='all';
+      textNode.setAttribute('role','link'); textNode.setAttribute('tabindex','0');
+      textNode.setAttribute('aria-label',`${teaser.title}. ${teaser.question}. Avaa visualisointi.`);
+      if(anchorValue) textNode.setAttribute('text-anchor',anchorValue);
+      if(originalTransform) textNode.setAttribute('transform',originalTransform);
+
+      textNode.addEventListener('click',event=>openSphereTopic(teaser,event));
+      textNode.addEventListener('keydown',event=>{
+        if(event.key==='Enter'||event.key===' ') openSphereTopic(teaser,event);
+      });
+      enhanced++;
+    });
+
+    return enhanced;
+  }
+
+  enhanceSphereTeasers();
+  [180,650,1400,2600].forEach(delay=>setTimeout(enhanceSphereTeasers,delay));
+  const sphereRoot=document.getElementById('welfare-sphere');
+  if(sphereRoot){
+    const sphereObserver=new MutationObserver(()=>enhanceSphereTeasers());
+    sphereObserver.observe(sphereRoot,{childList:true,subtree:true,characterData:true});
+  }
+  function closeMenu(){moduleMenu.hidden=true;moduleCurrent.setAttribute('aria-expanded','false');}
+
+  associationTab.addEventListener('click',()=>{closeMenu();scrollToSection('top');setTabs('yhdistys');history.replaceState(null,'','#yhdistys');});
+  newsTab.addEventListener('click',()=>{closeMenu();scrollToSection('teemat');});
+  joinTab.addEventListener('click',()=>{closeMenu();scrollToSection('liity');});
+  document.getElementById('v13Prev').addEventListener('click',()=>stepModule(-1));
+  document.getElementById('v13Next').addEventListener('click',()=>stepModule(1));
+  moduleCurrent.addEventListener('click',e=>{e.stopPropagation();const open=moduleMenu.hidden;moduleMenu.hidden=!open;moduleCurrent.setAttribute('aria-expanded',String(open));});
+  moduleMenu.addEventListener('click',e=>{const b=e.target.closest('[data-module]');if(!b)return;closeMenu();openVisualization(b.dataset.module);});
+  document.addEventListener('click',e=>{if(!e.target.closest('.v13-module-browser'))closeMenu();});
+  themeBtn.addEventListener('click',()=>applyTheme(currentTheme()==='dark'?'light':'dark'));
+  document.getElementById('v13FsBtn').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen();}catch{}});
+
+  // V4:n Atlas-linkit ohjataan shellin visualisointeihin.
+  document.querySelectorAll('a[href="#atlas-live"],a[href="#atlas"]').forEach(a=>{
+    if(/avaa atlas/i.test(a.textContent||'')) a.addEventListener('click',e=>{e.preventDefault();openVisualization('rengas');});
+  });
+
+  // ---------- Jäsenpalvelu ----------
+  async function getSession(){
+    if(!supabaseClient) throw new Error('Yhteys jäsenrekisteriin ei ole käytettävissä.');
+    const {data:{session},error}=await supabaseClient.auth.getSession();
+    if(error) throw error;
+    return session;
+  }
+
+  async function invokeMemberProfile(action='get',payload={}){
+    const session=await getSession();
+    if(!session?.access_token) throw new Error('Vahvista ensin sähköpostiosoitteesi.');
+    const response=await fetch(`${SUPABASE_URL}/functions/v1/member-profile`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':`Bearer ${session.access_token}`},
+      body:JSON.stringify({action,...payload})
+    });
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error(result.error||'Jäsentietojen käsittely epäonnistui.');
+    return result;
+  }
+
+  async function checkAtlasPro(){
+    const session=await getSession();
+    if(!session?.access_token) return {entitled:false};
+    const response=await fetch(`${SUPABASE_URL}/functions/v1/check-entitlement`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':`Bearer ${session.access_token}`},
+      body:JSON.stringify({product_code:'atlas-pro'})
+    });
+    return response.ok ? await response.json() : {entitled:false};
+  }
+
+  function profilePayload(profile={}){
+    return {
+      full_name:profile.full_name||null,phone:profile.phone||null,municipality:profile.municipality||null,
+      address_line:profile.address_line||null,postal_code:profile.postal_code||null,city:profile.city||null
+    };
+  }
+
+  async function updateVerifiedEmailIfNeeded(newEmail){
+    const session=await getSession();
+    const current=(session?.user?.email||'').trim().toLowerCase();
+    const next=String(newEmail||'').trim().toLowerCase();
+    if(!next||next===current)return{changed:false};
+    if(!/^\S+@\S+\.\S+$/.test(next))throw new Error('Anna toimiva sähköpostiosoite.');
+    const {error}=await supabaseClient.auth.updateUser({email:next});
+    if(error)throw error;
+    return{changed:true,email:next};
+  }
+
+  async function startPaytrailPayment(detail){
+    const session=await getSession();
+    if(!session?.access_token) throw new Error('Kirjaudu sisään ennen maksamista.');
+    const body={product_code:detail.product_code};
+    if(detail.product_code==='donation') body.amount_cents=Math.round(Number(detail.amount)*100);
+    const response=await fetch(`${SUPABASE_URL}/functions/v1/create-payment-test`,{
+      method:'POST',mode:'cors',cache:'no-store',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':`Bearer ${session.access_token}`},
+      body:JSON.stringify(body)
+    });
+    const raw=await response.text(); let result={};
+    try{result=raw?JSON.parse(raw):{}}catch{result={raw_response:raw}}
+    if(!response.ok){
+      const detailMsg=result?.provider_response?.message||result?.provider_response?.error||result?.detail||result?.message||result?.error||result?.raw_response||`HTTP ${response.status}`;
+      throw new Error(`Paytrail-testi hylättiin (${response.status}): ${detailMsg}`);
+    }
+    if(!result.checkout_url) throw new Error('Paytrail-testimaksuosoitetta ei saatu.');
+    sessionStorage.setItem('v13PaytrailTestPaymentId',result.payment_id||'');
+    window.location.assign(result.checkout_url);
+  }
+
+  const identityShell=membership.querySelector('.v13-identity-shell');
+  const profileShell=membership.querySelector('.v13-profile-shell');
+  const status=membership.querySelector('[data-status]');
+  const actionStatus=membership.querySelector('[data-action-status]');
+  const setStatus=(el,msg='',state='')=>{if(!el)return;el.textContent=msg;el.dataset.state=state;};
+  const collectProfile=()=>{
+    const p={};membership.querySelectorAll('[data-field]').forEach(i=>p[i.dataset.field]=i.value.trim());return p;
+  };
+
+  function renderMembership(profile){
+    const p=profile||{};const contact=p.contact||{};
+    identityShell.hidden=true;profileShell.hidden=false;
+    membership.querySelector('[data-field="email"]').value=p.email||contact.email||'';
+    ['full_name','phone','municipality','address_line','postal_code','city'].forEach(name=>{
+      const el=membership.querySelector(`[data-field="${name}"]`);if(el)el.value=contact[name]||'';
+    });
+    const member=!!p.is_member;
+    membership.querySelector('[data-profile-title]').textContent=member?'Jäsentietosi':'Yhteystietosi';
+    membership.querySelector('[data-member-badge]').textContent=member
+      ? `Jäsen${p.member?.member_number?' #'+p.member.member_number:''}`
+      : 'Et ole vielä jäsen — voit silti lahjoittaa tai osallistua vapaaehtoiseksi.';
+    membership.querySelector('[data-member-title]').textContent=member?'Jäsenmaksu':'Liity jäseneksi';
+    membership.querySelector('[data-member-price]').textContent=member?'25 €':'30 €';
+    membership.querySelector('[data-member-note]').textContent=member?'Vuosittainen jäsenmaksu.':'Liittymismaksu 5 € + jäsenmaksu 25 €.';
+    const checkWrap=membership.querySelector('[data-new-member-check]');
+    const joinCheck=membership.querySelector('[data-join-member]');
+    const payButton=membership.querySelector('[data-action="member-pay"]');
+    checkWrap.hidden=member;joinCheck.checked=member;payButton.disabled=!member&&!joinCheck.checked;
+    payButton.textContent=member?'Maksa 25 €':'Maksa 30 €';
+    payButton.dataset.productCode=member?'member-renewal':'member-new';
+    payButton.dataset.amount=member?'25':'30';
+    const volunteer=p.volunteer;
+    membership.querySelector('[data-volunteer]').checked=!!volunteer&&['interested','active'].includes(volunteer.status);
+    membership.querySelector('[data-availability]').value=volunteer?.availability||'';
+    membership.querySelector('[data-volunteer-note]').value=volunteer?.note||'';
+    setStatus(status);setStatus(actionStatus);
+  }
+
+  async function syncMembership(){
+    try{
+      const session=await getSession();
+      if(!session?.user?.email){identityShell.hidden=false;profileShell.hidden=true;return;}
+      setStatus(status,'Ladataan…','loading');
+      renderMembership(await invokeMemberProfile('get'));
+    }catch(error){setStatus(status,error?.message||'Tietojen lataus epäonnistui.','error');}
+  }
+
+  async function refreshAccountUI(){
+    const signedOut=document.getElementById('v13SignedOut'), signedIn=document.getElementById('v13SignedIn');
+    const session=await getSession().catch(()=>null);
+    if(!session?.user){
+      signedOut.hidden=false;signedIn.hidden=true;accountTab.innerHTML='Tunnistaudu';accountTab.dataset.active='false';return;
+    }
+    signedOut.hidden=true;signedIn.hidden=false;accountTab.dataset.active='true';
+    document.getElementById('v13AccountEmailShown').textContent=session.user.email||'';
+    let profile=null;try{profile=await invokeMemberProfile('get')}catch{}
+    const member=!!profile?.is_member;
+    const pro=await checkAtlasPro().catch(()=>({entitled:false}));
+    const name=profile?.contact?.full_name||session.user.email||'Kirjautunut käyttäjä';
+    document.getElementById('v13AccountName').textContent=name;
+    accountTab.innerHTML=member?`Jäsen${pro.entitled?' <span class="v13-pro">PRO</span>':''}`:'Oma tili';
+    document.getElementById('v13AccountBadges').innerHTML=
+      `${member?'<span class="v13-account-badge">Aktiivinen jäsen</span>':'<span class="v13-account-badge">Kirjautunut</span>'}${pro.entitled?' <span class="v13-account-badge pro">Atlas Pro</span>':''}`;
+    document.getElementById('v13AtlasAccess').textContent=pro.entitled?'Atlas Pro -käyttöoikeus on aktiivinen.':'Atlas Pro -käyttöoikeutta ei ole aktiivisena.';
+    if(activeFrame?.contentWindow)activeFrame.contentWindow.postMessage({type:'atlas-pro-entitlement',entitled:!!pro.entitled},'*');
+  }
+
+  let pendingAuthEmail='',cooldownTimer=null,cooldownUntil=0;
+  function startCooldown(seconds=60){
+    cooldownUntil=Date.now()+seconds*1000;const b=document.getElementById('v13ResendOtp'),l=document.getElementById('v13Cooldown');
+    clearInterval(cooldownTimer);
+    const tick=()=>{const left=Math.max(0,Math.ceil((cooldownUntil-Date.now())/1000));b.disabled=left>0;l.textContent=left>0?`(${left} s)`:'';if(left<=0){clearInterval(cooldownTimer);cooldownTimer=null;}};
+    tick();cooldownTimer=setInterval(tick,250);
+  }
+  function showEmailStep(prefill=''){
+    document.getElementById('v13EmailStep').hidden=false;document.getElementById('v13OtpStep').hidden=true;
+    document.getElementById('v13SignedOut').hidden=false;document.getElementById('v13SignedIn').hidden=true;
+    document.getElementById('v13AccountEmail').value=prefill;document.getElementById('v13Remember').checked=rememberSession;
+    document.getElementById('v13LoginStatus').textContent='';
+  }
+  function showOtpStep(){
+    document.getElementById('v13EmailStep').hidden=true;document.getElementById('v13OtpStep').hidden=false;
+    document.getElementById('v13Otp').value='';document.getElementById('v13OtpStatus').textContent='';
+    document.getElementById('v13OtpIntro').textContent=`Syötä osoitteeseen ${pendingAuthEmail} lähetetty 6-numeroinen vahvistustunnus.`;
+  }
+  function openAccount(prefill=''){
+    accountOverlay.classList.add('open');accountOverlay.setAttribute('aria-hidden','false');
+    getSession().then(s=>s?.user?refreshAccountUI():showEmailStep(prefill)).catch(()=>showEmailStep(prefill));
+  }
+  function closeAccount(){accountOverlay.classList.remove('open');accountOverlay.setAttribute('aria-hidden','true');}
+  async function sendEmailOtp(){
+    const email=String(document.getElementById('v13AccountEmail').value||pendingAuthEmail).trim().toLowerCase();
+    const st=document.getElementById('v13LoginStatus');
+    if(!/^\S+@\S+\.\S+$/.test(email)){st.textContent='Anna toimiva sähköpostiosoite.';return;}
+    pendingAuthEmail=email;setRememberPreference(document.getElementById('v13Remember').checked);st.textContent='Lähetetään vahvistustunnusta…';
+    const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
+    if(error){st.textContent=error.message||'Lähetys epäonnistui.';return;}
+    showOtpStep();startCooldown();
+  }
+  async function verifyOtp(){
+    const token=document.getElementById('v13Otp').value.trim(),st=document.getElementById('v13OtpStatus');
+    if(!/^\d{6}$/.test(token)){st.textContent='Syötä 6-numeroinen vahvistustunnus.';return;}
+    st.textContent='Vahvistetaan…';
+    const {data,error}=await supabaseClient.auth.verifyOtp({email:pendingAuthEmail,token,type:'email'});
+    if(error||!data?.session){st.textContent='Tunnus on virheellinen tai vanhentunut.';return;}
+    closeAccount();await refreshAccountUI();await syncMembership();scrollToSection('liity');
+  }
+  async function resendOtp(){
+    if(Date.now()<cooldownUntil)return;
+    const st=document.getElementById('v13OtpStatus');st.textContent='Lähetetään uusi tunnus…';
+    const {error}=await supabaseClient.auth.signInWithOtp({email:pendingAuthEmail,options:{shouldCreateUser:true}});
+    if(error){st.textContent=error.message||'Lähetys epäonnistui.';return;}
+    st.textContent='Uusi tunnus lähetetty.';startCooldown();
+  }
+
+  accountTab.addEventListener('click',()=>openAccount());
+  document.getElementById('v13AccountClose').addEventListener('click',closeAccount);
+  accountOverlay.addEventListener('click',e=>{if(e.target===accountOverlay)closeAccount();});
+  document.getElementById('v13Continue').addEventListener('click',sendEmailOtp);
+  document.getElementById('v13VerifyOtp').addEventListener('click',verifyOtp);
+  document.getElementById('v13ResendOtp').addEventListener('click',resendOtp);
+  document.getElementById('v13OtpBack').addEventListener('click',()=>showEmailStep(pendingAuthEmail));
+  document.getElementById('v13Logout').addEventListener('click',async()=>{await supabaseClient.auth.signOut();closeAccount();await refreshAccountUI();await syncMembership();});
+  document.getElementById('v13OpenProfile').addEventListener('click',()=>{closeAccount();scrollToSection('liity');});
+
+  membership.addEventListener('change',e=>{if(e.target.matches('[data-join-member]'))membership.querySelector('[data-action="member-pay"]').disabled=!e.target.checked;});
+  membership.addEventListener('click',async e=>{
+    const b=e.target.closest('[data-action]');if(!b)return;
+    const action=b.dataset.action;
+    try{
+      if(action==='identity'){const email=membership.querySelector('[data-email]').value;openAccount(email);setTimeout(sendEmailOtp,0);return;}
+      if(action==='change-email'){await supabaseClient.auth.signOut();identityShell.hidden=false;profileShell.hidden=true;return;}
+      const profile=collectProfile();
+      if(action==='save-profile'){
+        setStatus(actionStatus,'Tallennetaan tietoja…','loading');
+        const changed=await updateVerifiedEmailIfNeeded(profile.email);
+        const result=await invokeMemberProfile('save_profile',profilePayload(profile));
+        renderMembership(result);
+        setStatus(actionStatus,changed.changed?'Tiedot tallennettu. Vahvista uusi sähköposti.':'Tiedot tallennettu.','ok');return;
+      }
+      if(action==='member-pay'){
+        await invokeMemberProfile('save_profile',profilePayload(profile));
+        setStatus(actionStatus,'Avataan Paytrail-maksua…','loading');
+        await startPaytrailPayment({product_code:b.dataset.productCode,amount:Number(b.dataset.amount),profile});return;
+      }
+      if(action==='donation-pay'){
+        const amount=Number(membership.querySelector('[data-donation]').value||0);
+        if(!Number.isFinite(amount)||amount<1)throw new Error('Anna lahjoitussumma vähintään 1 €.');
+        await invokeMemberProfile('save_profile',profilePayload(profile));
+        setStatus(actionStatus,'Avataan Paytrail-maksua…','loading');
+        await startPaytrailPayment({product_code:'donation',amount,profile});return;
+      }
+      if(action==='volunteer-save'){
+        await invokeMemberProfile('save_profile',profilePayload(profile));
+        const result=await invokeMemberProfile('volunteer',{
+          enabled:membership.querySelector('[data-volunteer]').checked,
+          interests:[],availability:membership.querySelector('[data-availability]').value||null,
+          note:membership.querySelector('[data-volunteer-note]').value||null
+        });
+        renderMembership(result);setStatus(actionStatus,'Vapaaehtoistieto tallennettu.','ok');return;
+      }
+    }catch(error){setStatus(actionStatus,error?.message||'Toiminto epäonnistui.','error');}
+  });
+
+  if(supabaseClient){
+    supabaseClient.auth.onAuthStateChange(()=>{setTimeout(refreshAccountUI,50);setTimeout(syncMembership,80);});
+  }
+
+  // Paytrail-testipaluun käsittely.
+  (async()=>{
+    const params=new URLSearchParams(location.search),returned=params.get('paytrail_test');
+    if(!returned)return;
+    scrollToSection('liity');
+    const paymentId=sessionStorage.getItem('v13PaytrailTestPaymentId')||'';
+    const banner=document.getElementById('v13PaytrailBanner'),box=document.getElementById('v13PaytrailResult');
+    const show=(ok,title,detail='')=>{
+      banner.innerHTML=`Paytrail <strong>TESTI</strong> · ${title}`;
+      box.hidden=false;box.innerHTML=`<strong>${title}</strong><div>${detail}</div><small>Tämä on Paytrailin testimaksu.</small>`;
+    };
+    if(returned==='cancel')show(false,'Testimaksu peruutettiin','Paytrail palautti maksun peruutettuna tai epäonnistuneena.');
+    else if(paymentId){
+      let finalStatus=null,lastError='';
+      for(let i=0;i<12;i++){
+        try{
+          const session=await getSession();
+          const response=await fetch(`${SUPABASE_URL}/functions/v1/payment-status-test`,{
+            method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':`Bearer ${session.access_token}`},
+            body:JSON.stringify({payment_id:paymentId})
+          });
+          const data=await response.json().catch(()=>({}));
+          if(!response.ok)throw new Error(data?.detail||data?.error||`HTTP ${response.status}`);
+          finalStatus=data?.payment?.status||null;if(['paid','failed'].includes(finalStatus))break;
+        }catch(error){lastError=error?.message||String(error);}
+        await new Promise(r=>setTimeout(r,800));
+      }
+      if(finalStatus==='paid')show(true,'Testimaksu onnistui ✓','Paytrail callback vahvisti maksun maksetuksi.');
+      else if(finalStatus==='failed')show(false,'Testimaksu epäonnistui','Paytrail callback vahvisti maksun epäonnistuneeksi.');
+      else show(false,'Maksun vahvistus jäi avoimeksi',lastError||'Callback ei vahvistanut maksua määräajassa.');
+    }else show(false,'Maksun tilaa ei voitu tunnistaa','Selaimesta puuttuu tämän testimaksun tunniste.');
+  })();
+
+
+  // ---------- Kuvio 1 · yhteiskunta rakenteiden verkostona ----------
+  (() => {
+    const figure=document.getElementById('society-network-figure');
+    if(!figure) return;
+
+    const nodes=[...figure.querySelectorAll('.society-node')];
+    const core=figure.querySelector('.society-core');
+    const links=[...figure.querySelectorAll('.society-link')];
+    const kicker=document.getElementById('society-network-kicker');
+    const heading=document.getElementById('society-network-heading');
+    const copy=document.getElementById('society-network-copy');
+    const state=document.getElementById('society-network-state');
+    const prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index=0;
+    let timer=null;
+    let userFocus=false;
+
+    function connectedTo(id,link){
+      return link.dataset.from===id || link.dataset.to===id;
+    }
+
+    function resetNetwork(){
+      nodes.forEach(n=>n.classList.remove('is-active','is-muted'));
+      links.forEach(l=>l.classList.remove('is-active','is-neighbour'));
+      core?.classList.remove('is-active');
+    }
+
+    function activate(node,manual=false){
+      if(!node) return;
+      const id=node.dataset.node;
+      resetNetwork();
+      node.classList.add('is-active');
+      core?.classList.add('is-active');
+
+      links.forEach(link=>{
+        if(connectedTo(id,link)) link.classList.add('is-active');
+        else if(link.dataset.from==='core'||link.dataset.to==='core') link.classList.add('is-neighbour');
+      });
+
+      const neighbours=new Set();
+      links.filter(l=>connectedTo(id,l)).forEach(l=>{
+        neighbours.add(l.dataset.from); neighbours.add(l.dataset.to);
+      });
+      nodes.forEach(n=>{
+        if(n!==node && !neighbours.has(n.dataset.node)) n.classList.add('is-muted');
+      });
+
+      kicker.textContent=manual?'VALITTU RAKENNE':'VERKOSTOVAIKUTUS';
+      heading.textContent=node.dataset.label||'Rakenne';
+      copy.textContent=node.dataset.message||'Muutos kulkee rakenteesta toiseen.';
+      state.textContent=`${node.dataset.label} → yhteinen järjestelmä → muut rakenteet`;
+    }
+
+    function autoStep(){
+      if(userFocus||!nodes.length)return;
+      activate(nodes[index%nodes.length],false);
+      index=(index+1)%nodes.length;
+    }
+
+    function start(){
+      if(prefersReduced||timer)return;
+      timer=setInterval(autoStep,2800);
+    }
+
+    function stop(){
+      if(timer){clearInterval(timer);timer=null;}
+    }
+
+    nodes.forEach((node,i)=>{
+      node.addEventListener('mouseenter',()=>{
+        userFocus=true;stop();activate(node,true);
+      });
+      node.addEventListener('mouseleave',()=>{
+        userFocus=false;start();
+      });
+      node.addEventListener('focus',()=>{
+        userFocus=true;stop();activate(node,true);
+      });
+      node.addEventListener('blur',()=>{
+        userFocus=false;start();
+      });
+      node.addEventListener('click',()=>{
+        userFocus=true;stop();activate(node,true);
+      });
+      node.addEventListener('keydown',event=>{
+        if(event.key==='Enter'||event.key===' '){
+          event.preventDefault();userFocus=true;stop();activate(node,true);
+        }
+      });
+    });
+
+    core?.addEventListener('click',()=>{
+      userFocus=false;resetNetwork();
+      kicker.textContent='YHTEINEN JÄRJESTELMÄ';
+      heading.textContent='Rakenteet muodostavat kokonaisuuden.';
+      copy.textContent='Työ, terveys, talous, koulutus, asuminen, luottamus, yhteisöt ja luonto vaikuttavat toisiinsa yhtä aikaa.';
+      state.textContent='Kokonaisuus syntyy riippuvuuksista';
+      start();
+    });
+
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          if(!prefersReduced){autoStep();start();}
+        }else stop();
+      });
+    },{threshold:.22});
+    observer.observe(figure);
+  })();
+
+  // Hashin mukainen aloitus.
+  const initial=location.hash.replace(/^#/,'');
+  if(VIEWS[initial]) openVisualization(initial);
+  else if(initial==='ajankohtaista') setTimeout(()=>scrollToSection('teemat'),50);
+  else if(initial==='liity') setTimeout(()=>scrollToSection('liity'),50);
+  else setTabs('yhdistys');
+
+  setTimeout(refreshAccountUI,80);
+  setTimeout(syncMembership,120);
+})();
+</script>
+
+</body>
+</html>
