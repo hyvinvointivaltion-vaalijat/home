@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hyvinvointivaltion Vaalijat ry · v13</title>
+<title>Hyvinvointivaltion Vaalijat ry · v13.1</title>
 <meta name="description" content="Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena." />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Hyvinvointivaltion Vaalijat ry — Hyvinvointivaltio on verkosto" />
@@ -689,7 +689,7 @@ body{overflow-x:hidden!important}
 #v13VisualLayer[hidden]{display:none}
 #v13VisualLayer iframe{display:block;width:100%;height:100%;border:0;background:var(--paper,#f7f4ee)}
 .v13-visual-crop{position:relative;width:100%;height:100%;overflow:hidden}
-.v13-visual-crop.verkko iframe{position:absolute;left:0;top:-62px;width:100%;height:calc(100% + 62px)}
+.v13-visual-crop.murros iframe{position:absolute;left:0;top:-62px;width:100%;height:calc(100% + 62px)}
 .v13-loader{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:var(--paper,#f7f4ee);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate,#7a837f)}
 .v13-loader[hidden]{display:none}
 
@@ -2230,9 +2230,9 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
     activeFrame = frame;
     frame.addEventListener('load',()=>{loader.hidden=true;sendThemeToVisualization();},{once:true});
 
-    if(name === 'verkko'){
+    if(name === 'rengas' || name === 'verkko'){
       const crop = document.createElement('div');
-      crop.className = 'v13-visual-crop verkko';
+      crop.className = 'v13-visual-crop murros';
       crop.appendChild(frame);
       visualLayer.appendChild(crop);
     }else{
