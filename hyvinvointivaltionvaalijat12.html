@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hyvinvointivaltion Vaalijat ry · v12.2</title>
+<title>Hyvinvointivaltion Vaalijat ry · v12.3</title>
 <meta name="description" content="Hyvinvointivaltion Vaalijat ry yhteisellä Atlas-navigaatiolla; visualisoinnit avautuvat itsenäisinä täyden viewportin sivuina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,11 +16,11 @@
   --nav-h:64px;
 }
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0}
-body{display:flex;flex-direction:column;overflow:hidden;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
+html,body{width:100%;min-height:100%;margin:0}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
 button{font:inherit;color:inherit}
 .topbar{
-  position:relative;z-index:100;display:flex;align-items:center;gap:18px;min-height:var(--nav-h);
+  position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;min-height:var(--nav-h);
   padding:9px 20px;background:rgba(247,244,238,.94);backdrop-filter:blur(14px) saturate(1.2);
   border-bottom:1px solid var(--line)
 }
@@ -74,14 +74,21 @@ button{font:inherit;color:inherit}
 .icon-btn{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
 .icon-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
 
-#viewRoot{position:relative;flex:1;min-width:0;min-height:0;overflow:hidden;background:var(--paper)}
+#viewRoot{position:relative;min-width:0;min-height:calc(100dvh - var(--nav-h));background:var(--paper)}
 #associationRoot{
-  position:absolute;inset:0;overflow:auto;background:var(--paper);overscroll-behavior:contain
+  position:relative;min-height:calc(100dvh - var(--nav-h));overflow:visible;background:var(--paper)
 }
 #associationRoot[hidden]{display:none}
-#visualRoot{position:absolute;inset:0;background:var(--paper)}
+#visualRoot{
+  position:relative;width:100%;height:calc(100dvh - var(--nav-h));
+  min-height:560px;overflow:hidden;background:var(--paper);
+  -webkit-overflow-scrolling:touch
+}
 #visualRoot[hidden]{display:none}
-.view-frame{display:block;width:100%;height:100%;border:0;background:var(--paper)}
+.view-frame{
+  display:block;width:100%;height:100%;min-height:100%;border:0;background:var(--paper);
+  overflow:auto;-webkit-overflow-scrolling:touch
+}
 .loader{
   position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);
   font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)
@@ -448,17 +455,13 @@ button{font:inherit;color:inherit}
 
     requestAnimationFrame(() => {
       if(name === "yhdistys"){
-        associationRoot.scrollTop = 0;
+        window.scrollTo({top:0,behavior:"smooth"});
         return;
       }
       const target = findAssociationTarget(name);
       if(target){
-        const rootTop = associationRoot.getBoundingClientRect().top;
-        const targetTop = target.getBoundingClientRect().top;
-        associationRoot.scrollTo({
-          top: associationRoot.scrollTop + targetTop - rootTop - 16,
-          behavior: "smooth"
-        });
+        const top = target.getBoundingClientRect().top + window.scrollY - 76;
+        window.scrollTo({top:Math.max(0,top),behavior:"smooth"});
       }
     });
   }
