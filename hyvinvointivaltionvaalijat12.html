@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hyvinvointivaltion Vaalijat ry · v12.3</title>
+<title>Hyvinvointivaltion Vaalijat ry · v12.4</title>
 <meta name="description" content="Hyvinvointivaltion Vaalijat ry yhteisellä Atlas-navigaatiolla; visualisoinnit avautuvat itsenäisinä täyden viewportin sivuina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,14 @@
   --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;
   --nav-h:64px;
 }
+html[data-theme="dark"]{
+  --paper:#111817;--surface:#182220;--sunk:#202b29;--ink:#f0eee7;--muted:#a7b0ad;
+  --line:#33413e;--line-soft:#283532;--forest:#75b8ad;--copper:#d48a55;
+}
+html[data-theme="dark"] body{color-scheme:dark}
+html[data-theme="dark"] .topbar{background:rgba(17,24,23,.96)}
+html[data-theme="dark"] .module-current{background:linear-gradient(180deg,rgba(24,34,32,.96),rgba(32,43,41,.90))}
+
 *{box-sizing:border-box}
 html,body{width:100%;min-height:100%;margin:0}
 body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans)}
@@ -89,6 +97,15 @@ button{font:inherit;color:inherit}
   display:block;width:100%;height:100%;min-height:100%;border:0;background:var(--paper);
   overflow:auto;-webkit-overflow-scrolling:touch
 }
+.visual-crop{
+  position:relative;width:100%;height:100%;overflow:hidden;background:var(--paper)
+}
+.visual-crop--verkko .view-frame{
+  position:absolute;left:0;top:-62px;width:100%;height:calc(100% + 62px)
+}
+.theme-btn[data-theme-state="dark"] .theme-moon{display:none}
+.theme-btn[data-theme-state="light"] .theme-sun{display:none}
+.theme-btn svg{width:17px;height:17px}
 .loader{
   position:absolute;inset:0;z-index:20;display:grid;place-items:center;background:var(--paper);
   font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)
@@ -139,6 +156,10 @@ button{font:inherit;color:inherit}
   </nav>
 
   <div class="tools">
+    <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Vaihda tumma tai vaalea teema" data-theme-state="light" title="Tumma / vaalea teema">
+      <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.5 8.5 0 1 1 8.8 4a7 7 0 0 0 11.2 11.2Z"/></svg>
+      <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+    </button>
     <button class="icon-btn" id="fsBtn" type="button" aria-label="Koko näyttö">
       <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
     </button>
@@ -216,6 +237,38 @@ button{font:inherit;color:inherit}
   let active = null;
   let associationLoaded = false;
   let associationLoadPromise = null;
+  let activeFrame = null;
+
+  const THEME_KEY = "hv-v12-theme";
+  const themeBtn = document.getElementById("themeBtn");
+
+  function currentTheme(){
+    return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  }
+
+  function sendThemeToVisualization(){
+    if(!activeFrame?.contentWindow) return;
+    activeFrame.contentWindow.postMessage({
+      type:"atlas-theme",
+      theme:currentTheme(),
+      source:"hyvinvointivaltionvaalijat12"
+    },"*");
+  }
+
+  function applyTheme(theme, persist=true){
+    const next = theme === "dark" ? "dark" : "light";
+    document.documentElement.dataset.theme = next;
+    themeBtn.dataset.themeState = next;
+    themeBtn.setAttribute(
+      "aria-label",
+      next === "dark" ? "Vaihda vaaleaan teemaan" : "Vaihda tummaan teemaan"
+    );
+    if(persist) localStorage.setItem(THEME_KEY,next);
+    sendThemeToVisualization();
+  }
+
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  applyTheme(savedTheme === "dark" ? "dark" : "light", false);
 
   moduleMenu.innerHTML = MODULE_ORDER.map(name =>
     `<button class="module-option" type="button" role="option" data-module="${name}">
@@ -448,6 +501,10 @@ button{font:inherit;color:inherit}
   }
 
   async function showAssociation(name){
+    if(activeFrame){
+      activeFrame.src = "about:blank";
+      activeFrame = null;
+    }
     visualRoot.hidden = true;
     visualRoot.innerHTML = "";
     associationRoot.hidden = false;
@@ -481,8 +538,24 @@ button{font:inherit;color:inherit}
     frame.allow = "fullscreen";
     frame.loading = "eager";
     frame.src = view.url;
-    frame.addEventListener("load",() => { loader.hidden = true; },{once:true});
-    visualRoot.appendChild(frame);
+    activeFrame = frame;
+
+    frame.addEventListener("load",() => {
+      loader.hidden = true;
+      // Lähetetään valittu teema Atlas-sivulle. Vastaanottava näkymä voi soveltaa sen.
+      sendThemeToVisualization();
+    },{once:true});
+
+    if(name === "verkko"){
+      // Verkon oma moduulipalkki + sen tumma/vaalea-painike rajataan pois.
+      // Yhteinen yläpalkki jää ainoaksi navigaatioksi.
+      const crop = document.createElement("div");
+      crop.className = "visual-crop visual-crop--verkko";
+      crop.appendChild(frame);
+      visualRoot.appendChild(crop);
+    }else{
+      visualRoot.appendChild(frame);
+    }
   }
 
   async function showView(name){
@@ -536,6 +609,10 @@ button{font:inherit;color:inherit}
 
   document.addEventListener("click",e => {
     if(!e.target.closest(".module-browser")) closeMenu();
+  });
+
+  themeBtn.addEventListener("click",() => {
+    applyTheme(currentTheme() === "dark" ? "light" : "dark");
   });
 
   document.getElementById("fsBtn").addEventListener("click",async() => {
