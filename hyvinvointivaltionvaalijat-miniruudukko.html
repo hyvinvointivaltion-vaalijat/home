@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>Hyvinvointivaltio Miniruudukko</title>
+<title>Hyvinvointivaltio Minipisteruudukko</title>
 <style>:root {
   color-scheme: light dark;
   background-color: transparent !important;
@@ -820,55 +820,56 @@ svg {
 </style>
 </head>
 <body>
-<div id="hvv-mini-grid-model">
+<div id="hvv-mini-dot-grid-model">
   <style>
-    #hvv-mini-grid-model{color:var(--foreground);background:transparent}
-    #hvv-mini-grid-model .hvv-overview,#hvv-mini-grid-model .hvv-focus{display:grid;gap:1rem}
-    #hvv-mini-grid-model .hvv-focus[hidden],#hvv-mini-grid-model .hvv-overview[hidden]{display:none}
-    #hvv-mini-grid-model .hvv-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem}
-    #hvv-mini-grid-model .hvv-summary-copy{display:grid;gap:.25rem}
-    #hvv-mini-grid-model .hvv-summary h3,#hvv-mini-grid-model .hvv-focus h3{margin:0;font-weight:500}
-    #hvv-mini-grid-model .hvv-summary p,#hvv-mini-grid-model .hvv-focus p{margin:0}
-    #hvv-mini-grid-model .hvv-map{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.5rem;align-items:stretch}
-    #hvv-mini-grid-model .hvv-row-labels{display:grid;grid-template-rows:repeat(10,minmax(2rem,1fr));gap:.2rem;align-items:center;text-align:right}
-    #hvv-mini-grid-model .hvv-row-labels span{max-width:7rem}
-    #hvv-mini-grid-model .hvv-grid-wrap{display:grid;gap:.35rem;min-width:0}
-    #hvv-mini-grid-model .hvv-column-labels{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.2rem;text-align:center}
-    #hvv-mini-grid-model .hvv-column-labels span{writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;max-height:6.5rem}
-    #hvv-mini-grid-model .hvv-cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.2rem;touch-action:none}
-    #hvv-mini-grid-model .hvv-cells .btn{min-width:0;aspect-ratio:1;padding:0;background:color-mix(in srgb,var(--viz-series-1) var(--cell-fill),var(--muted))}
-    #hvv-mini-grid-model .hvv-join{display:flex;justify-content:flex-end;margin-bottom:1rem}
-    #hvv-mini-grid-model .hvv-axis{display:flex;justify-content:space-between;gap:1rem}
-    #hvv-mini-grid-model .hvv-focus{min-height:42rem;align-content:space-between;touch-action:none}
-    #hvv-mini-grid-model .hvv-focus-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
-    #hvv-mini-grid-model .hvv-mini-map{display:grid;gap:.3rem;justify-items:end}
-    #hvv-mini-grid-model .hvv-mini-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:2px;width:min(9rem,38vw)}
-    #hvv-mini-grid-model .hvv-mini-grid .btn{min-width:0;aspect-ratio:1;padding:0}
-    #hvv-mini-grid-model .hvv-focus-title{display:grid;gap:.35rem;text-align:center;max-width:48rem;margin-inline:auto}
-    #hvv-mini-grid-model .hvv-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.75rem;align-items:center}
-    #hvv-mini-grid-model .hvv-flow-step{display:grid;align-content:center;min-height:10rem;padding:1rem;background:color-mix(in srgb,var(--viz-series-1) 12%,transparent)}
-    #hvv-mini-grid-model .hvv-flow-step strong{font-weight:500}
-    #hvv-mini-grid-model .hvv-flow-step span{margin-top:.4rem}
-    #hvv-mini-grid-model .hvv-arrow{color:var(--muted-foreground)}
-    #hvv-mini-grid-model .hvv-question{display:grid;gap:.5rem;text-align:center;max-width:48rem;margin-inline:auto}
-    #hvv-mini-grid-model .hvv-compass{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"up up up" "left position right" "down down down";align-items:center;gap:.5rem}
-    #hvv-mini-grid-model .hvv-up{grid-area:up;justify-self:center}
-    #hvv-mini-grid-model .hvv-left{grid-area:left;justify-self:end}
-    #hvv-mini-grid-model .hvv-position{grid-area:position;text-align:center;min-width:10rem}
-    #hvv-mini-grid-model .hvv-right{grid-area:right;justify-self:start}
-    #hvv-mini-grid-model .hvv-down{grid-area:down;justify-self:center}
-    #hvv-mini-grid-model .hvv-position strong{display:block;font-weight:500}
+    #hvv-mini-dot-grid-model{color:var(--foreground);background:transparent}
+    #hvv-mini-dot-grid-model .hvv-overview,#hvv-mini-dot-grid-model .hvv-focus{display:grid;gap:1rem}
+    #hvv-mini-dot-grid-model .hvv-focus[hidden],#hvv-mini-dot-grid-model .hvv-overview[hidden]{display:none}
+    #hvv-mini-dot-grid-model .hvv-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem}
+    #hvv-mini-dot-grid-model .hvv-summary-copy{display:grid;gap:.25rem}
+    #hvv-mini-dot-grid-model .hvv-summary h3,#hvv-mini-dot-grid-model .hvv-focus h3{margin:0;font-weight:500}
+    #hvv-mini-dot-grid-model .hvv-summary p,#hvv-mini-dot-grid-model .hvv-focus p{margin:0}
+    #hvv-mini-dot-grid-model .hvv-map{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.5rem;align-items:stretch}
+    #hvv-mini-dot-grid-model .hvv-row-labels{display:grid;grid-template-rows:repeat(10,minmax(2rem,1fr));gap:.2rem;align-items:center;text-align:right}
+    #hvv-mini-dot-grid-model .hvv-row-labels span{max-width:7rem}
+    #hvv-mini-dot-grid-model .hvv-grid-wrap{display:grid;gap:.35rem;min-width:0}
+    #hvv-mini-dot-grid-model .hvv-column-labels{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.2rem;text-align:center}
+    #hvv-mini-dot-grid-model .hvv-column-labels span{writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;max-height:6.5rem}
+    #hvv-mini-dot-grid-model .hvv-cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.2rem;touch-action:none}
+    #hvv-mini-dot-grid-model .hvv-cells .btn{min-width:0;aspect-ratio:1;padding:0;background:color-mix(in srgb,var(--viz-series-1) var(--cell-fill),var(--muted))}
+    #hvv-mini-dot-grid-model .hvv-join{display:flex;justify-content:flex-end;margin-bottom:1rem}
+    #hvv-mini-dot-grid-model .hvv-axis{display:flex;justify-content:space-between;gap:1rem}
+    #hvv-mini-dot-grid-model .hvv-focus{min-height:42rem;align-content:space-between;touch-action:none}
+    #hvv-mini-dot-grid-model .hvv-focus-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    #hvv-mini-dot-grid-model .hvv-mini-map{display:grid;gap:.3rem;justify-items:end}
+    #hvv-mini-dot-grid-model .hvv-mini-grid{display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr);place-items:center;gap:3px;width:min(9rem,38vw);aspect-ratio:1}
+    #hvv-mini-dot-grid-model .hvv-mini-dot{display:block;width:55%;min-width:0;aspect-ratio:1;padding:0;border:0;border-radius:50%;background:var(--border);color:transparent}
+    #hvv-mini-dot-grid-model .hvv-mini-dot[aria-pressed="true"]{width:82%;background:var(--primary);box-shadow:0 0 0 2px var(--background),0 0 0 3px var(--ring)}
+    #hvv-mini-dot-grid-model .hvv-focus-title{display:grid;gap:.35rem;text-align:center;max-width:48rem;margin-inline:auto}
+    #hvv-mini-dot-grid-model .hvv-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.75rem;align-items:center}
+    #hvv-mini-dot-grid-model .hvv-flow-step{display:grid;align-content:center;min-height:10rem;padding:1rem;background:color-mix(in srgb,var(--viz-series-1) 12%,transparent)}
+    #hvv-mini-dot-grid-model .hvv-flow-step strong{font-weight:500}
+    #hvv-mini-dot-grid-model .hvv-flow-step span{margin-top:.4rem}
+    #hvv-mini-dot-grid-model .hvv-arrow{color:var(--muted-foreground)}
+    #hvv-mini-dot-grid-model .hvv-question{display:grid;gap:.5rem;text-align:center;max-width:48rem;margin-inline:auto}
+    #hvv-mini-dot-grid-model .hvv-compass{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"up up up" "left position right" "down down down";align-items:center;gap:.5rem}
+    #hvv-mini-dot-grid-model .hvv-up{grid-area:up;justify-self:center}
+    #hvv-mini-dot-grid-model .hvv-left{grid-area:left;justify-self:end}
+    #hvv-mini-dot-grid-model .hvv-position{grid-area:position;text-align:center;min-width:10rem}
+    #hvv-mini-dot-grid-model .hvv-right{grid-area:right;justify-self:start}
+    #hvv-mini-dot-grid-model .hvv-down{grid-area:down;justify-self:center}
+    #hvv-mini-dot-grid-model .hvv-position strong{display:block;font-weight:500}
     @media(max-width:600px){
-      #hvv-mini-grid-model .hvv-map{grid-template-columns:1fr}
-      #hvv-mini-grid-model .hvv-row-labels{display:none}
-      #hvv-mini-grid-model .hvv-column-labels span{max-height:4.8rem}
-      #hvv-mini-grid-model .hvv-focus{min-height:38rem}
-      #hvv-mini-grid-model .hvv-mini-grid{width:min(8rem,40vw);gap:1px}
-      #hvv-mini-grid-model .hvv-flow{grid-template-columns:1fr;gap:.4rem}
-      #hvv-mini-grid-model .hvv-flow-step{min-height:0}
-      #hvv-mini-grid-model .hvv-arrow{transform:rotate(90deg);justify-self:center}
-      #hvv-mini-grid-model .hvv-position{min-width:7rem}
-      #hvv-mini-grid-model .hvv-compass .btn{padding-inline:.5rem}
+      #hvv-mini-dot-grid-model .hvv-map{grid-template-columns:1fr}
+      #hvv-mini-dot-grid-model .hvv-row-labels{display:none}
+      #hvv-mini-dot-grid-model .hvv-column-labels span{max-height:4.8rem}
+      #hvv-mini-dot-grid-model .hvv-focus{min-height:38rem}
+      #hvv-mini-dot-grid-model .hvv-mini-grid{width:min(8rem,40vw);gap:2px}
+      #hvv-mini-dot-grid-model .hvv-flow{grid-template-columns:1fr;gap:.4rem}
+      #hvv-mini-dot-grid-model .hvv-flow-step{min-height:0}
+      #hvv-mini-dot-grid-model .hvv-arrow{transform:rotate(90deg);justify-self:center}
+      #hvv-mini-dot-grid-model .hvv-position{min-width:7rem}
+      #hvv-mini-dot-grid-model .hvv-compass .btn{padding-inline:.5rem}
     }
   </style>
 
@@ -911,7 +912,7 @@ svg {
 
   <script>
     (() => {
-      const root = document.getElementById("hvv-mini-grid-model");
+      const root = document.getElementById("hvv-mini-dot-grid-model");
       if (!root || root.dataset.ready === "1") return;
       root.dataset.ready = "1";
       const periods = [
@@ -951,7 +952,7 @@ svg {
         button.setAttribute("aria-label",`${periods[c].label}, ${levels[r].name}`);button.style.setProperty("--cell-fill",`${10+r*2+c}%`);
         button.addEventListener("click",()=>openCell(r,c));cells.appendChild(button);
         const mini=document.createElement("button");
-        mini.type="button";mini.className="btn viz-tile";mini.dataset.miniRow=String(r);mini.dataset.miniCol=String(c);mini.setAttribute("role","gridcell");
+        mini.type="button";mini.className="hvv-mini-dot";mini.dataset.miniRow=String(r);mini.dataset.miniCol=String(c);mini.setAttribute("role","gridcell");
         mini.setAttribute("aria-label",`Siirry kohtaan ${periods[c].label}, ${levels[r].name}`);
         mini.addEventListener("click",()=>{row=r;col=c;render()});miniGrid.appendChild(mini);
       }}
