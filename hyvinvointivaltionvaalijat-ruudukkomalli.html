@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Hyvinvointivaltio Ruudukkomalli</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: transparent !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --main-surface-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --red: light-dark(rgb(186 38 35), rgb(250 66 62));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 10px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-visualize-standalone] {
+  background-color: var(--background) !important;
+}
+
+/* Generic mobile code-block hosts provide light/dark mode but no series palette.
+   AppBlock hosts set all six variables themselves. */
+:root:not([data-app-block-surface]) {
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(#f3883b, #f59a56);
+  --viz-series-3: light-dark(#5dc977, #74d58b);
+  --viz-series-4: light-dark(#eb77b1, #f08fc0);
+  --viz-series-5: light-dark(#9b79ec, #aa91ef);
+  --viz-series-6: light-dark(#3ab9b1, #5acbc2);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+:root:not([data-app-block-surface]) > body {
+  padding: 12px;
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget > :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The bundled tooltip runtime owns [data-tooltip]. AppBlock's CSS-only
+   pseudo-tooltip can widen dense grids even while hidden. */
+main [data-tooltip]::after {
+  content: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--interactive-label-primary-default, var(--primary-foreground));
+  background: var(--interactive-bg-primary-default, var(--foreground));
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(
+    in srgb,
+    var(--interactive-label-primary-default, var(--primary-foreground)) 50%,
+    transparent
+  );
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type="file"]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed="true"],
+    [aria-selected="true"],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+</style>
+</head>
+<body>
+<div id="hvv-grid-model">
+  <style>
+    #hvv-grid-model{color:var(--foreground);background:transparent}
+    #hvv-grid-model .hvv-overview,#hvv-grid-model .hvv-focus{display:grid;gap:1rem}
+    #hvv-grid-model .hvv-focus[hidden],#hvv-grid-model .hvv-overview[hidden]{display:none}
+    #hvv-grid-model .hvv-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem}
+    #hvv-grid-model .hvv-summary-copy{display:grid;gap:.25rem}
+    #hvv-grid-model .hvv-summary h3,#hvv-grid-model .hvv-focus h3{margin:0;font-weight:500}
+    #hvv-grid-model .hvv-summary p,#hvv-grid-model .hvv-focus p{margin:0}
+    #hvv-grid-model .hvv-map{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.5rem;align-items:stretch}
+    #hvv-grid-model .hvv-row-labels{display:grid;grid-template-rows:repeat(10,minmax(2rem,1fr));gap:.2rem;align-items:center;text-align:right}
+    #hvv-grid-model .hvv-row-labels span{max-width:7rem}
+    #hvv-grid-model .hvv-grid-wrap{display:grid;gap:.35rem;min-width:0}
+    #hvv-grid-model .hvv-column-labels{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.2rem;text-align:center}
+    #hvv-grid-model .hvv-column-labels span{writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;max-height:6.5rem}
+    #hvv-grid-model .hvv-cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.2rem;touch-action:none}
+    #hvv-grid-model .hvv-cells .btn{min-width:0;aspect-ratio:1;padding:0;background:color-mix(in srgb,var(--viz-series-1) var(--cell-fill),var(--muted))}
+    #hvv-grid-model .hvv-join{display:flex;justify-content:flex-end;margin-bottom:1rem}
+    #hvv-grid-model .hvv-axis{display:flex;justify-content:space-between;gap:1rem}
+    #hvv-grid-model .hvv-focus{min-height:42rem;align-content:space-between;touch-action:none}
+    #hvv-grid-model .hvv-focus-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem}
+    #hvv-grid-model .hvv-focus-title{display:grid;gap:.35rem;text-align:center;max-width:48rem;margin-inline:auto}
+    #hvv-grid-model .hvv-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.75rem;align-items:center}
+    #hvv-grid-model .hvv-flow-step{display:grid;align-content:center;min-height:10rem;padding:1rem;background:color-mix(in srgb,var(--viz-series-1) 12%,transparent)}
+    #hvv-grid-model .hvv-flow-step strong{font-weight:500}
+    #hvv-grid-model .hvv-flow-step span{margin-top:.4rem}
+    #hvv-grid-model .hvv-arrow{color:var(--muted-foreground)}
+    #hvv-grid-model .hvv-question{display:grid;gap:.5rem;text-align:center;max-width:48rem;margin-inline:auto}
+    #hvv-grid-model .hvv-compass{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"up up up" "left position right" "down down down";align-items:center;gap:.5rem}
+    #hvv-grid-model .hvv-up{grid-area:up;justify-self:center}
+    #hvv-grid-model .hvv-left{grid-area:left;justify-self:end}
+    #hvv-grid-model .hvv-position{grid-area:position;text-align:center;min-width:10rem}
+    #hvv-grid-model .hvv-right{grid-area:right;justify-self:start}
+    #hvv-grid-model .hvv-down{grid-area:down;justify-self:center}
+    #hvv-grid-model .hvv-position strong{display:block;font-weight:500}
+    @media(max-width:600px){
+      #hvv-grid-model .hvv-map{grid-template-columns:1fr}
+      #hvv-grid-model .hvv-row-labels{display:none}
+      #hvv-grid-model .hvv-column-labels span{max-height:4.8rem}
+      #hvv-grid-model .hvv-focus{min-height:38rem}
+      #hvv-grid-model .hvv-flow{grid-template-columns:1fr;gap:.4rem}
+      #hvv-grid-model .hvv-flow-step{min-height:0}
+      #hvv-grid-model .hvv-arrow{transform:rotate(90deg);justify-self:center}
+      #hvv-grid-model .hvv-position{min-width:7rem}
+      #hvv-grid-model .hvv-compass .btn{padding-inline:.5rem}
+    }
+  </style>
+
+  <div class="hvv-join"><a class="btn btn-primary" href="https://hyvinvointivaltion-vaalijat.github.io/home/hyvinvointivaltionvaalijat21.html#liity" target="_blank" rel="noopener">Liity Hyvinvointivaltion Vaalijat ry:n jäseneksi</a></div>
+  <section class="hvv-overview" data-overview>
+    <div class="card hvv-summary">
+      <div class="hvv-summary-copy"><h3>Valitse ruutu</h3><p class="text-muted">Avaa aikakauden ja tarkastelutason infografiikka.</p></div>
+      <span class="viz-badge">10 × 10 · 100 näkökulmaa</span>
+    </div>
+    <div class="hvv-map">
+      <div class="hvv-row-labels text-small text-muted" data-row-labels aria-hidden="true"></div>
+      <div class="hvv-grid-wrap">
+        <div class="hvv-column-labels text-small text-muted" data-column-labels aria-hidden="true"></div>
+        <div class="hvv-cells" data-cells role="grid" aria-label="Hyvinvointivaltion 10 kertaa 10 -navigointiruudukko"></div>
+      </div>
+    </div>
+    <div class="hvv-axis text-small text-muted"><span>← Menneisyys</span><span>Kokemus ↑ · Toiminta ↓</span><span>Tulevaisuus →</span></div>
+  </section>
+
+  <section class="hvv-focus" data-focus hidden aria-live="polite">
+    <div class="hvv-focus-top"><button class="btn btn-ghost" type="button" data-close>← Ruudukkoon</button><span class="viz-badge" data-badge></span></div>
+    <div class="hvv-focus-title"><span class="text-small text-muted" data-level></span><h3 data-title></h3><p data-intro></p></div>
+    <div class="hvv-flow" role="img" aria-label="Valitun aikakauden muutosketju">
+      <div class="hvv-flow-step"><strong>Tausta</strong><span data-before></span></div><span class="hvv-arrow" aria-hidden="true">→</span>
+      <div class="hvv-flow-step"><strong>Murros</strong><span data-shift></span></div><span class="hvv-arrow" aria-hidden="true">→</span>
+      <div class="hvv-flow-step"><strong>Pitkä vaikutus</strong><span data-after></span></div>
+    </div>
+    <div class="hvv-question"><span class="text-small text-muted">Tämän ruudun kysymys</span><p data-question></p></div>
+    <div class="hvv-compass" aria-label="Siirry viereiseen infografiikkaan">
+      <button class="btn btn-ghost hvv-up" type="button" data-move="up">↑ <span data-up-label></span></button>
+      <button class="btn btn-ghost hvv-left" type="button" data-move="left">← <span data-left-label></span></button>
+      <div class="hvv-position"><strong data-coordinate></strong><span class="text-small text-muted">pyyhkäise</span></div>
+      <button class="btn btn-ghost hvv-right" type="button" data-move="right"><span data-right-label></span> →</button>
+      <button class="btn btn-ghost hvv-down" type="button" data-move="down">↓ <span data-down-label></span></button>
+    </div>
+  </section>
+
+  <script>
+    (() => {
+      const root = document.getElementById("hvv-grid-model");
+      if (!root || root.dataset.ready === "1") return;
+      root.dataset.ready = "1";
+      const periods = [
+        { short:"1850",label:"1850–1879",name:"Teollistumisen alku",before:"Maatalousyhteiskunta, väestönkasvu ja niukat liikenneyhteydet",shift:"Tehdastyö, rautatiet ja kaupunkien kasvu",after:"Palkkatyö, luokkajako ja uudenlainen keskinäisriippuvuus" },
+        { short:"1880",label:"1880–1905",name:"Kansallinen järjestäytyminen",before:"Sääty-yhteiskunta ja paikalliset yhteisöt",shift:"Kansanliikkeet, koulutus ja hallinnon vahvistuminen",after:"Kansalaisuus, järjestäytyminen ja kansallinen instituutiopohja" },
+        { short:"1906",label:"1906–1917",name:"Demokratian synty",before:"Eriarvoinen poliittinen osallistuminen ja kasvava joukkoliike",shift:"Yleinen äänioikeus ja parlamentaarinen edustus",after:"Demokraattinen legitimiteetti ja kamppailu vallan jakamisesta" },
+        { short:"1918",label:"1918–1938",name:"Kansakunnan eheyttäminen",before:"Eriarvoisuus, maattomuus ja sisällissodan jakolinja",shift:"Torpparivapautus, oppivelvollisuus ja sosiaaliset kompromissit",after:"Laajempi omistajuus, koulutus ja hidas yhteiskunnallinen eheytyminen" },
+        { short:"1939",label:"1939–1959",name:"Sota ja jälleenrakennus",before:"Sota, menetetyt alueet, puute ja siirtoväki",shift:"Jälleenrakennus, asuttaminen ja tuotannon mobilisointi",after:"Yhteinen ponnistus ja pohja universaaleille instituutioille" },
+        { short:"1960",label:"1960–1979",name:"Hyvinvointivaltion laajeneminen",before:"Maatalousvaltainen rakenne ja alueellinen eriarvoisuus",shift:"Kaupungistuminen, tulopolitiikka ja julkisten palvelujen laajeneminen",after:"Yhteisesti jaettu riski, palveluoikeudet ja uusi keskiluokka" },
+        { short:"1980",label:"1980–1994",name:"Vapautuminen ja lama",before:"Säännelty talous, vakaa työ ja vahva kansallinen ohjaus",shift:"Rahoitusmarkkinoiden vapautuminen, velkaantuminen ja syvä lama",after:"Massatyöttömyys, julkisen talouden kurinalaisuus ja rakennemuutos" },
+        { short:"1995",label:"1995–2007",name:"EU ja globalisaatio",before:"Laman jälkeinen sopeutuminen ja kansallinen markkina",shift:"EU-integraatio, euro, digitalisaatio ja globaalit arvoketjut",after:"Kasvanut vauraus mutta myös riippuvuus kansainvälisistä järjestelmistä" },
+        { short:"2008",label:"2008–2025",name:"Monikriisien aika",before:"Globalisaation vakausodotus ja kasvava järjestelmäriippuvuus",shift:"Finanssi-, pandemia-, turvallisuus- ja ekologiset kriisit",after:"Julkisen talouden paine, epävarmuus ja koetukselle joutunut luottamus" },
+        { short:"2026",label:"2026–2050",name:"Tulevaisuuden vaihtoehdot",before:"Ikääntyminen, automaatio, velka ja ekologiset rajat",shift:"Valinnat omistuksesta, teknologiasta, palveluista ja riskien jaosta",after:"Eriytyvä tai uudistuva hyvinvointiyhteiskunta" }
+      ];
+      const levels = [
+        { short:"Kokemus",name:"Ihmisen kokemus",title:"Muutos ihmisen näkökulmasta",lead:"Miltä muutos tuntui ihmisen elämässä" },
+        { short:"Arki",name:"Arjen olosuhteet",title:"Arjen ehdot muuttuvat",lead:"Miten työ, koti ja toimeentulo muuttuivat" },
+        { short:"Yhteisö",name:"Yhteisöt ja alueet",title:"Yhteisö kantaa ja eriytyy",lead:"Miten perheet, yhteisöt ja alueet sopeutuivat" },
+        { short:"Palvelut",name:"Yhteiset palvelut",title:"Yhteinen turva rakentuu",lead:"Miten koulutus, terveys ja sosiaalinen turva järjestettiin" },
+        { short:"Rakenteet",name:"Yhteiskunnan rakenteet",title:"Rakenteet ohjaavat valintoja",lead:"Mitkä instituutiot ja järjestelmät ohjasivat kehitystä" },
+        { short:"Talous",name:"Talous ja omistus",title:"Arvo syntyy ja jakautuu",lead:"Miten työ, vauraus, omistus ja riskit jakautuivat" },
+        { short:"Päätökset",name:"Poliittiset päätökset",title:"Päätökset muuttavat suuntaa",lead:"Mitä valintoja tehtiin ja ketkä niihin vaikuttivat" },
+        { short:"Seuraukset",name:"Pitkät seuraukset",title:"Vaikutus jatkuu päätöstä pidemmälle",lead:"Mitkä välittömät ja viiveellä näkyneet vaikutukset syntyivät" },
+        { short:"Vaihtoehdot",name:"Vaihtoehtoiset polut",title:"Toinenkin suunta oli mahdollinen",lead:"Mitä olisi voitu tehdä toisin ja mitä voimme oppia" },
+        { short:"Toiminta",name:"Toiminta nyt",title:"Ymmärrys muuttuu toiminnaksi",lead:"Mitä tästä seuraa nykyhetken valinnoille ja osallistumiselle" }
+      ];
+      let row=4,col=8,touchStart=null;
+      const overview=root.querySelector("[data-overview]");
+      const focus=root.querySelector("[data-focus]");
+      const cells=root.querySelector("[data-cells]");
+      root.querySelector("[data-row-labels]").innerHTML=levels.map(item=>`<span>${item.short}</span>`).join("");
+      root.querySelector("[data-column-labels]").innerHTML=periods.map(item=>`<span>${item.short}</span>`).join("");
+      for(let r=0;r<10;r+=1){for(let c=0;c<10;c+=1){
+        const button=document.createElement("button");
+        button.type="button";button.className="btn viz-tile";button.dataset.row=String(r);button.dataset.col=String(c);button.setAttribute("role","gridcell");
+        button.setAttribute("aria-label",`${periods[c].label}, ${levels[r].name}`);button.style.setProperty("--cell-fill",`${10+r*2+c}%`);
+        button.addEventListener("click",()=>openCell(r,c));cells.appendChild(button);
+      }}
+      function neighbor(r,c,fallback){if(r<0||r>9||c<0||c>9)return fallback;return r===row?periods[c].name:levels[r].short}
+      function render(){
+        const period=periods[col],level=levels[row];
+        root.querySelector("[data-badge]").textContent=`${period.label} · ${period.name}`;
+        root.querySelector("[data-level]").textContent=level.name;root.querySelector("[data-title]").textContent=level.title;
+        root.querySelector("[data-intro]").textContent=`${level.lead} aikakaudella ${period.name}.`;
+        root.querySelector("[data-before]").textContent=period.before;root.querySelector("[data-shift]").textContent=period.shift;root.querySelector("[data-after]").textContent=period.after;
+        root.querySelector("[data-question]").textContent=`${level.lead} aikakaudella ${period.name}, ja mitä siitä seurasi nykyhetkeen?`;
+        root.querySelector("[data-coordinate]").textContent=`${row+1} × ${col+1}`;
+        root.querySelector("[data-up-label]").textContent=neighbor(row-1,col,"Ylin taso");root.querySelector("[data-down-label]").textContent=neighbor(row+1,col,"Alin taso");
+        root.querySelector("[data-left-label]").textContent=neighbor(row,col-1,"Alku");root.querySelector("[data-right-label]").textContent=neighbor(row,col+1,"Tulevaisuus");
+        root.querySelectorAll("[data-move]").forEach(button=>{const d=button.dataset.move;button.disabled=(d==="up"&&row===0)||(d==="down"&&row===9)||(d==="left"&&col===0)||(d==="right"&&col===9)});
+        root.querySelectorAll("[data-row][data-col]").forEach(button=>button.setAttribute("aria-pressed",String(Number(button.dataset.row)===row&&Number(button.dataset.col)===col)));
+      }
+      function openCell(r,c){row=r;col=c;render();overview.hidden=true;focus.hidden=false;root.querySelector("[data-close]").focus()}
+      function closeCell(){focus.hidden=true;overview.hidden=false;root.querySelector(`[data-row="${row}"][data-col="${col}"]`)?.focus()}
+      function move(direction){if(direction==="up"&&row>0)row-=1;if(direction==="down"&&row<9)row+=1;if(direction==="left"&&col>0)col-=1;if(direction==="right"&&col<9)col+=1;render()}
+      root.querySelector("[data-close]").addEventListener("click",closeCell);
+      root.querySelectorAll("[data-move]").forEach(button=>button.addEventListener("click",()=>move(button.dataset.move)));
+      root.addEventListener("keydown",event=>{if(event.key==="Escape"&&!focus.hidden){closeCell();return}const dirs={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right"};if(!focus.hidden&&dirs[event.key]){event.preventDefault();move(dirs[event.key])}});
+      focus.addEventListener("touchstart",event=>{const t=event.changedTouches[0];touchStart={x:t.clientX,y:t.clientY}},{passive:true});
+      focus.addEventListener("touchend",event=>{if(!touchStart)return;const t=event.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;if(Math.max(Math.abs(dx),Math.abs(dy))<42)return;if(Math.abs(dx)>Math.abs(dy))move(dx<0?"right":"left");else move(dy<0?"down":"up")},{passive:true});
+      render();
+    })();
+  </script>
+</div>
+
+<script id="codex-visualization-floating-ui-core" src="https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js"></script>
+<script id="codex-visualization-floating-ui-dom" src="https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js"></script>
+<script id="codex-visualization-lucide" async src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js"></script>
+<script id="codex-visualization-tooltip">/* oxlint-disable typescript/no-unsafe-argument, typescript/no-unsafe-call, typescript/no-unsafe-return */
+// Runs inside the visualization sandbox, not the host webview.
+(() => {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set(["top", "right", "bottom", "left"]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =>
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest("[data-tooltip]")
+      : null;
+  const containsTarget = (trigger, target) =>
+    target?.nodeType != null && trigger.contains(target);
+  const getContent = (trigger) =>
+    trigger.getAttribute("data-tooltip")?.trim() ?? "";
+  const getPlacement = (trigger) => {
+    const placement = trigger.getAttribute("data-tooltip-placement");
+    return tooltipPlacements.has(placement) ? placement : "top";
+  };
+  const getTooltip = () => {
+    if (tooltip == null) {
+      tooltip = document.createElement("div");
+      tooltip.id = tooltipId;
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("role", "tooltip");
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) => {
+    const ids = new Set(
+      (trigger.getAttribute("aria-describedby") ?? "")
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute("aria-describedby");
+    } else {
+      trigger.setAttribute("aria-describedby", [...ids].join(" "));
+    }
+  };
+  const clearOpenTimeout = () => {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) => {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) => {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              "--tooltip-available-width",
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              "--tooltip-available-height",
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: "fixed",
+    })
+      .then(({ x, y }) => {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = "visible";
+      })
+      .catch(() => {
+        if (activeTrigger === trigger && request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) => {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = "hidden";
+    floating.style.transform = "translate(0, 0)";
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () => {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) => {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() < skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() => {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(":focus-visible")) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) => {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () => {
+    closeTooltip(false);
+    document.removeEventListener("pointerover", handlePointerOpen);
+    document.removeEventListener("pointerout", handleLeave);
+    document.removeEventListener("focusin", handleFocusIn);
+    document.removeEventListener("focusout", handleLeave);
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("contextmenu", handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener("pointerover", handlePointerOpen);
+  document.addEventListener("pointerout", handleLeave);
+  document.addEventListener("focusin", handleFocusIn);
+  document.addEventListener("focusout", handleLeave);
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("contextmenu", handleContextMenu);
+  window.addEventListener("pagehide", destroy, { once: true });
+})();
+</script>
+<script id="codex-visualization-lucide-initialization">(() => {
+  const initialize = () => {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById("codex-visualization-lucide")
+    ?.addEventListener("load", initialize, { once: true });
+})();
+</script>
+</body>
+</html>
