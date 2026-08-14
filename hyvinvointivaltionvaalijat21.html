@@ -677,6 +677,10 @@ body{overflow-x:hidden!important}
 .v13-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
 .v13-theme[data-theme-state="dark"] .moon{display:none}
 .v13-theme[data-theme-state="light"] .sun{display:none}
+.v13-view-switch{display:flex;align-items:center;padding:2px;border:1px solid var(--line,#EAD9C4);border-radius:10px;background:var(--card,#FFFFFF)}
+.v13-view-switch button{min-height:30px;padding:0 8px;border:0;border-radius:7px;background:transparent;color:var(--slate,#6E7F86);font:700 9px/1 "Source Sans 3",system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+.v13-view-switch button[aria-pressed="true"]{background:var(--deep,#004458);color:#FFFFFF}
+.v13-view-switch button:focus-visible{outline:2px solid var(--copper,#F39200);outline-offset:1px}
 
 #v13VisualLayer{position:fixed;top:var(--shell-nav-h);left:0;right:0;bottom:0;z-index:900;background:var(--paper,#FCF4E9)}
 #v13VisualLayer[hidden]{display:none}
@@ -847,6 +851,10 @@ html[data-theme="dark"] .society-network-card::after{opacity:.28}
   .hero-grid{align-items:start}
   atlas-society-network{width:100%;--atlas-sans:"Source Sans 3",system-ui,sans-serif}
 }
+html[data-visual-mode="phone"] .society-network-figure{display:none!important}
+html[data-visual-mode="phone"] .society-network-phone{display:block!important;width:100%;max-width:430px;justify-self:center}
+html[data-visual-mode="other"] .society-network-figure{display:block!important}
+html[data-visual-mode="other"] .society-network-phone{display:none!important}
 @media(prefers-reduced-motion:reduce){
   .society-link,.society-core .core-halo,.society-core .core-ring,.society-node .node-pulse,.society-network-card::after{animation:none!important}
   .society-flow-pulses{display:none}
@@ -1203,6 +1211,11 @@ html[data-theme="dark"] .society-network-meta{
     </div>
   </nav>
   <div class="v13-tools">
+    <div class="v13-view-switch" id="v13ViewSwitch" role="group" aria-label="Testattava näkymä">
+      <button type="button" data-visual-mode="auto" aria-pressed="true" title="Valitse näkymä automaattisesti">Auto</button>
+      <button type="button" data-visual-mode="phone" aria-pressed="false">Phone</button>
+      <button type="button" data-visual-mode="other" aria-pressed="false">Muut</button>
+    </div>
     <button class="v13-icon v13-theme" id="v13ThemeBtn" type="button" data-theme-state="light" aria-label="Vaihda tummaan teemaan">
       <svg class="moon" viewBox="0 0 24 24"><path d="M20 15.2A8.5 8.5 0 1 1 8.8 4a7 7 0 0 0 11.2 11.2Z"/></svg>
       <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
@@ -2645,6 +2658,7 @@ html[data-theme="dark"] .society-network-meta{
   const moduleQuestion = document.getElementById('v13ModuleQuestion');
   const moduleCurrent = document.getElementById('v13Current');
   const themeBtn = document.getElementById('v13ThemeBtn');
+  const viewSwitch = document.getElementById('v13ViewSwitch');
   const associationTab = document.getElementById('v13AssociationTab');
   const newsTab = document.getElementById('v13NewsTab');
   const joinTab = document.getElementById('v13JoinTab');
@@ -2693,6 +2707,21 @@ html[data-theme="dark"] .society-network-meta{
     sendThemeToVisualization();
   }
   applyTheme(localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light',false);
+
+  function applyVisualMode(mode){
+    const next = ['phone','other'].includes(mode) ? mode : 'auto';
+    if(next === 'auto') delete document.documentElement.dataset.visualMode;
+    else document.documentElement.dataset.visualMode = next;
+    viewSwitch?.querySelectorAll('[data-visual-mode]').forEach(button => {
+      button.setAttribute('aria-pressed',String(button.dataset.visualMode === next));
+    });
+    sessionStorage.setItem('v13VisualMode',next);
+  }
+  viewSwitch?.addEventListener('click',event => {
+    const button = event.target.closest('[data-visual-mode]');
+    if(button) applyVisualMode(button.dataset.visualMode);
+  });
+  applyVisualMode(sessionStorage.getItem('v13VisualMode') || 'auto');
 
   function setTabs(active){
     associationTab.setAttribute('aria-selected',String(active === 'yhdistys'));
