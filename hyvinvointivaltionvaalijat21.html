@@ -310,7 +310,7 @@ footer a:hover{color:var(--amber)}
 .atlas-stage > *{min-height:380px;width:100%;display:block}
 .atlas-stage.is-loading{opacity:.38;transform:translateY(3px)}
 .atlas-foot{padding:14px 26px;border-top:1px solid var(--atlas-line);font-size:.78rem;letter-spacing:.1em;color:var(--atlas-muted);background:#faf7f0}
-atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-article{
+atlas-stat-card,atlas-topic,atlas-timeline,atlas-network,atlas-matrix,atlas-article,atlas-society-network{
   display:block;width:100%;
   --atlas-paper:#FFFFFF;--atlas-line:#ded8ca;--atlas-title:#1f4642;--atlas-ink:#172421;--atlas-accent:#F39200;
   --atlas-radius:14px;--atlas-serif:"Jost","Source Sans 3",system-ui,sans-serif;--atlas-sans:"Source Sans 3",system-ui,sans-serif;
@@ -752,6 +752,7 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
 
 /* V13.3 · Kuvio 1 — Yhteiskunta rakenteiden verkostona */
 .society-network-figure{margin:0;min-width:0}
+.society-network-phone{display:none;margin:0;min-width:0}
 .society-network-card{
   position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;
   background:var(--card,#FFFFFF);
@@ -839,6 +840,12 @@ html[data-theme="dark"] .society-network-card::after{opacity:.28}
   .society-network-readout{position:sticky;left:14px;bottom:4px;width:calc(100vw - 58px);max-width:360px;height:98px;margin-top:-102px;margin-bottom:4px;padding:11px 13px 11px 21px}
   .society-network-readout::before{border-left-width:2px;border-radius:18px 0 0 18px}
   .society-network-kicker{letter-spacing:.11em}
+}
+@media(max-width:640px){
+  .society-network-figure{display:none!important}
+  .society-network-phone{display:block}
+  .hero-grid{align-items:start}
+  atlas-society-network{width:100%;--atlas-sans:"Source Sans 3",system-ui,sans-serif}
 }
 @media(prefers-reduced-motion:reduce){
   .society-link,.society-core .core-halo,.society-core .core-ring,.society-node .node-pulse,.society-network-card::after{animation:none!important}
@@ -1430,6 +1437,9 @@ html[data-theme="dark"] .society-network-meta{
           </div>
         </div>
       </div>
+    </figure>
+    <figure class="reveal society-network-phone" aria-label="Yhteiskunta rakenteiden verkostona, puhelinnäkymä">
+      <atlas-society-network></atlas-society-network>
     </figure>
   </div>
 </section>
