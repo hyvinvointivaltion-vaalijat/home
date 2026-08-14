@@ -755,7 +755,7 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
 .society-network-card{
   position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;
   background:var(--card,#FFFFFF);
-  box-shadow:0 40px 90px -60px rgba(0,68,88,.62);
+  box-shadow:none;
   isolation:isolate
 }
 .society-network-card::after{content:"";display:none}
@@ -785,8 +785,8 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
 .society-node{cursor:pointer;outline:none;transition:opacity .3s ease}
 .society-node > circle:first-child{
   fill:var(--card,#FFFFFF);stroke:var(--forest,#E50046);stroke-width:1.3;
-  filter:drop-shadow(0 7px 10px rgba(0,68,88,.10));
-  transform-box:fill-box;transform-origin:center;transition:transform .3s ease,fill .3s ease,stroke .3s ease
+  filter:none;
+  transition:fill .3s ease,stroke .3s ease,stroke-width .3s ease
 }
 .society-node:nth-of-type(odd) > circle:first-child{stroke:var(--copper,#F39200)}
 .society-node .node-pulse{
@@ -798,28 +798,30 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
   fill:var(--ink-soft,#4B6068);pointer-events:none;transition:fill .3s ease
 }
 .society-node:hover > circle:first-child,.society-node:focus-visible > circle:first-child,.society-node.is-active > circle:first-child{
-  transform:scale(1.18);fill:var(--forest,#E50046);stroke:var(--forest,#E50046)
+  fill:var(--paper-2,#FAEAD7);stroke:var(--forest,#E50046);stroke-width:2.4
 }
 .society-node:hover text,.society-node:focus-visible text,.society-node.is-active text{fill:var(--copper,#F39200)}
 .society-node.is-active .node-pulse{animation:societyNodePulse 1.55s ease-out infinite}
 .society-node.is-muted{opacity:.32}
 .society-core.is-active .core-halo{opacity:.13;animation-duration:2.4s}
 .society-network-readout{
-  position:relative;z-index:3;width:auto;min-height:92px;
-  margin:-2px 22px 20px;padding:14px 18px 14px 18px;
+  position:relative;z-index:3;width:auto;height:112px;box-sizing:border-box;overflow:hidden;
+  display:grid;grid-template-columns:124px minmax(0,1fr);align-items:start;gap:18px;
+  margin:-2px 22px 20px;padding:16px 18px;
   border-top:1px solid var(--line-soft,#F2E5D5);
   border-left:2px solid var(--copper,#F39200);
-  background:transparent
+  background:var(--card,#FFFFFF)
 }
-.society-network-kicker{display:block;margin-bottom:5px;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#F39200)}
+.society-network-kicker{display:block;padding-top:2px;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#F39200)}
+.society-network-text{min-width:0}
 .society-network-readout strong{display:block;font:600 1.06rem/1.2 "Jost","Source Sans 3",system-ui,sans-serif;color:var(--deep,#004458)}
-.society-network-readout p{margin:5px 0 0;font-size:.76rem;line-height:1.45;color:var(--ink-soft,#4B6068)}
+.society-network-readout p{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;margin:6px 0 0;font-size:.76rem;line-height:1.45;color:var(--ink-soft,#4B6068)}
 @keyframes societyFlow{to{stroke-dashoffset:-170}}
 @keyframes societyCorePulse{0%,100%{transform:scale(.92);opacity:.04}50%{transform:scale(1.13);opacity:.11}}
 @keyframes societyNodePulse{0%{transform:scale(.78);opacity:.72}100%{transform:scale(1.48);opacity:0}}
 @keyframes societyRotate{to{transform:rotate(360deg)}}
 @keyframes societySheen{0%,70%,100%{transform:translateX(-120%)}82%{transform:translateX(120%)}}
-html[data-theme="dark"] .society-network-readout{background:transparent}
+html[data-theme="dark"] .society-network-readout{background:var(--card,#182220)}
 html[data-theme="dark"] .society-node > circle:first-child{fill:#182220}
 html[data-theme="dark"] .society-network-card::after{opacity:.28}
 @media(max-width:780px){
@@ -827,7 +829,8 @@ html[data-theme="dark"] .society-network-card::after{opacity:.28}
   .society-network-meta span:last-child{display:none}
   .society-network-svg{min-width:600px;min-height:420px}
   .society-network-card{overflow-x:auto;overflow-y:hidden}
-  .society-network-readout{position:relative;left:auto;bottom:auto;width:auto;margin:0 14px 14px;padding:12px 14px 12px 14px}
+  .society-network-readout{position:relative;left:auto;bottom:auto;width:auto;height:126px;grid-template-columns:1fr;gap:5px;margin:0 14px 14px;padding:13px 14px}
+  .society-network-kicker{padding-top:0}
 }
 @media(prefers-reduced-motion:reduce){
   .society-link,.society-core .core-halo,.society-core .core-ring,.society-node .node-pulse,.society-network-card::after{animation:none!important}
@@ -863,11 +866,11 @@ svg text[data-v13-sphere-teaser="1"]:hover tspan:last-child{fill:var(--forest,#E
 /* V13.5 · yhtenäinen, gradientiton värikieli ja huolitellut lomakkeet */
 .society-core .core-disc{fill:var(--card,#FFFFFF)!important;stroke:var(--forest,#E50046);stroke-width:2}
 .society-core .core-ring{stroke:var(--copper,#F39200);opacity:.52}
-.society-core .core-halo{fill:var(--forest,#E50046);opacity:.055}
+.society-core .core-halo{fill:none;stroke:var(--forest,#E50046);stroke-width:.8;opacity:.22}
 .society-core text{fill:var(--deep,#004458)!important}
 .society-core .core-small{fill:var(--slate,#6E7F86)!important;opacity:1}
 .society-node > circle:first-child{fill:var(--card,#FFFFFF)}
-.society-node:hover > circle:first-child,.society-node:focus-visible > circle:first-child,.society-node.is-active > circle:first-child{fill:var(--paper-2,#FAEAD7);stroke:var(--forest,#E50046)}
+.society-node:hover > circle:first-child,.society-node:focus-visible > circle:first-child,.society-node.is-active > circle:first-child{fill:var(--paper-2,#FAEAD7);stroke:var(--forest,#E50046);stroke-width:2.4}
 html[data-theme="dark"] .society-core .core-disc,html[data-theme="dark"] .society-node > circle:first-child{fill:var(--card,#182220)!important}
 html[data-theme="dark"] .society-core text{fill:var(--ink,#f0eee7)!important}
 html[data-theme="dark"] .society-core .core-small{fill:var(--ink-soft,#b8c0bd)!important}
@@ -1292,12 +1295,6 @@ html[data-theme="dark"] .society-network-meta{
           <title id="society-network-title">Yhteiskunta rakenteiden verkostona</title>
           <desc id="society-network-desc">Animoitu verkosto, jossa työ, terveys, talous, koulutus, asuminen, luottamus, yhteisöt ja luonto vaikuttavat toisiinsa yhteisen järjestelmän kautta.</desc>
 
-          <defs>
-            <filter id="society-node-shadow" x="-80%" y="-80%" width="260%" height="260%">
-              <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#004458" flood-opacity=".14"/>
-            </filter>
-          </defs>
-
           <g class="society-grid" aria-hidden="true">
             <path d="M70 100H650M70 180H650M70 260H650M70 340H650M70 420H650"/>
             <path d="M120 60V460M240 60V460M360 60V460M480 60V460M600 60V460"/>
@@ -1339,7 +1336,7 @@ html[data-theme="dark"] .society-network-meta{
              aria-label="Yhteinen järjestelmä. Kaikki rakenteet vaikuttavat toisiinsa.">
             <circle class="core-halo" cx="360" cy="260" r="74"/>
             <circle class="core-ring" cx="360" cy="260" r="61"/>
-            <circle class="core-disc" cx="360" cy="260" r="52"  filter="url(#society-node-shadow)"/>
+            <circle class="core-disc" cx="360" cy="260" r="52"/>
             <text x="360" y="250" text-anchor="middle">YHTEINEN</text>
             <text x="360" y="267" text-anchor="middle">JÄRJESTELMÄ</text>
             <text class="core-small" x="360" y="285" text-anchor="middle">RISKI · ARVO · TURVA</text>
@@ -1412,8 +1409,10 @@ html[data-theme="dark"] .society-network-meta{
 
         <div class="society-network-readout" aria-live="polite">
           <span class="society-network-kicker" id="society-network-kicker">VERKOSTOVAIKUTUS</span>
-          <strong id="society-network-heading">Yksi muutos ei jää yhteen kohtaan.</strong>
-          <p id="society-network-copy">Rakenteet välittävät vaikutuksia eteenpäin. Valitse solmu tai seuraa animaatiota.</p>
+          <div class="society-network-text">
+            <strong id="society-network-heading">Yksi muutos ei jää yhteen kohtaan.</strong>
+            <p id="society-network-copy">Rakenteet välittävät vaikutuksia eteenpäin. Valitse solmu tai seuraa animaatiota.</p>
+          </div>
         </div>
       </div>
       <figcaption class="figcap">Kuvio 1 — Yhteiskunta rakenteiden verkostona · kosketa rakennetta nähdäksesi sen yhteydet</figcaption>
