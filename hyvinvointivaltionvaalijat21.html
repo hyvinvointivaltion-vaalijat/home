@@ -806,16 +806,15 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
 .society-core.is-active .core-halo{opacity:.13;animation-duration:2.4s}
 .society-network-readout{
   position:absolute;z-index:3;left:22px;bottom:20px;
-  width:min(410px,calc(100% - 44px));height:104px;box-sizing:border-box;overflow:hidden;
-  display:grid;grid-template-columns:112px minmax(0,1fr);align-items:start;gap:16px;
-  margin:0;padding:15px 17px;
-  border:1px solid var(--line,#EAD9C4);
-  border-left:3px solid var(--copper,#F39200);
-  border-radius:12px;
+  width:min(380px,calc(100% - 44px));height:96px;box-sizing:border-box;overflow:hidden;
+  display:block;
+  margin:0;padding:12px 14px;
+  border:0;
+  border-radius:0;
   background:var(--card,#FFFFFF);
   pointer-events:none
 }
-.society-network-kicker{display:block;padding-top:2px;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#F39200)}
+.society-network-kicker{display:block;margin-bottom:4px;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#F39200)}
 .society-network-text{min-width:0}
 .society-network-readout strong{display:block;font:600 1.06rem/1.2 "Jost","Source Sans 3",system-ui,sans-serif;color:var(--deep,#004458)}
 .society-network-readout p{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;margin:6px 0 0;font-size:.76rem;line-height:1.45;color:var(--ink-soft,#4B6068)}
@@ -832,8 +831,8 @@ html[data-theme="dark"] .society-network-card::after{opacity:.28}
   .society-network-meta span:last-child{display:none}
   .society-network-svg{min-width:600px;min-height:420px}
   .society-network-card{overflow-x:auto;overflow-y:hidden}
-  .society-network-readout{position:sticky;left:14px;bottom:14px;width:calc(100vw - 58px);max-width:380px;height:108px;grid-template-columns:96px minmax(0,1fr);gap:12px;margin-top:-122px;margin-bottom:14px;padding:13px 14px}
-  .society-network-kicker{padding-top:1px;letter-spacing:.11em}
+  .society-network-readout{position:sticky;left:14px;bottom:14px;width:calc(100vw - 58px);max-width:360px;height:98px;margin-top:-112px;margin-bottom:14px;padding:11px 13px}
+  .society-network-kicker{letter-spacing:.11em}
 }
 @media(prefers-reduced-motion:reduce){
   .society-link,.society-core .core-halo,.society-core .core-ring,.society-node .node-pulse,.society-network-card::after{animation:none!important}
@@ -1029,6 +1028,10 @@ h2{font-size:clamp(1.7rem,3.4vw,2.8rem)}
 /* --- Viimeistely: fokus, valinta, tekstin laatu, tulostus --- */
 html{-webkit-text-size-adjust:100%}
 body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.v13-brand h1{
+  margin:0;font:700 .94rem/1.1 "Jost","Source Sans 3",system-ui,sans-serif;
+  letter-spacing:.005em;text-transform:none;white-space:nowrap
+}
 
 /* --- Saavutettava vaalea teema --- */
 :root{
@@ -1140,6 +1143,9 @@ html[data-theme="dark"] .society-network-meta{
     animation-duration:.001ms!important;animation-iteration-count:1!important;
     transition-duration:.001ms!important;scroll-behavior:auto!important;
   }
+}
+@media (max-width:760px){
+  .v13-brand h1{font-size:.82rem}
 }
 @media print{
   .v13-topbar,.nav,.mobile,.burger,.backtop,.v13-account-overlay,
@@ -1293,7 +1299,7 @@ html[data-theme="dark"] .society-network-meta{
           <span id="society-network-state">Yhden osan muutos etenee koko järjestelmään</span>
         </div>
 
-        <svg class="society-network-svg" viewBox="0 0 720 520" role="img"
+        <svg class="society-network-svg" viewBox="0 0 720 630" role="img"
              aria-labelledby="society-network-title society-network-desc">
           <title id="society-network-title">Yhteiskunta rakenteiden verkostona</title>
           <desc id="society-network-desc">Animoitu verkosto, jossa työ, terveys, talous, koulutus, asuminen, luottamus, yhteisöt ja luonto vaikuttavat toisiinsa yhteisen järjestelmän kautta.</desc>
@@ -1418,7 +1424,6 @@ html[data-theme="dark"] .society-network-meta{
           </div>
         </div>
       </div>
-      <figcaption class="figcap">Kuvio 1 — Yhteiskunta rakenteiden verkostona · kosketa rakennetta nähdäksesi sen yhteydet</figcaption>
     </figure>
   </div>
 </section>
