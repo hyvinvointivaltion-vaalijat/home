@@ -27,6 +27,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="modulepreload" href="https://harrikayhko.fi/atlas/components/atlas-ui.js" crossorigin>
 <script type="module" src="https://harrikayhko.fi/atlas/components/atlas-ui.js"></script>
+<script type="module" src="https://harrikayhko.fi/atlas/components/atlas-society-network.js?v=20260814-1"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"NGO","@id":"#organisaatio","name":"Hyvinvointivaltion Vaalijat ry","alternateName":"Hyvinvointivaltion Vaalijat","description":"Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena.","email":"juha.nurmela1@gmail.com","telephone":"+358408319466","areaServed":"FI","inLanguage":"fi","knowsLanguage":"fi","contactPoint":{"@type":"ContactPoint","contactType":"yleiset yhteydenotot","email":"juha.nurmela1@gmail.com","telephone":"+358408319466","availableLanguage":"fi"}},
@@ -757,6 +758,7 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
 /* V13.3 · Kuvio 1 — Yhteiskunta rakenteiden verkostona */
 .society-network-figure{margin:0;min-width:0}
 .society-network-phone{display:none;margin:0;min-width:0}
+.society-network-phone atlas-society-network:not(:defined){display:block;min-height:220px;padding:28px 22px;border:1px solid var(--line);border-radius:18px;background:#102f2c;color:#f5f1e8;font:600 .9rem/1.5 "Source Sans 3",system-ui,sans-serif}
 .society-network-card{
   position:relative;overflow:hidden;border:1px solid var(--line);border-radius:20px;
   background:var(--card,#FFFFFF);
@@ -1451,8 +1453,8 @@ html[data-theme="dark"] .society-network-meta{
         </div>
       </div>
     </figure>
-    <figure class="reveal society-network-phone" aria-label="Yhteiskunta rakenteiden verkostona, puhelinnäkymä">
-      <atlas-society-network></atlas-society-network>
+    <figure class="society-network-phone" aria-label="Yhteiskunta rakenteiden verkostona, puhelinnäkymä">
+      <atlas-society-network>Phone-visualisointia ladataan…</atlas-society-network>
     </figure>
   </div>
 </section>
