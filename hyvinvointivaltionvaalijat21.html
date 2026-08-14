@@ -805,12 +805,15 @@ html[data-theme="dark"] .hero figure svg{filter:brightness(.84) saturate(.9)}
 .society-node.is-muted{opacity:.32}
 .society-core.is-active .core-halo{opacity:.13;animation-duration:2.4s}
 .society-network-readout{
-  position:relative;z-index:3;width:auto;height:112px;box-sizing:border-box;overflow:hidden;
-  display:grid;grid-template-columns:124px minmax(0,1fr);align-items:start;gap:18px;
-  margin:-2px 22px 20px;padding:16px 18px;
-  border-top:1px solid var(--line-soft,#F2E5D5);
-  border-left:2px solid var(--copper,#F39200);
-  background:var(--card,#FFFFFF)
+  position:absolute;z-index:3;left:22px;bottom:20px;
+  width:min(410px,calc(100% - 44px));height:104px;box-sizing:border-box;overflow:hidden;
+  display:grid;grid-template-columns:112px minmax(0,1fr);align-items:start;gap:16px;
+  margin:0;padding:15px 17px;
+  border:1px solid var(--line,#EAD9C4);
+  border-left:3px solid var(--copper,#F39200);
+  border-radius:12px;
+  background:var(--card,#FFFFFF);
+  pointer-events:none
 }
 .society-network-kicker{display:block;padding-top:2px;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--copper,#F39200)}
 .society-network-text{min-width:0}
@@ -829,8 +832,8 @@ html[data-theme="dark"] .society-network-card::after{opacity:.28}
   .society-network-meta span:last-child{display:none}
   .society-network-svg{min-width:600px;min-height:420px}
   .society-network-card{overflow-x:auto;overflow-y:hidden}
-  .society-network-readout{position:relative;left:auto;bottom:auto;width:auto;height:126px;grid-template-columns:1fr;gap:5px;margin:0 14px 14px;padding:13px 14px}
-  .society-network-kicker{padding-top:0}
+  .society-network-readout{position:sticky;left:14px;bottom:14px;width:calc(100vw - 58px);max-width:380px;height:108px;grid-template-columns:96px minmax(0,1fr);gap:12px;margin-top:-122px;margin-bottom:14px;padding:13px 14px}
+  .society-network-kicker{padding-top:1px;letter-spacing:.11em}
 }
 @media(prefers-reduced-motion:reduce){
   .society-link,.society-core .core-halo,.society-core .core-ring,.society-node .node-pulse,.society-network-card::after{animation:none!important}
