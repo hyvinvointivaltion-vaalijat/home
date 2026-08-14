@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hyvinvointivaltion Vaalijat ry · v13.5</title>
+<title>Hyvinvointivaltion Vaalijat ry</title>
 <meta name="description" content="Hyvinvointivaltion Vaalijat ry tarkastelee suomalaista hyvinvointivaltiota kokonaisuutena: rakenteina, riippuvuuksina ja muutoksena." />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Hyvinvointivaltion Vaalijat ry — Hyvinvointivaltio on verkosto" />
@@ -923,8 +923,9 @@ html[data-theme="dark"] .v13-account-field input,html[data-theme="dark"] .v13-fi
    Valkoinen pohja, ei yhtään liukuväriä, oranssi pääväri,
    lihavat suuraakkosotsikot geometrisella groteskilla ja serif-leipäteksti. */
 :root{
-  --kf-orange:#ED7102;
-  --kf-orange-2:#F39200;
+  /* Saavutettava tekstioranssi: toimii myös pienessä tekstissä valkoisella. */
+  --kf-orange:#A94F00;
+  --kf-orange-2:#B85A00;
   --kf-magenta:#E50046;
   --kf-blue:#74C9E5;
   --kf-blue-soft:#EAF6FB;
@@ -933,14 +934,14 @@ html[data-theme="dark"] .v13-account-field input,html[data-theme="dark"] .v13-fi
   --paper:#FFFFFF;
   --paper-2:#FFFFFF;
   --card:#FFFFFF;
-  --line:#DCDCDC;
+  --line:#CECECE;
   --line-soft:#EAEAEA;
   --ink:#111111;
   --ink-soft:#3D3D3D;
-  --slate:#6B6B6B;
+  --slate:#595959;
   --deep:#004458;
-  --forest:#ED7102;
-  --forest-2:#D06200;
+  --forest:#A94F00;
+  --forest-2:#823D00;
   --copper:#E50046;
   --amber:#F39200;
 }
@@ -1022,6 +1023,96 @@ h2{font-size:clamp(1.7rem,3.4vw,2.8rem)}
 /* --- Viimeistely: fokus, valinta, tekstin laatu, tulostus --- */
 html{-webkit-text-size-adjust:100%}
 body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+/* --- Saavutettava vaalea teema --- */
+:root{
+  --ink:#111111;
+  --ink-soft:#3D3D3D;
+  --slate:#595959;
+}
+.news-kicker,.write .meta,.hero-strip b,.shead .num,
+.v13-pro,.v13-account-badge.pro,.v13-paytrail-banner,
+.society-network-kicker{
+  color:var(--kf-orange)!important;
+}
+.v13-module-question,.v13-module-option small,.v13-loader,
+.v13-account-meta,.v13-remember,.society-network-meta{
+  color:var(--slate)!important;
+}
+.v13-tab,.v13-account,.v13-module-arrow,.v13-account-close{
+  color:var(--slate);
+}
+.btn-primary,.links a[data-action="join"],.v13-tab[aria-selected="true"],
+.v13-primary,.v13-account-btn.primary{
+  background-color:var(--kf-orange)!important;
+  border-color:var(--kf-orange)!important;
+  color:#FFFFFF!important;
+}
+.btn-primary:hover,.links a[data-action="join"]:hover,
+.v13-primary:hover,.v13-account-btn.primary:hover{
+  background-color:var(--kf-teal)!important;
+  border-color:var(--kf-teal)!important;
+}
+
+/* Tumma teema ei saa jättää vaaleaa tekstiä valkoisille pinnoille. */
+html[data-theme="dark"] body{background:#111817!important;color:var(--ink)}
+html[data-theme="dark"] section,
+html[data-theme="dark"] .atlas-lab,
+html[data-theme="dark"] .atlas-stage,
+html[data-theme="dark"] .atlas-toolbar,
+html[data-theme="dark"] .welfare-map{
+  background-color:#111817!important;
+}
+html[data-theme="dark"] .v13-topbar,
+html[data-theme="dark"] .v13-module-menu{
+  background-color:#17211F!important;
+}
+html[data-theme="dark"] .v13-module-current,
+html[data-theme="dark"] .hero figure svg,
+html[data-theme="dark"] .hero-strip div,
+html[data-theme="dark"] .news-card,
+html[data-theme="dark"] .news-card.pinned,
+html[data-theme="dark"] .write,
+html[data-theme="dark"] .org-card,
+html[data-theme="dark"] .board-card,
+html[data-theme="dark"] .doc-group,
+html[data-theme="dark"] .atlas-shell,
+html[data-theme="dark"] .atlas-reading-visual,
+html[data-theme="dark"] .atlas-indicator-visual,
+html[data-theme="dark"] .society-network-card{
+  background-color:#182220!important;
+}
+html[data-theme="dark"] .v13-tab[aria-selected="true"]{
+  background-color:#D17838!important;
+  border-color:#D17838!important;
+  color:#111817!important;
+}
+html[data-theme="dark"] .news-kicker,
+html[data-theme="dark"] .write .meta,
+html[data-theme="dark"] .hero-strip b,
+html[data-theme="dark"] .shead .num,
+html[data-theme="dark"] .v13-pro,
+html[data-theme="dark"] .v13-account-badge.pro,
+html[data-theme="dark"] .v13-paytrail-banner,
+html[data-theme="dark"] .society-network-kicker{
+  color:#E6A06D!important;
+}
+html[data-theme="dark"] .v13-module-question,
+html[data-theme="dark"] .v13-module-option small,
+html[data-theme="dark"] .v13-loader,
+html[data-theme="dark"] .v13-account-meta,
+html[data-theme="dark"] .v13-remember,
+html[data-theme="dark"] .society-network-meta{
+  color:#B8C0BD!important;
+}
+
+/* Lomakkeiden nimet on yhdistetty näkyvästi syötekenttiin. */
+.v13-account-field label,.v13-field label{display:block;color:var(--ink-soft)!important}
+.v13-account-field input::placeholder,.v13-field input::placeholder,
+.v13-field textarea::placeholder,.v13-volunteer-extra input::placeholder,
+.v13-volunteer-extra textarea::placeholder{color:#707070;opacity:1}
+:where(button,a,input,textarea,select):disabled{cursor:not-allowed}
+:where(button,a,input,textarea,select):focus-visible{outline-color:var(--kf-orange)}
 :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
   outline:2px solid var(--deep);
   outline-offset:3px;
@@ -1143,14 +1234,14 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-o
     <div id="v13SignedOut">
       <div class="v13-account-section" id="v13EmailStep">
         <p class="v13-account-meta">Anna sähköpostiosoitteesi. Lähetämme siihen 6-numeroisen vahvistustunnuksen.</p>
-        <div class="v13-account-field"><label>Sähköpostiosoite</label><input id="v13AccountEmail" type="email" autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+        <div class="v13-account-field"><label for="v13AccountEmail">Sähköpostiosoite</label><input id="v13AccountEmail" type="email" autocomplete="email" placeholder="nimi@esimerkki.fi" aria-describedby="v13LoginStatus"></div>
         <label class="v13-remember"><input id="v13Remember" type="checkbox"> <span>Pidä minut kirjautuneena tällä laitteella</span></label>
         <div class="v13-account-actions"><button class="v13-account-btn primary" id="v13Continue" type="button">Lähetä vahvistustunnus</button></div>
         <div class="v13-account-meta" id="v13LoginStatus" style="margin-top:10px"></div>
       </div>
       <div class="v13-account-section" id="v13OtpStep" hidden>
         <p class="v13-account-meta" id="v13OtpIntro"></p>
-        <div class="v13-account-field"><label>Vahvistustunnus</label><input id="v13Otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000"></div>
+        <div class="v13-account-field"><label for="v13Otp">Vahvistustunnus</label><input id="v13Otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" aria-describedby="v13OtpStatus"></div>
         <div class="v13-account-actions">
           <button class="v13-account-btn primary" id="v13VerifyOtp" type="button">Vahvista ja jatka</button>
           <button class="v13-account-btn" id="v13ResendOtp" type="button">Lähetä uusi tunnus <span id="v13Cooldown"></span></button>
@@ -1611,7 +1702,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-o
     <h3>Asioi sähköpostiosoitteellasi</h3>
     <p class="intro">Sähköpostiosoite toimii tunnisteena. Lähetämme siihen 6-numeroisen vahvistustunnuksen. Vahvistuksen jälkeen voit täyttää tai päivittää yhteystietosi ja valita jäsenyyden, lahjoituksen tai vapaaehtoisuuden.</p>
     <div class="v13-identity-row">
-      <div class="v13-field"><label>Sähköpostiosoite</label><input type="email" data-email autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
+      <div class="v13-field"><label for="v13IdentityEmail">Sähköpostiosoite</label><input id="v13IdentityEmail" type="email" data-email autocomplete="email" placeholder="nimi@esimerkki.fi"></div>
       <button class="v13-primary" type="button" data-action="identity">Jatka</button>
     </div>
     <div class="v13-status" data-status role="status" aria-live="polite"></div>
@@ -1623,13 +1714,13 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-o
       <button class="v13-secondary" type="button" data-action="change-email">Vaihda sähköposti</button>
     </div>
     <div class="v13-profile-form">
-      <div class="v13-field wide"><label>Sähköpostiosoite</label><input data-field="email" type="email" autocomplete="email"></div>
-      <div class="v13-field"><label>Nimi</label><input data-field="full_name" autocomplete="name"></div>
-      <div class="v13-field"><label>Puhelin</label><input data-field="phone" autocomplete="tel"></div>
-      <div class="v13-field"><label>Kunta</label><input data-field="municipality"></div>
-      <div class="v13-field"><label>Lähiosoite</label><input data-field="address_line" autocomplete="street-address"></div>
-      <div class="v13-field"><label>Postinumero</label><input data-field="postal_code" autocomplete="postal-code"></div>
-      <div class="v13-field"><label>Postitoimipaikka</label><input data-field="city" autocomplete="address-level2"></div>
+      <div class="v13-field wide"><label for="v13ProfileEmail">Sähköpostiosoite</label><input id="v13ProfileEmail" data-field="email" type="email" autocomplete="email"></div>
+      <div class="v13-field"><label for="v13ProfileName">Nimi</label><input id="v13ProfileName" data-field="full_name" autocomplete="name"></div>
+      <div class="v13-field"><label for="v13ProfilePhone">Puhelin</label><input id="v13ProfilePhone" data-field="phone" autocomplete="tel"></div>
+      <div class="v13-field"><label for="v13ProfileMunicipality">Kunta</label><input id="v13ProfileMunicipality" data-field="municipality" autocomplete="address-level2"></div>
+      <div class="v13-field"><label for="v13ProfileAddress">Lähiosoite</label><input id="v13ProfileAddress" data-field="address_line" autocomplete="street-address"></div>
+      <div class="v13-field"><label for="v13ProfilePostalCode">Postinumero</label><input id="v13ProfilePostalCode" data-field="postal_code" autocomplete="postal-code"></div>
+      <div class="v13-field"><label for="v13ProfileCity">Postitoimipaikka</label><input id="v13ProfileCity" data-field="city" autocomplete="address-level2"></div>
     </div>
     <div class="v13-profile-actions"><button class="v13-secondary" type="button" data-action="save-profile">Päivitä tiedot</button></div>
 
