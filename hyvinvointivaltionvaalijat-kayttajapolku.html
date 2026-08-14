@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Mitä hyvinvointivaltiolle tapahtuu, miten suuntaa voidaan muuttaa ja miten voit osallistua? Hyvinvointivaltion Vaalijat ry tekee yhteydet ja vaihtoehdot näkyviksi.">
+  <title>Hyvinvointivaltion Vaalijat – ymmärrä, vaikuta ja tule mukaan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="https://harrikayhko.fi/atlas/components/atlas-society-network.js?v=20260814-1"></script>
+  <style>
+    :root{
+      --paper:#f8f4eb;--surface:#fffdf8;--ink:#17312e;--muted:#526662;--line:#ddd5c7;
+      --forest:#185e57;--deep:#0f3d39;--teal:#83bcb2;--orange:#c96825;--yellow:#edae3b;
+      --max:1180px;--radius:18px;--shadow:0 24px 60px -46px rgba(13,61,57,.45)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:88px}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.58}
+    a{color:inherit}.skip{position:fixed;left:12px;top:-70px;z-index:999;padding:10px 14px;background:var(--deep);color:#fff}.skip:focus{top:12px}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin-inline:auto}
+    .site-head{position:sticky;top:0;z-index:100;min-height:68px;border-bottom:1px solid var(--line);background:rgba(255,253,248,.96);backdrop-filter:blur(12px)}
+    .head-in{min-height:68px;display:flex;align-items:center;gap:24px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-mark{width:24px;height:24px;border-radius:50%;background:var(--forest);box-shadow:inset 0 0 0 7px var(--surface);border:2px solid var(--forest)}
+    .brand strong{font:600 clamp(.92rem,2vw,1.06rem)/1.05 Jost,sans-serif;white-space:nowrap}
+    .test-label{padding:4px 7px;border:1px solid var(--line);border-radius:999px;color:var(--orange);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    .main-nav{display:flex;align-items:center;gap:22px;margin-left:auto}
+    .main-nav a{text-decoration:none;color:var(--muted);font-size:.84rem;font-weight:650}.main-nav a:hover{color:var(--forest)}
+    .head-cta{padding:9px 14px!important;border-radius:8px;background:var(--deep);color:#fff!important}
+    .menu-btn{display:none;margin-left:auto;width:42px;height:42px;border:1px solid var(--line);border-radius:9px;background:var(--surface);font-size:1.2rem}
+    .hero{padding:clamp(68px,9vw,124px) 0 56px;border-bottom:1px solid var(--line)}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:clamp(44px,7vw,92px);align-items:center}
+    .eyebrow{display:flex;align-items:center;gap:9px;margin-bottom:19px;color:var(--orange);font-size:.69rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase}
+    .eyebrow::before{content:"";width:28px;height:2px;background:var(--orange)}
+    h1,h2,h3{font-family:Jost,sans-serif;color:var(--deep)}
+    h1{max-width:760px;margin:0;font-size:clamp(2.65rem,6vw,5.7rem);line-height:.98;letter-spacing:-.048em}
+    h1 span{color:var(--orange)}
+    .hero-lead{max-width:690px;margin:25px 0 0;color:var(--muted);font-size:clamp(1.08rem,2vw,1.35rem);line-height:1.48}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+    .button{display:inline-flex;align-items:center;justify-content:center;min-height:47px;padding:11px 17px;border:1px solid var(--deep);border-radius:9px;text-decoration:none;font-weight:700;font-size:.9rem}
+    .button.primary{background:var(--deep);color:#fff}.button.secondary{background:transparent;color:var(--deep)}
+    .button:hover{transform:translateY(-1px)}
+    .promise{position:relative;padding:26px 25px 24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+    .promise::before{content:"";position:absolute;left:-1px;top:24px;bottom:24px;width:2px;border-radius:12px;background:var(--orange)}
+    .promise small{color:var(--orange);font-size:.65rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}
+    .promise h2{margin:8px 0 12px;font-size:1.45rem;line-height:1.15}
+    .promise p{margin:0;color:var(--muted);font-size:.95rem}
+    .promise ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}
+    .promise li{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;font-weight:600}.promise li::before{content:"→";color:var(--orange)}
+    .paths{padding:58px 0 88px}
+    .intro{max-width:760px}.intro h2{margin:0;font-size:clamp(2rem,4vw,3.35rem);line-height:1.05;letter-spacing:-.035em}.intro p{color:var(--muted);font-size:1.06rem}
+    .path-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+    .path{display:flex;flex-direction:column;min-height:310px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);text-decoration:none;box-shadow:var(--shadow);transition:transform .18s,border-color .18s}
+    .path:hover{transform:translateY(-3px);border-color:var(--teal)}
+    .path-num{color:var(--orange);font:700 .7rem/1 Jost,sans-serif;letter-spacing:.13em}.path h3{margin:34px 0 10px;font-size:1.55rem;line-height:1.1}.path p{margin:0;color:var(--muted);font-size:.94rem}.path-link{margin-top:auto;padding-top:22px;color:var(--forest);font-weight:750;font-size:.85rem}
+    .section{padding:clamp(72px,9vw,112px) 0;border-top:1px solid var(--line)}
+    .section-head{display:grid;grid-template-columns:180px minmax(0,760px);gap:30px;margin-bottom:42px}
+    .section-index{color:var(--orange);font-size:.68rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase}
+    .section-head h2{margin:0;font-size:clamp(2.1rem,4.7vw,4rem);line-height:1.02;letter-spacing:-.04em}.section-head p{max-width:700px;margin:17px 0 0;color:var(--muted);font-size:1.08rem}
+    .question-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;border:1px solid var(--line);border-radius:var(--radius);background:var(--line);overflow:hidden}
+    .question{padding:27px;background:var(--surface)}
+    .question span{color:var(--orange);font-size:.61rem;font-weight:750;letter-spacing:.12em;text-transform:uppercase}.question h3{margin:8px 0 9px;font-size:1.28rem}.question p{margin:0;color:var(--muted);font-size:.92rem}
+    .insight{margin-top:26px;padding:22px 24px 22px 30px;border-left:2px solid var(--orange);background:var(--surface)}
+    .insight strong{color:var(--deep);font-size:1.12rem}.insight p{margin:5px 0 0;color:var(--muted)}
+    .network-layout{display:grid;grid-template-columns:minmax(300px,.72fr) minmax(360px,1.28fr);gap:42px;align-items:center}
+    .network-copy h2{margin:0;font-size:clamp(2rem,4vw,3.5rem);line-height:1.04;letter-spacing:-.035em}.network-copy p{color:var(--muted)}
+    .network-copy ol{margin:24px 0 0;padding:0;list-style:none;display:grid;gap:13px;counter-reset:steps}.network-copy li{counter-increment:steps;display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start;font-size:.92rem}.network-copy li::before{content:counter(steps);display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--teal);border-radius:50%;color:var(--forest);font-weight:750}
+    atlas-society-network{display:block;width:100%;max-width:620px;margin-inline:auto;--atlas-sans:"Source Sans 3",system-ui,sans-serif}
+    atlas-society-network:not(:defined){display:grid;place-items:center;min-height:520px;border-radius:18px;background:#102f2c;color:#fff}
+    .solutions{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .solution{padding:25px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+    .solution-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--deep);color:#fff;font-weight:750}.solution h3{margin:22px 0 9px;font-size:1.25rem}.solution p{margin:0;color:var(--muted);font-size:.92rem}
+    .principle{margin-top:18px;padding:21px;border:1px solid #dfb989;border-radius:var(--radius);background:#fff8ec;color:#65441f;font-size:.94rem}
+    .atlas-cta{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding:clamp(28px,5vw,52px);border-radius:22px;background:#102f2c;color:#eef5f1}
+    .atlas-cta h2{margin:0;color:#fff;font-size:clamp(2rem,4vw,3.6rem);line-height:1.04}.atlas-cta p{max-width:680px;margin:14px 0 0;color:#bcd1cb}.atlas-cta .button{border-color:#f2a33c;background:#f2a33c;color:#102f2c}
+    .trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}.trust-card{padding:27px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}.trust-card h3{margin:0 0 10px}.trust-card p{color:var(--muted)}.trust-card ul{padding-left:19px;color:var(--muted)}
+    .join{background:var(--deep);color:#edf4f1}.join .section-head h2{color:#fff}.join .section-head p{color:#bbd0ca}.join .section-index{color:#f2a33c}
+    .join-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.join-card{display:flex;flex-direction:column;padding:24px;border:1px solid rgba(220,239,233,.22);border-radius:var(--radius);background:#174944}.join-card h3{margin:0 0 9px;color:#fff}.join-card p{margin:0;color:#bfd1cc;font-size:.92rem}.join-card a{margin-top:auto;padding-top:24px;color:#f4b44f;font-weight:750;text-decoration:none}
+    .site-foot{padding:38px 0;background:#0b2825;color:#abc2bc}.foot-in{display:flex;justify-content:space-between;gap:30px}.site-foot strong{color:#fff}.site-foot a{color:#dbe9e5}
+    @media(max-width:900px){.main-nav{display:none;position:absolute;left:0;right:0;top:68px;padding:14px 20px 20px;border-bottom:1px solid var(--line);background:var(--surface);flex-direction:column;align-items:stretch}.main-nav.open{display:flex}.menu-btn{display:block}.hero-grid,.network-layout{grid-template-columns:1fr}.promise{max-width:620px}.path-grid,.solutions,.join-grid{grid-template-columns:1fr}.path{min-height:230px}.section-head{grid-template-columns:1fr;gap:9px}.trust-grid{grid-template-columns:1fr}.atlas-cta{grid-template-columns:1fr}.brand .test-label{display:none}}
+    @media(max-width:620px){.wrap{width:min(100% - 28px,var(--max))}.brand strong{max-width:220px;white-space:normal}.hero{padding-top:54px}.question-grid{grid-template-columns:1fr}.question{padding:22px}.network-layout{gap:26px}.section{padding:68px 0}.foot-in{flex-direction:column}.actions .button{width:100%}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.path,.button{transition:none}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#sisalto">Siirry sisältöön</a>
+  <header class="site-head">
+    <div class="wrap head-in">
+      <a class="brand" href="#alku"><span class="brand-mark" aria-hidden="true"></span><strong>Hyvinvointivaltion Vaalijat ry</strong><span class="test-label">Käyttäjäversio</span></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Avaa valikko">☰</button>
+      <nav class="main-nav" id="mainNav" aria-label="Päänavigaatio">
+        <a href="#tilanne">Mitä tapahtuu?</a><a href="#ratkaisut">Mitä voidaan tehdä?</a><a href="#atlas">Tutki yhteyksiä</a><a href="#luottamus">Keitä olemme?</a><a class="head-cta" href="#mukaan">Tule mukaan</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="sisalto">
+    <section class="hero" id="alku">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">Hyvinvointivaltio koskee meitä kaikkia</div>
+          <h1>Miksi yhteinen turva <span>ei enää tunnu varmalta?</span></h1>
+          <p class="hero-lead">Palvelut, työ, talous, koulutus, luottamus ja ympäristö eivät ole erillisiä ongelmia. Autamme näkemään, miten ne liittyvät toisiinsa — ja missä suunnanmuutos on mahdollinen.</p>
+          <div class="actions"><a class="button primary" href="#polut">Löydä oma reittisi</a><a class="button secondary" href="#verkosto">Näe yhteydet</a></div>
+        </div>
+        <aside class="promise" aria-label="Mitä löydät tältä sivulta">
+          <small>Tältä sivulta löydät</small><h2>Ymmärrettävän kokonaiskuvan</h2>
+          <p>Sinun ei tarvitse tuntea järjestelmän käsitteitä tai historiaa etukäteen.</p>
+          <ul><li>Mitä hyvinvointivaltiolle tapahtuu?</li><li>Mihin kehitys perustuu?</li><li>Millaisia vaihtoehtoja meillä on?</li><li>Miten voit osallistua?</li></ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="paths" id="polut">
+      <div class="wrap">
+        <div class="intro"><div class="eyebrow">Mikä toi sinut tänne?</div><h2>Aloita omasta kysymyksestäsi.</h2><p>Kaikkea ei tarvitse lukea järjestyksessä. Valitse se reitti, joka vastaa omaa kiinnostustasi.</p></div>
+        <div class="path-grid">
+          <a class="path" href="#tilanne"><span class="path-num">REITTI 01</span><h3>Haluan ymmärtää, mitä tapahtuu</h3><p>Miksi palvelut, julkinen talous ja ihmisten turvallisuuden tunne ovat samanaikaisesti paineessa?</p><span class="path-link">Muodosta tilannekuva →</span></a>
+          <a class="path" href="#ratkaisut"><span class="path-num">REITTI 02</span><h3>Haluan nähdä vaihtoehtoja</h3><p>Onko kehityksen suunta väistämätön, vai voidaanko rakenteita uudistaa oikeudenmukaisesti?</p><span class="path-link">Tutustu ratkaisusuuntiin →</span></a>
+          <a class="path" href="#mukaan"><span class="path-num">REITTI 03</span><h3>Haluan osallistua</h3><p>Miten voin tukea keskustelua, tuoda osaamiseni mukaan tai liittyä yhdistykseen?</p><span class="path-link">Katso osallistumisen tavat →</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tilanne">
+      <div class="wrap">
+        <header class="section-head"><div class="section-index">01 · Tilanne</div><div><h2>Kyse ei ole vain yhdestä kriisistä.</h2><p>Hyvinvointivaltion ongelmat näkyvät arjessa erillisinä, mutta niiden taustalla vaikuttavat yhteiset rakenteet ja toisiaan vahvistavat muutokset.</p></div></header>
+        <div class="question-grid">
+          <article class="question"><span>Palvelut</span><h3>Miksi apua joutuu odottamaan?</h3><p>Väestön tarpeet, työntekijöiden saatavuus, rahoitus ja palvelujen järjestämistapa vaikuttavat samaan aikaan.</p></article>
+          <article class="question"><span>Toimeentulo</span><h3>Miksi työ ei aina tuo turvaa?</h3><p>Työmarkkinat, asumisen kustannukset, sosiaaliturva ja verotus muodostavat kokonaisuuden, jota yksittäinen ratkaisu ei korjaa.</p></article>
+          <article class="question"><span>Julkinen talous</span><h3>Miksi rahat eivät tunnu riittävän?</h3><p>Menot ja tulot ovat vain näkyvä pinta. Niiden alla ovat väestö, tuottavuus, omistus, veropohja ja poliittiset valinnat.</p></article>
+          <article class="question"><span>Luottamus</span><h3>Miksi yhteinen suunta katoaa?</h3><p>Kun ihmiset kokevat riskien ja mahdollisuuksien jakautuvan epäreilusti, myös järjestelmän hyväksyttävyys heikkenee.</p></article>
+        </div>
+        <div class="insight"><strong>Ydinajatus:</strong><p>Jos ongelmat syntyvät verkostossa, niitä ei voida ratkaista toisistaan irrallisina säästöinä, hankkeina tai palveluina.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="verkosto">
+      <div class="wrap network-layout">
+        <div class="network-copy"><div class="eyebrow">Kokeile itse</div><h2>Yksi muutos kulkee koko järjestelmän läpi.</h2><p>Valitse verkostosta esimerkiksi työ, terveys tai luottamus. Näet, miksi yhden rakenteen muutos vaikuttaa myös muihin.</p><ol><li>Valitse sinua kiinnostava rakenne.</li><li>Katso, mihin se kytkeytyy.</li><li>Lue lyhyt selitys vaikutuksesta.</li></ol></div>
+        <atlas-society-network>Verkostovisualisointia ladataan…</atlas-society-network>
+      </div>
+    </section>
+
+    <section class="section" id="ratkaisut">
+      <div class="wrap">
+        <header class="section-head"><div class="section-index">02 · Vaihtoehdot</div><div><h2>Suunta ei ole ennalta määrätty.</h2><p>Yhdistys ei etsi yhtä taikaratkaisua. Tavoitteena on arvioida muutoksia sen perusteella, vahvistavatko ne yhteistä turvaa, toimintakykyä ja oikeudenmukaista riskien jakoa.</p></div></header>
+        <div class="solutions">
+          <article class="solution"><span class="solution-icon">1</span><h3>Näe kokonaisvaikutus</h3><p>Päätöstä ei arvioida vain yhden budjettivuoden tai hallinnonalan kautta, vaan sen pitkien ja välillisten vaikutusten perusteella.</p></article>
+          <article class="solution"><span class="solution-icon">2</span><h3>Jaa hyödyt ja riskit</h3><p>Teknologian, tuottavuuden ja vaurauden hyödyn pitää vahvistaa yhteiskunnan toimintakykyä eikä kasautua vain harvoille.</p></article>
+          <article class="solution"><span class="solution-icon">3</span><h3>Rakenna osallistumista</h3><p>Ihmisille tarvitaan todellisia tapoja vaikuttaa, toimia yhdessä ja käyttää osaamistaan yhteisten tarpeiden ratkaisemiseen.</p></article>
+        </div>
+        <div class="principle"><strong>Arviointikysymys:</strong> lisääkö ehdotus ihmisten tosiasiallista mahdollisuutta hyvinvointiin riippumatta varallisuudesta, asuinpaikasta tai yhteiskunnallisesta asemasta?</div>
+      </div>
+    </section>
+
+    <section class="section" id="atlas">
+      <div class="wrap"><div class="atlas-cta"><div><div class="eyebrow">Syvenny aineistoon</div><h2>Mistä nykyhetki syntyi?</h2><p>Rakennemuutosten Atlas jäljittää Suomen yhteiskunnallisia muutoksia, päätöksiä ja niiden välisiä yhteyksiä. Se on tarkoitettu käyttäjälle, joka haluaa siirtyä yleiskuvasta syvempään tutkimiseen.</p></div><a class="button" href="https://harrikayhko.fi/atlas/" target="_blank" rel="noopener">Avaa Rakennemuutosten Atlas →</a></div></div>
+    </section>
+
+    <section class="section" id="luottamus">
+      <div class="wrap">
+        <header class="section-head"><div class="section-index">03 · Luottamus</div><div><h2>Kuka tämän takana on?</h2><p>Hyvinvointivaltion Vaalijat ry on yhteiskunnallinen yhdistys, joka tekee hyvinvointivaltion rakenteita, riippuvuuksia ja vaihtoehtoja näkyviksi.</p></div></header>
+        <div class="trust-grid">
+          <article class="trust-card"><h3>Mitä teemme?</h3><ul><li>Julkaisemme analyysejä ja visualisointeja.</li><li>Kokoamme tutkimustietoa ymmärrettävään muotoon.</li><li>Kehitämme ja arvioimme ratkaisuehdotuksia.</li><li>Luomme tilaa kansalaiskeskustelulle ja osallistumiselle.</li></ul></article>
+          <article class="trust-card"><h3>Mihin pyrimme?</h3><p>Tavoitteena on yhteiskunta, jossa jokaisella on todellinen oikeus hyvinvointiin varallisuudesta ja asemasta riippumatta.</p><p>Emme tarkastele hyvinvointivaltiota vain menoina, vaan yhteiskunnan toimintakykyä ylläpitävänä järjestelmänä.</p><a href="hyvinvointivaltionvaalijat21.html#yhdistys">Tutustu yhdistykseen ja asiakirjoihin →</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section join" id="mukaan">
+      <div class="wrap">
+        <header class="section-head"><div class="section-index">04 · Osallistu</div><div><h2>Valitse sinulle sopiva tapa tulla mukaan.</h2><p>Osallistuminen ei edellytä valmista mielipidettä tai erityistä asemaa. Voit aloittaa lukemalla, keskustelemalla tai tarjoamalla osaamistasi.</p></div></header>
+        <div class="join-grid">
+          <article class="join-card"><h3>Seuraa ja keskustele</h3><p>Tutustu kirjoituksiin, jaa havaintosi ja osallistu hyvinvointivaltion tulevaisuutta koskevaan keskusteluun.</p><a href="hyvinvointivaltionvaalijat21.html#kirjoitukset">Lue kirjoituksia →</a></article>
+          <article class="join-card"><h3>Tuo osaamisesi</h3><p>Tutkimus, viestintä, visualisointi, järjestötoiminta ja eletty kokemus ovat kaikki arvokkaita.</p><a href="mailto:juha.nurmela1@gmail.com?subject=Haluan%20osallistua">Ota yhteyttä →</a></article>
+          <article class="join-card"><h3>Liity jäseneksi</h3><p>Jäsenenä tuet pitkäjänteistä työtä ja voit osallistua yhdistyksen toiminnan suuntaamiseen.</p><a href="hyvinvointivaltionvaalijat21.html#liity">Katso jäsenyys ja liittyminen →</a></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot"><div class="wrap foot-in"><div><strong>Hyvinvointivaltion Vaalijat ry</strong><br>Rakenteet näkyviksi. Vaihtoehdot mahdollisiksi.</div><div><a href="mailto:juha.nurmela1@gmail.com">juha.nurmela1@gmail.com</a><br><a href="#alku">Takaisin alkuun ↑</a></div></div></footer>
+  <script>
+    const menuButton=document.querySelector('.menu-btn');
+    const menu=document.getElementById('mainNav');
+    menuButton?.addEventListener('click',()=>{const open=menu.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));menuButton.textContent=open?'×':'☰'});
+    menu?.addEventListener('click',event=>{if(event.target.closest('a')){menu.classList.remove('open');menuButton?.setAttribute('aria-expanded','false');if(menuButton)menuButton.textContent='☰'}});
+  </script>
+</body>
+</html>
